@@ -21,14 +21,35 @@ interface Hakemus {
   created_at: string
 }
 
+interface MetaAnalysis {
+  hakijaprofiili: {
+    [key: string]: number
+  }
+  viestinnan_selkeys: {
+    arvosana: number
+    selitys: string
+  }
+  suositukset: string[]
+}
+
 export default function DashboardPage() {
   const [stats, setStats] = useState<Stats>({ count: 0, total_summa: 0, avg_arvosana: 0 })
   const [recentApplications, setRecentApplications] = useState<Hakemus[]>([])
   const [loading, setLoading] = useState(true)
+  const [metaAnalysis, setMetaAnalysis] = useState<MetaAnalysis | null>(null)
+  const [metaLoading, setMetaLoading] = useState(false)
+  const [metaError, setMetaError] = useState('')
 
   useEffect(() => {
     fetchDashboardData()
   }, [])
+
+  useEffect(() => {
+    // Hae meta-analyysi automaattisesti jos hakemuksia on >= 3
+    if (stats.count >= 3 && !metaAnalysis && !metaLoading) {
+      fetchMetaAnalysis()
+    }
+  }, [stats.count])
 
   const fetchDashboardData = async () => {
     try {
@@ -49,6 +70,27 @@ export default function DashboardPage() {
       console.error('Virhe datan haussa:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchMetaAnalysis = async () => {
+    setMetaLoading(true)
+    setMetaError('')
+
+    try {
+      const response = await fetch('/api/meta-analysis')
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Virhe meta-analyysissä')
+      }
+
+      setMetaAnalysis(data.meta_analysis)
+    } catch (error: any) {
+      console.error('Virhe meta-analyysissä:', error)
+      setMetaError(error.message || 'Virhe meta-analyysin haussa')
+    } finally {
+      setMetaLoading(false)
     }
   }
 
@@ -164,6 +206,107 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Meta-analyysi hakemuksista */}
+      {!loading && stats.count >= 3 && (
+        <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl shadow-md p-6 border-2 border-purple-200">
+          <div className="flex justify-between items-start mb-6">
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                📊 Meta-analyysi hakemuksista
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Claude AI:n kokonaisarvio {stats.count} hakemuksesta
+              </p>
+            </div>
+            <button
+              onClick={fetchMetaAnalysis}
+              disabled={metaLoading}
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition disabled:opacity-50"
+            >
+              {metaLoading ? 'Päivitetään...' : '🔄 Päivitä analyysi'}
+            </button>
+          </div>
+
+          {metaLoading && (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-purple-600 border-t-transparent"></div>
+              <p className="mt-4 text-gray-600">Analysoidaan hakemuksia Claude AI:lla...</p>
+            </div>
+          )}
+
+          {metaError && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+              <p className="font-semibold">Virhe meta-analyysissä</p>
+              <p className="text-sm">{metaError}</p>
+            </div>
+          )}
+
+          {!metaLoading && !metaError && metaAnalysis && (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Laatikko 1: Hakijaprofiili */}
+              <div className="bg-white rounded-lg shadow p-5">
+                <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  👥 Hakijaprofiili
+                </h4>
+                <div className="space-y-3">
+                  {Object.entries(metaAnalysis.hakijaprofiili)
+                    .filter(([_, count]) => count > 0)
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([category, count]) => (
+                      <div key={category} className="flex items-center justify-between">
+                        <span className="text-gray-700 text-sm">{category}</span>
+                        <div className="flex items-center gap-2">
+                          <div className="bg-purple-100 h-2 rounded-full" style={{ width: `${(count / stats.count) * 100}px` }}></div>
+                          <span className="font-bold text-purple-600 text-sm">{count} kpl</span>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              {/* Laatikko 2: Viestinnän selkeys */}
+              <div className="bg-white rounded-lg shadow p-5">
+                <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  💡 Viestinnän selkeys
+                </h4>
+                <div className="text-center mb-4">
+                  <div className={`text-5xl font-bold mb-2 ${
+                    metaAnalysis.viestinnan_selkeys.arvosana >= 7
+                      ? 'text-green-600'
+                      : metaAnalysis.viestinnan_selkeys.arvosana >= 5
+                      ? 'text-yellow-600'
+                      : 'text-red-600'
+                  }`}>
+                    {metaAnalysis.viestinnan_selkeys.arvosana}/10
+                  </div>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide">
+                    Toimintakentän ymmärrys
+                  </p>
+                </div>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  {metaAnalysis.viestinnan_selkeys.selitys}
+                </p>
+              </div>
+
+              {/* Laatikko 3: Suositukset viestintään */}
+              <div className="bg-white rounded-lg shadow p-5">
+                <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  ✨ Suositukset viestintään
+                </h4>
+                <ul className="space-y-2">
+                  {metaAnalysis.suositukset.map((suositus, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-sm">
+                      <span className="text-purple-600 font-bold mt-0.5">{idx + 1}.</span>
+                      <span className="text-gray-700">{suositus}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Viimeisimmät hakemukset */}
       {!loading && recentApplications.length > 0 && (
