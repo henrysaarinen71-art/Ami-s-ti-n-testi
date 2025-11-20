@@ -120,6 +120,92 @@ Dashboard sisältää:
   - Keskiarvoarvosana
 - **Call-to-action**: Linkit hakemusten analysointiin ja chatbotiin
 
+## Työmarkkinadatan käsittely
+
+Sovellus sisältää työkalut työmarkkinadatan (XML) käsittelyyn ja tarjoamiseen API:n kautta.
+
+### XML-tiedostojen tallennus
+
+Tallenna työmarkkinadata XML-tiedostot `data/raw/` hakemistoon. Tiedostot ovat .gitignoressa, joten ne eivät mene versionhallintaan.
+
+### Datan parsiminen
+
+Parsii XML-tiedostot JSON-muotoon:
+
+```bash
+npm run parse-data
+```
+
+Tämä komento:
+1. Lukee kaikki XML-tiedostot `data/raw/` hakemistosta
+2. Parsii ne (käsittelee sekä kaupunkikohtaisen datan, koulutusasteet että ammattiryhmät)
+3. Korjaa merkistökoodauksen (XML-tiedostot väittävät olevansa iso-8859-15, mutta ovat UTF-8)
+4. Poistaa virheelliset HTML-tagit
+5. Tallentaa yhtenäisen JSON-tiedoston: `data/tyomarkkinadata.json`
+
+### Parserin rakenne
+
+Python-parseri (`scripts/parse_tyomarkkinadata.py`) tunnistaa automaattisesti seuraavat tiedostotyypit:
+- `12r5` - Työnhakijat kaupungeittain (Espoo, Helsinki, Vantaa) kuukausittain
+- `12te` - Työttömät työnhakijat koulutusasteittain
+- `12ti` - Työttömät työnhakijat ammattiryhmittäin
+
+### API-endpoint
+
+Datan voi hakea autentikoidusti API-endpointin kautta:
+
+```
+GET /api/data/tyomarkkinadata
+```
+
+Endpointti:
+- Vaatii kirjautumisen (Supabase Auth)
+- Palauttaa koko JSON-datan
+- Vastaa 404:llä jos dataa ei ole parsittu
+
+Esimerkki käytöstä:
+```javascript
+const response = await fetch('/api/data/tyomarkkinadata');
+const { data } = await response.json();
+console.log(data.metadata);  // Metadata päivityksestä
+console.log(data.tyonhakijat_kaupungeittain);  // Kaupunkidata
+console.log(data.koulutusasteet);  // Koulutusastedata
+console.log(data.ammattiryhmat);  // Ammattiryhmädata
+```
+
+### JSON-rakenne
+
+```json
+{
+  "metadata": {
+    "paivitetty": "2025-11-20",
+    "alueet": ["Espoo", "Helsinki", "Vantaa"],
+    "aikajakso": "2024M12 - 2025M09",
+    "source_files": 2,
+    "files": ["001_12r5_2025_...", "008_12te_2025_..."]
+  },
+  "tyonhakijat_kaupungeittain": {
+    "type": "12r5_tyonhakijat",
+    "description": "Työnhakijat laskentapäivänä",
+    "cities": {
+      "Espoo": { ... },
+      "Helsinki": { ... },
+      "Vantaa": { ... }
+    }
+  },
+  "koulutusasteet": {
+    "type": "12te_koulutusaste",
+    "description": "Työttömät työnhakijat koulutusasteittain",
+    "koulutusasteet": [...]
+  },
+  "ammattiryhmat": {
+    "type": "12ti_ammattiryhmat",
+    "description": "Työttömät työnhakijat ja avoimet työpaikat ammattiryhmittäin",
+    "ammattiryhmat": [...]
+  }
+}
+```
+
 ## Seuraavat vaiheet
 
 1. ✅ Projektin perusrakenne

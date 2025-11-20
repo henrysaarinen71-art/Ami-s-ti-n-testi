@@ -1,0 +1,161 @@
+{
+  "metadata": {
+    "paivitetty": "2025-11-20",
+    "alueet": [
+      "Espoo",
+      "Helsinki",
+      "Vantaa"
+    ],
+    "aikajakso": "2024M12 - 2025M09",
+    "source_files": 2,
+    "files": [
+      "001_12r5_2025_20251120-124332.xml",
+      "008_12te_2025_20251120-124720.xml"
+    ]
+  },
+  "tyonhakijat_kaupungeittain": {
+    "type": "12r5_tyonhakijat",
+    "description": "Työnhakijat laskentapäivänä",
+    "cities": {
+      "Espoo": {
+        "Työnhakijoita laskentapäivänä (lkm.)": {
+          "2024M12": 29277,
+          "2025M01": 29969,
+          "2025M02": 29960,
+          "2025M03": 29764,
+          "2025M04": 29401,
+          "2025M05": 29416,
+          "2025M06": 30177,
+          "2025M07": 30583,
+          "2025M08": 29942,
+          "2025M09": 29761
+        }
+      },
+      "Helsinki": {
+        "Työnhakijoita laskentapäivänä (lkm.)": {
+          "2024M12": 71440,
+          "2025M01": 73169,
+          "2025M02": 73761,
+          "2025M03": 73837,
+          "2025M04": 73249,
+          "2025M05": 74417,
+          "2025M06": 76601,
+          "2025M07": 77900,
+          "2025M08": 76952,
+          "2025M09": 76485
+        }
+      },
+      "Vantaa": {
+        "Työnhakijoita laskentapäivänä (lkm.)": {
+          "2024M12": 29777,
+          "2025M01": 30719,
+          "2025M02": 30757,
+          "2025M03": 30557,
+          "2025M04": 30026,
+          "2025M05": 29856,
+          "2025M06": 30388,
+          "2025M07": 30570,
+          "2025M08": 30182,
+          "2025M09": 30088
+        }
+      }
+    }
+  },
+  "koulutusasteet": {
+    "type": "12te_koulutusaste",
+    "description": "Työttömät työnhakijat koulutusasteittain",
+    "koulutusasteet": [
+      {
+        "koulutusaste": "KU049",
+        "values": [
+          "Espoo",
+          "SSS",
+          "Yhteensä",
+          2,
+          "Työttömät työnhakijat",
+          1,
+          "Alempi perusaste",
+          342,
+          367,
+          365,
+          372,
+          361,
+          350,
+          368,
+          378,
+          352,
+          345
+        ]
+      },
+      {
+        "koulutusaste": "KU091",
+        "values": [
+          "Helsinki",
+          "SSS",
+          "Yhteensä",
+          2,
+          "Työttömät työnhakijat",
+          1,
+          "Alempi perusaste",
+          1000,
+          1033,
+          1033,
+          1049,
+          1060,
+          1081,
+          1117,
+          1127,
+          1082,
+          1067
+        ]
+      },
+      {
+        "koulutusaste": "KU092",
+        "values": [
+          "Vantaa",
+          "SSS",
+          "Yhteensä",
+          2,
+          "Työttömät työnhakijat",
+          1,
+          "Alempi perusaste",
+          511,
+          521,
+          534,
+          537,
+          516,
+          517,
+          550,
+          536,
+          504,
+          473
+        ]
+      },
+      {
+        "koulutusaste": "Työnhakijoita laskentapäivänä (lkm.):",
+        "values": [
+          "20251030 09:00"
+        ]
+      },
+      {
+        "koulutusaste": "Lähde:",
+        "values": [
+          "KEHA-keskus, Työnvälitystilasto"
+        ]
+      },
+      {
+        "koulutusaste": "Työnhakijoita laskentapäivänä (lkm.):",
+        "values": [
+          "lukumäärä"
+        ]
+      },
+      {
+        "koulutusaste": "Sisäinen viitekoodi:",
+        "values": [
+          "008_12te_2025"
+        ]
+      }
+    ]
+  },
+  "ammattiryhmat": {}
+}
