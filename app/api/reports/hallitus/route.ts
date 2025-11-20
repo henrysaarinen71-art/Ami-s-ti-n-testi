@@ -199,26 +199,66 @@ Luotu: ${new Date().toLocaleDateString('fi-FI')} (automaattinen AI-raportti)
 
 ## 5. RELEVANSSI TYÖMARKKINATILANTEESEEN
 
-**Työttömyystilanne pääkaupunkiseudulla:**
+**Työttömyyden rakenne pääkaupunkiseudulla:**
+
+[Laske yhteensä työttömät: Espoo + Helsinki + Vantaa]
 ${tyomarkkinadata && tyomarkkinadata.tyonhakijat_kaupungeittain?.cities ? `
+Työmarkkinadata saatavilla:
 - Espoo: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Espoo?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
 - Helsinki: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Helsinki?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
 - Vantaa: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Vantaa?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
+
+Yhteensä työttömiä: [Laske summa] henkilöä
 ` : 'Ei saatavilla'}
 
+**Suurimmat työttömyysryhmät:**
+
+[Analysoi ja tunnista 3-5 suurinta ryhmää työmarkkinadatasta. Jos data ei riitä, arvioi yleisten tilastojen perusteella:]
+
+Esimerkki (täytä OIKEILLA LUVUILLA jos data saatavilla):
+1. Nuoret (alle 25v): XX XXX henkilöä (XX% kaikista) - Trendi: **KASVAA/LASKEE ±X%/v** ⚠️/✅
+2. Ulkomaalaistaustaiset: XX XXX henkilöä (XX%) - Trendi: **KASVAA/LASKEE ±X%/v** ⚠️/✅
+3. Pitkäaikaistyöttömät: XX XXX henkilöä (XX%) - **KRIITTINEN TASO / NORMAALI** ⚠️/✅
+4. [Lisää muita merkittäviä ryhmiä]
+
 ${tyomarkkinadata && tyomarkkinadata.koulutusasteet ? `
-**Työttömät koulutusasteittain:**
-Data saatavilla eri koulutusasteista (Alempi perusaste, Ylempi perusaste, Keskiaste, Alin korkea-aste, Alempi korkeakouluaste, Ylempi korkeakouluaste, Tutkijakoulutusaste).
-Käytä tätä arvioidessasi ovatko hakemukset kohdistuneet relevantteihin ryhmiin.
+**Koulutustaso:**
+
+[Analysoi koulutusasteet-datasta. Tunnista:]
+- Matalasti koulutetut (perusaste): XX% työttömistä - **MERKITTÄVÄ HAASTE** ⚠️ / **NORMAALI** ✅
+- Korkeakoulutetut: XX% työttömistä - **KASVAA/LASKEE**
+- [Lisää muita havaintoja]
 ` : ''}
 
 **Hakemusten kohdentuminen:**
-[Analysoi vastaako hakemukset työmarkkinatilanteeseen]
-- XX% hakemuksista kohdistuu ajankohtaisiin työmarkkinahaasteisiin ✅
-- XX% hakemuksista käsittelee vähemmän kriittisiä aiheita ⚠️
 
-**Analyysi:**
-[Vastaako hakemuspooli työmarkkinatilanteeseen? Onko aukkoja?]
+[Analysoi KONKREETTISESTI montako hakemusta kohdistuu mihinkäkin ryhmään:]
+
+- XX% hakemuksista kohdistuu KASVAVIIN työttömyysryhmiin (esim. nuoret, ulkomaalaiset) ✅ OIKEA FOKUS
+- XX% käsittelee KRIITTISIÄ ryhmiä (esim. pitkäaikaistyöttömät, matalasti koulutetut) ✅ TÄRKEÄÄ
+- XX% keskittyy VÄHENEVIIN tai PIENIIN ryhmiin ⚠️ VÄHEMMÄN AJANKOHTAISTA
+
+**ANALYYSI JA SUOSITUKSET:**
+
+[Kirjoita 2-3 kappaletta:]
+
+1. **Vastaako portfolio työmarkkinatilanteeseen?**
+   - Ovatko hakemukset kohdistuneet suurimpiin / kasvaviin ryhmiin?
+   - Onko painopiste oikeissa teemoissa?
+
+2. **Mitä puuttuu?**
+   - Mitkä SUURET työttömyysryhmät eivät saa huomiota?
+   - Esim: "28% työttömistä on pitkäaikaistyöttömiä, mutta vain 1 hakemus (10%) kohdistuu heihindelleen"
+
+3. **Strateginen suositus:**
+   - Mihin Ami-säätiön kannattaa panostaa seuraavassa haussa työmarkkinatilanteen perusteella?
+
+Esimerkki hyvästä analyysistä:
+"Portfolio vastaa hyvin työmarkkinatilanteeseen. Painopiste nuorissa (3 hakemusta, 43%) ja maahanmuuttajissa (2 hakemusta, 29%) on oikea, koska nämä ovat nopeimmin kasvavia ryhmiä (+8% ja +12% vuodessa).
+
+Huomio: Pitkäaikaistyöttömyys on kriittisellä tasolla (28% kaikista työttömistä), mutta vain 1 hakemus (14%) kohdistuu tähän ryhmään. Suositus: Seuraavassa haussa korostaa pitkäaikaistyöttömyyden ehkäisyä.
+
+Koulutustaso: 45% työttömistä on matalasti koulutettuja. Hakemuksista 4 kpl (57%) keskittyy osaamisen kehittämiseen → hyvä kohdentuminen."
 
 ---
 

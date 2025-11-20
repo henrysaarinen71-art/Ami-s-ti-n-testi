@@ -321,9 +321,18 @@ KRIITTISET KYSYMYKSET (vastaa kaikkiin):
    - Vertaa muiden rahoittajien hankkeisiin (TSR, Diak, EURA jne.)
    - Voisiko hakija hakea avustusta muualta?
 
-5. **Vastaavatko kohderyhmät työmarkkinatarpeisiin?**
-   - Käytä työmarkkinadataa (ikäryhmät, ulkomaalaiset, pitkäaikaistyöttömät)
-   - Onko kohderyhmävalinta perusteltu datan valossa?
+5. **Vastaako hanke työmarkkinatilanteeseen?**
+   - Tunnista hakemuksen pääkohderyhmä (esim. nuoret, maahanmuuttajat, pitkäaikaistyöttömät, koulutustaso)
+   - Vertaa työmarkkinadataan:
+     * Montako työttömää tässä kohderyhmässä on?
+     * Mikä on osuus kaikista työttömistä?
+     * Onko ryhmä kasvava vai vähenevä?
+   - Anna SELKEÄ ARVIO:
+     * ✅ Ajankohtainen ongelma (iso ryhmä tai kasvaa nopeasti)
+     * ⚠️ Pieni ryhmä mutta merkittävä
+     * ❌ Ei relevantti työmarkkinatilanteeseen
+   - Esimerkki hyvästä vastauksesta:
+     "Hakemus kohdistuu nuoriin (alle 25v). Työmarkkinadata: 23 719 nuorta työtöntä (31% kaikista), trendi kasvaa +8%/v. ✅ Ajankohtainen ja kasvava ongelma."
 
 6. **Onko hakemus teknisesti heikkolaatuinen?**
    - Puutteet, epäselvyydet, ristiriitaisuudet
