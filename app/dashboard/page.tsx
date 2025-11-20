@@ -187,6 +187,13 @@ export default function DashboardPage() {
     return 'text-red-600 bg-red-100'
   }
 
+  // DEBUG: Log board report button visibility
+  console.log('[DASHBOARD] Hallitusraportti ehto:', {
+    loading,
+    statsCount: stats.count,
+    shouldShow: !loading && stats.count > 0
+  })
+
   return (
     <div className="space-y-8">
       {/* Otsikko */}
@@ -284,9 +291,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-
-      {/* DEBUG: Hallitusraportti tila */}
-      {console.log('[DASHBOARD] Hallitusraportti ehto:', { loading, statsCount: stats.count, shouldShow: !loading && stats.count > 0 })}
 
       {/* DEBUG: Visual indicator when button should show but doesn't */}
       {!loading && stats.count === 0 && (
