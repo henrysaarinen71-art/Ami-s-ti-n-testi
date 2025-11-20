@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import Anthropic from '@anthropic-ai/sdk'
+import { readFile } from 'fs/promises'
+import { join } from 'path'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -87,8 +89,27 @@ export async function POST(request: NextRequest) {
       tyomarkkinadata = null
     }
 
-    // 4. Luo prompt Claudelle
-    const prompt = `Analysoi seuraava hankehakemus työmarkkinadatan ja Ami-säätiön painopisteiden valossa.
+    // 4. Hae hankkedata vertailua varten
+    currentStep = 'fetching_project_data'
+    console.log('[ANALYZE] Step: Fetching project comparison data')
+
+    let hankkedata: any = null
+    try {
+      const hankkeetPath = join(process.cwd(), 'data', 'hankkeet.json')
+      const hankkeetContent = await readFile(hankkeetPath, 'utf-8')
+      hankkedata = JSON.parse(hankkeetContent)
+      console.log('[ANALYZE] Project data loaded:', {
+        ami_projects: hankkedata.ami?.myonnetyt?.length || 0,
+        other_funders: Object.keys(hankkedata.muut_rahoittajat || {}).length,
+        eura_projects: hankkedata.eura?.length || 0
+      })
+    } catch (error: any) {
+      console.warn('[ANALYZE] Could not load project data:', error.message)
+      hankkedata = null
+    }
+
+    // 5. Luo prompt Claudelle
+    const prompt = `Analysoi seuraava hankehakemus työmarkkinadatan, Ami-säätiön painopisteiden JA olemassa olevien hankkeiden valossa.
 
 AMI-SÄÄTIÖN PAINOPISTEET:
 - Työllisyyden edistäminen
@@ -105,6 +126,20 @@ ${tyomarkkinadata && tyomarkkinadata.tyonhakijat_kaupungeittain?.cities ? `
 - Espoo: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Espoo?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
 - Helsinki: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Helsinki?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
 - Vantaa: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Vantaa?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
+` : 'Ei saatavilla'}
+
+AMI-SÄÄTIÖN MYÖNTÄMÄT HANKKEET (vertailua varten):
+${hankkedata && hankkedata.ami?.myonnetyt ? `
+Ami-säätiö on myöntänyt avustuksia seuraaville hankkeille:
+${hankkedata.ami.myonnetyt.map((h: any) => `- ${h.nimi} (${h.vuosi}): ${h.kuvaus}${h.summa ? ` | Summa: ${h.summa} €` : ''}`).join('\n')}
+` : 'Ei saatavilla'}
+
+MUIDEN RAHOITTAJIEN HANKKEET (vertailua varten):
+${hankkedata && hankkedata.muut_rahoittajat && Object.keys(hankkedata.muut_rahoittajat).length > 0 ? `
+Muut rahoittajat pääkaupunkiseudulla:
+${Object.entries(hankkedata.muut_rahoittajat).map(([rahoittaja, hankkeet]: [string, any]) =>
+  `${rahoittaja.toUpperCase()}: ${hankkeet.map((h: any) => h.nimi).join(', ')}`
+).join('\n')}
 ` : 'Ei saatavilla'}
 
 HAKEMUS:
@@ -140,22 +175,39 @@ Analysoi hakemus ja anna arvio JSON-muodossa seuraavasti:
 }
 
 KRIITTISET KYSYMYKSET (vastaa kaikkiin):
-1. Onko vastaava hanke jo toteutettu? (vertaa aikaisempiin hankkeisiin jos mahdollista)
-2. Onko hakemus teknisesti heikkolaatuinen? (puutteet, epäselvyydet)
-3. Onko aikataulu realistinen?
-4. Soveltuuko Ami-säätiön painopisteisiin? (työllisyys, ammatilliset taidot)
-5. Onko budjetti realistinen suhteessa tavoitteisiin?
-6. Onko vaikuttavuus mitattavissa?
+1. **Onko Ami rahoittanut vastaavaa aiemmin?**
+   - Vertaa Ami-säätiön myönnettyihin hankkeisiin
+   - Onko päällekkäisyyttä kohderyhmän, aiheen tai alueen kanssa?
+   - Jos on vastaavia, MIKÄ EROTTAA tämän hakemuksen niistä?
+
+2. **Onko joku muu rahoittanut vastaavaa?**
+   - Vertaa muiden rahoittajien hankkeisiin (TSR, Diak, EURA jne.)
+   - Voisiko hakija hakea avustusta muualta?
+
+3. **Vastaavatko kohderyhmät työmarkkinatarpeisiin?**
+   - Käytä työmarkkinadataa (ikäryhmät, ulkomaalaiset, pitkäaikaistyöttömät)
+   - Onko kohderyhmävalinta perusteltu datan valossa?
+
+4. **Onko hakemus teknisesti heikkolaatuinen?**
+   - Puutteet, epäselvyydet, ristiriitaisuudet
+
+5. **Onko aikataulu ja budjetti realistinen?**
+   - Suhteessa tavoitteisiin ja kohderyhmän kokoon
+
+6. **Onko vaikuttavuus mitattavissa?**
+   - Konkreettiset mittarit ja seurantamenetelmät
 
 TÄRKEÄÄ:
 - Jokaiseen kriittiseen kysymykseen PAKKO olla konkreettinen perustelu
-- Käytä työmarkkinadataa arvioinnissa kun mahdollista
+- **VERTAA AINA** Ami-säätiön myönnettyihin hankkeisiin
+- **KÄYTÄ TYÖMARKKINADATAA** kohderyhmäarvioinnissa
 - Ole rehellinen ja kriittinen mutta rakentava
 - Suositus perustuu kokonaisarvioon, ei vain arvosanaan
+- Jos päällekkäisyyttä aiempiin hankkeisiin, perustele MIKSI tämä on silti tarpeellinen (tai ei ole)
 
 Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
 
-    // 5. Lähetä Claudelle
+    // 6. Lähetä Claudelle
     currentStep = 'calling_claude_api'
     console.log('[ANALYZE] Step: Calling Claude API')
     console.log('[ANALYZE] Prompt length:', prompt.length)
@@ -174,7 +226,7 @@ Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
     console.log('[ANALYZE] Claude API response received')
     console.log('[ANALYZE] Response type:', message.content[0].type)
 
-    // 6. Parsii Claude-vastaus
+    // 7. Parsii Claude-vastaus
     currentStep = 'parsing_claude_response'
     console.log('[ANALYZE] Step: Parsing Claude response')
 
@@ -206,7 +258,7 @@ Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
     // Lisää haettava summa arviointiin
     arviointi.haettava_summa = haettava_summa
 
-    // 7. Tallenna Supabaseen
+    // 8. Tallenna Supabaseen
     currentStep = 'saving_to_supabase'
     console.log('[ANALYZE] Step: Saving to Supabase')
 
@@ -233,7 +285,7 @@ Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
 
     console.log('[ANALYZE] Saved successfully with ID:', savedData.id)
 
-    // 8. Palauta arviointi
+    // 9. Palauta arviointi
     return NextResponse.json({
       success: true,
       arviointi,
