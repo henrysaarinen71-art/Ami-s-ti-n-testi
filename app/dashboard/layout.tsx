@@ -40,7 +40,7 @@ export default async function DashboardLayout({
                   Dashboard
                 </Link>
                 <Link
-                  href="/dashboard/analysoi"
+                  href="/dashboard/analyze"
                   className="text-gray-700 hover:text-indigo-600 font-medium transition"
                 >
                   Analysoi hakemus
