@@ -197,6 +197,18 @@ ${tyomarkkinadata && tyomarkkinadata.tyonhakijat_kaupungeittain?.cities ? `
 - Vantaa: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Vantaa?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
 ` : 'Ei saatavilla'}
 
+${tyomarkkinadata && tyomarkkinadata.koulutusasteet ? `
+TYÖTTÖMÄT KOULUTUSASTEITTAIN (pääkaupunkiseutu):
+Käytä tätä dataa arvioidessasi onko hakemuksen kohderyhmä relevantti:
+- Jos hakemus kohdistuu matalan koulutuksen ryhmiin, tarkista onko heitä paljon työttömänä
+- Jos hakemus kohdistuu korkeakoutettuihin, tarkista tilanne
+- Jos hakemus mainitsee tietyn koulutustaustan, vertaa työmarkkinatilanteeseen
+
+Data saatavilla: Alempi perusaste, Ylempi perusaste, Keskiaste, Alin korkea-aste, Alempi korkeakouluaste, Ylempi korkeakouluaste, Tutkijakoulutusaste
+
+(Huom: Täysi data on saatavilla tyomarkkinadata.koulutusasteet-objektissa. Käytä sitä tarpeen mukaan vertailuun.)
+` : ''}
+
 AMI-SÄÄTIÖN MYÖNTÄMÄT HANKKEET (vertailua varten):
 ${hankkedata && hankkedata.ami?.myonnetyt ? `
 Ami-säätiö on myöntänyt avustuksia seuraaville hankkeille:

@@ -206,6 +206,12 @@ ${tyomarkkinadata && tyomarkkinadata.tyonhakijat_kaupungeittain?.cities ? `
 - Vantaa: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Vantaa?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
 ` : 'Ei saatavilla'}
 
+${tyomarkkinadata && tyomarkkinadata.koulutusasteet ? `
+**Työttömät koulutusasteittain:**
+Data saatavilla eri koulutusasteista (Alempi perusaste, Ylempi perusaste, Keskiaste, Alin korkea-aste, Alempi korkeakouluaste, Ylempi korkeakouluaste, Tutkijakoulutusaste).
+Käytä tätä arvioidessasi ovatko hakemukset kohdistuneet relevantteihin ryhmiin.
+` : ''}
+
 **Hakemusten kohdentuminen:**
 [Analysoi vastaako hakemukset työmarkkinatilanteeseen]
 - XX% hakemuksista kohdistuu ajankohtaisiin työmarkkinahaasteisiin ✅
