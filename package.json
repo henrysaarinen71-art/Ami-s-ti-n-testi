@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "parse-data": "python3 scripts/parse_tyomarkkinadata.py"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.0",
