@@ -2,11 +2,22 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import ReportModal from './components/ReportModal'
 
 interface Stats {
   count: number
   total_summa: number
   avg_arvosana: number
+}
+
+interface ReportSummary {
+  hakemusten_maara: number
+  haettu_summa: number
+  keskiarvo_arvosana: number
+  erinomaiset: number
+  hyvat: number
+  heikot: number
+  raportointijakso: string
 }
 
 interface Hakemus {
@@ -39,6 +50,14 @@ export default function DashboardPage() {
   const [metaAnalysis, setMetaAnalysis] = useState<MetaAnalysis | null>(null)
   const [metaLoading, setMetaLoading] = useState(false)
   const [metaError, setMetaError] = useState('')
+
+  // Hallitusraportti state
+  const [showReport, setShowReport] = useState(false)
+  const [reportMarkdown, setReportMarkdown] = useState('')
+  const [reportSummary, setReportSummary] = useState<ReportSummary | null>(null)
+  const [reportLoading, setReportLoading] = useState(false)
+  const [reportError, setReportError] = useState('')
+  const [reportProgress, setReportProgress] = useState('')
 
   useEffect(() => {
     fetchDashboardData()
@@ -91,6 +110,42 @@ export default function DashboardPage() {
       setMetaError(error.message || 'Virhe meta-analyysin haussa')
     } finally {
       setMetaLoading(false)
+    }
+  }
+
+  const fetchBoardReport = async () => {
+    if (stats.count === 0) {
+      setReportError('Ei hakemuksia raportoitavaksi')
+      return
+    }
+
+    setReportLoading(true)
+    setReportError('')
+    setReportProgress('Analysoidaan hakemuksia...')
+
+    try {
+      // Animoidaan edistymistä
+      setTimeout(() => setReportProgress(`Analysoidaan ${stats.count} hakemusta...`), 500)
+      setTimeout(() => setReportProgress('Vertaillaan työmarkkinadataan...'), 2000)
+      setTimeout(() => setReportProgress('Arvioidaan viestinnän tehokkuutta...'), 4000)
+      setTimeout(() => setReportProgress('Luodaan dokumenttia...'), 6000)
+
+      const response = await fetch('/api/reports/hallitus')
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Virhe raportin luomisessa')
+      }
+
+      setReportMarkdown(data.markdown)
+      setReportSummary(data.summary)
+      setShowReport(true)
+    } catch (error: any) {
+      console.error('Virhe raportin luomisessa:', error)
+      setReportError(error.message || 'Virhe raportin luomisessa')
+    } finally {
+      setReportLoading(false)
+      setReportProgress('')
     }
   }
 
@@ -206,6 +261,50 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Hallitusraportti-nappi */}
+      {!loading && stats.count > 0 && (
+        <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl shadow-lg p-6 border-2 border-green-200">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex-1">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                📄 Hallitusraportti
+              </h3>
+              <p className="text-gray-700 mb-1">
+                Automaattinen yhteenveto kaikista {stats.count} hakemuksesta
+              </p>
+              <p className="text-sm text-gray-600">
+                Valmis Word-dokumentti hallituksen kokoukseen - sisältää analyysin, suositukset ja strategiset huomiot
+              </p>
+            </div>
+            <button
+              onClick={fetchBoardReport}
+              disabled={reportLoading}
+              className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+            >
+              {reportLoading ? '⏳ Luodaan...' : '📄 Luo hallitusraportti'}
+            </button>
+          </div>
+
+          {/* Loading progress */}
+          {reportLoading && reportProgress && (
+            <div className="mt-4 bg-white rounded-lg p-4 border border-green-200">
+              <div className="flex items-center gap-3">
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-green-600 border-t-transparent"></div>
+                <span className="text-gray-700 font-medium">{reportProgress}</span>
+              </div>
+            </div>
+          )}
+
+          {/* Error */}
+          {reportError && !reportLoading && (
+            <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+              <p className="text-red-700 font-semibold">Virhe raportin luomisessa</p>
+              <p className="text-sm text-red-600">{reportError}</p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Meta-analyysi hakemuksista */}
       {!loading && stats.count >= 3 && (
@@ -626,6 +725,16 @@ export default function DashboardPage() {
           </p>
         </div>
       </div>
+
+      {/* ReportModal */}
+      {showReport && reportSummary && (
+        <ReportModal
+          isOpen={showReport}
+          onClose={() => setShowReport(false)}
+          markdown={reportMarkdown}
+          summary={reportSummary}
+        />
+      )}
     </div>
   )
 }
