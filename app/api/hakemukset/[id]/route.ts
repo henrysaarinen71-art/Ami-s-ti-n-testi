@@ -3,10 +3,13 @@ import { createClient } from '@/lib/supabase/server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // 1. Autentikointi
+    // 1. Await params (Next.js 15+ requirement)
+    const { id } = await params
+
+    // 2. Autentikointi
     const supabase = await createClient()
     const {
       data: { user },
@@ -19,11 +22,11 @@ export async function GET(
       )
     }
 
-    // 2. Hae hakemus ID:llä
+    // 3. Hae hakemus ID:llä
     const { data: hakemus, error } = await supabase
       .from('hakemukset')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('user_id', user.id) // Varmista että käyttäjä omistaa hakemuksen
       .single()
 
