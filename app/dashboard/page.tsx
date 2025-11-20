@@ -72,23 +72,36 @@ export default function DashboardPage() {
 
   const fetchDashboardData = async () => {
     try {
+      console.log('[DASHBOARD] Fetching stats from /api/stats')
       // Hae tilastot
       const statsRes = await fetch('/api/stats')
+      console.log('[DASHBOARD] Stats response status:', statsRes.status)
+
       if (statsRes.ok) {
         const statsData = await statsRes.json()
+        console.log('[DASHBOARD] Stats data:', statsData)
         setStats(statsData.stats)
+      } else {
+        console.error('[DASHBOARD] Stats fetch failed:', statsRes.status, statsRes.statusText)
       }
 
+      console.log('[DASHBOARD] Fetching applications from /api/hakemukset?limit=5')
       // Hae viimeisimmät hakemukset
       const appsRes = await fetch('/api/hakemukset?limit=5')
+      console.log('[DASHBOARD] Applications response status:', appsRes.status)
+
       if (appsRes.ok) {
         const appsData = await appsRes.json()
+        console.log('[DASHBOARD] Applications count:', appsData.hakemukset?.length || 0)
         setRecentApplications(appsData.hakemukset || [])
+      } else {
+        console.error('[DASHBOARD] Applications fetch failed:', appsRes.status, appsRes.statusText)
       }
     } catch (error) {
-      console.error('Virhe datan haussa:', error)
+      console.error('[DASHBOARD] Error fetching data:', error)
     } finally {
       setLoading(false)
+      console.log('[DASHBOARD] Loading complete')
     }
   }
 
@@ -114,7 +127,10 @@ export default function DashboardPage() {
   }
 
   const fetchBoardReport = async () => {
+    console.log('[BOARD REPORT] Starting report generation, stats count:', stats.count)
+
     if (stats.count === 0) {
+      console.error('[BOARD REPORT] No applications to report')
       setReportError('Ei hakemuksia raportoitavaksi')
       return
     }
@@ -130,22 +146,29 @@ export default function DashboardPage() {
       setTimeout(() => setReportProgress('Arvioidaan viestinnän tehokkuutta...'), 4000)
       setTimeout(() => setReportProgress('Luodaan dokumenttia...'), 6000)
 
+      console.log('[BOARD REPORT] Fetching from /api/reports/hallitus')
       const response = await fetch('/api/reports/hallitus')
+      console.log('[BOARD REPORT] Response status:', response.status)
+
       const data = await response.json()
+      console.log('[BOARD REPORT] Response data received, markdown length:', data.markdown?.length || 0)
 
       if (!response.ok) {
+        console.error('[BOARD REPORT] API error:', data.error)
         throw new Error(data.error || 'Virhe raportin luomisessa')
       }
 
       setReportMarkdown(data.markdown)
       setReportSummary(data.summary)
       setShowReport(true)
+      console.log('[BOARD REPORT] Report ready, showing modal')
     } catch (error: any) {
-      console.error('Virhe raportin luomisessa:', error)
+      console.error('[BOARD REPORT] Error:', error)
       setReportError(error.message || 'Virhe raportin luomisessa')
     } finally {
       setReportLoading(false)
       setReportProgress('')
+      console.log('[BOARD REPORT] Report generation complete')
     }
   }
 
@@ -265,9 +288,22 @@ export default function DashboardPage() {
       {/* DEBUG: Hallitusraportti tila */}
       {console.log('[DASHBOARD] Hallitusraportti ehto:', { loading, statsCount: stats.count, shouldShow: !loading && stats.count > 0 })}
 
+      {/* DEBUG: Visual indicator when button should show but doesn't */}
+      {!loading && stats.count === 0 && (
+        <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4 text-center">
+          <p className="text-yellow-800 font-semibold">⚠️ DEBUG: Ei hakemuksia - Hallitusraportti-nappi piilotettu</p>
+          <p className="text-sm text-yellow-700">Luo ensin hakemus "Analysoi hakemus" -sivulla</p>
+        </div>
+      )}
+
       {/* Hallitusraportti-nappi */}
       {!loading && stats.count > 0 && (
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl shadow-lg p-6 border-2 border-green-200">
+          {/* DEBUG: Banner to confirm button is rendering */}
+          <div className="mb-4 bg-blue-100 border border-blue-400 rounded px-3 py-2 text-xs text-blue-800">
+            ✓ DEBUG: Hallitusraportti-nappi renderöidään! Stats: {stats.count} hakemusta
+          </div>
+
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="flex-1">
               <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
