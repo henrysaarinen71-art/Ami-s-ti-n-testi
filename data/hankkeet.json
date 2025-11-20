@@ -1,0 +1,82 @@
+{
+  "paivitetty": "2025-11-20",
+  "ami": {
+    "myonnetyt": [
+      {
+        "nimi": "Nuorten yrittäjyyspolku 2024",
+        "kuvaus": "Hanke tukee 18-29-vuotiaiden nuorten yrittäjyysvalmiuksia ja verkostoitumista pääkaupunkiseudulla",
+        "summa": "45000",
+        "vuosi": "2024"
+      },
+      {
+        "nimi": "Maahanmuuttajanaisten ammatillinen koulutus",
+        "kuvaus": "Koulutusohjelma ulkomaalaistaustaisten naisten työllistämisen tukemiseksi hoiva-alalle Helsingissä",
+        "summa": "62000",
+        "vuosi": "2024"
+      },
+      {
+        "nimi": "Pitkäaikaistyöttömien mentorointiohjelma",
+        "kuvaus": "Yksilöllinen mentorointi ja työkokeilut yli 50-vuotiaille pitkäaikaistyöttömille Espoossa ja Vantaalla",
+        "summa": "38000",
+        "vuosi": "2023"
+      },
+      {
+        "nimi": "Digitaidot työelämään -verkkokurssi",
+        "kuvaus": "Ilmainen verkkokoulutus perustason digitaidoista työnhakijoille, fokuksena vammaiset ja pitkäaikaissairaat",
+        "summa": "28000",
+        "vuosi": "2023"
+      },
+      {
+        "nimi": "Työpajatoiminta nuorille syrjäytymisvaarassa oleville",
+        "kuvaus": "Matalan kynnyksen työpajaverkosto nuorille Helsingin itäisessä osassa, ammatillisen suuntautumisen tuki",
+        "summa": "55000",
+        "vuosi": "2024"
+      }
+    ],
+    "painopisteet": "Ami-säätiö tukee työllisyyden edistämistä ja ammatillisten taitojen kehittämistä pääkaupunkiseudulla. Erityisenä painopisteenä on nuorten, pitkäaikaistyöttömien, ulkomaalaistaustaisten sekä vammaisten ja pitkäaikaissairaiden työllistymisen tukeminen. Säätiö myöntää avustuksia hankkeille, jotka edistävät kohderyhmien osaamisen kehittymistä, työllistymismahdollisuuksia ja yhteiskunnallista osallisuutta.",
+    "blogit": [
+      {
+        "otsikko": "Miten tukea nuorten siirtymää työelämään 2025?",
+        "url": "https://ami.fi/blogi/nuorten-tyollistyminen-2025",
+        "paiva": "2025-10-15",
+        "tiivistelma": "Nuorten työllisyystilanne on parantunut, mutta haasteet jatkuvat erityisesti matalamman koulutustason nuorten keskuudessa."
+      },
+      {
+        "otsikko": "Maahanmuuttajien integraatio työmarkkinoille",
+        "url": "https://ami.fi/blogi/maahanmuuttajien-tyollistyminen",
+        "paiva": "2025-09-20",
+        "tiivistelma": "Kielitaidon kehittäminen ja ammatillisen osaamisen tunnistaminen ovat avainasemassa ulkomaalaistaustaisten työllistymisessä."
+      }
+    ]
+  },
+  "muut_rahoittajat": {
+    "tsr": [
+      {
+        "nimi": "Työurien pidentäminen -ohjelma",
+        "kuvaus": "Valtakunnallinen ohjelma ikääntyneiden työntekijöiden tukemiseen",
+        "rahoitus": "TSR"
+      }
+    ],
+    "diak": [
+      {
+        "nimi": "Digiloikka sosiaalipalveluihin",
+        "kuvaus": "Sosiaalialan digitaalisten taitojen kehittämishanke",
+        "rahoitus": "Diakonissalaitos"
+      }
+    ]
+  },
+  "eura": [
+    {
+      "nimi": "ESR+ Nuorten työllisyys 2025",
+      "kuvaus": "Euroopan sosiaalirahasto+ hanke nuorten työllistämiseen Uudellamaalla",
+      "maakunta": "Uusimaa",
+      "rahoitus": "300000"
+    },
+    {
+      "nimi": "Maahanmuuttajien osaamisen tunnistaminen",
+      "kuvaus": "ESR-hanke ulkomaalaistaustaisten ammatillisen osaamisen kartoittamiseen ja tunnustamiseen",
+      "maakunta": "Uusimaa",
+      "rahoitus": "180000"
+    }
+  ]
+}
