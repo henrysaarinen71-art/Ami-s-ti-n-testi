@@ -111,7 +111,33 @@ export async function POST(request: NextRequest) {
     // 5. Luo prompt Claudelle
     const prompt = `Analysoi seuraava hankehakemus työmarkkinadatan, Ami-säätiön painopisteiden JA olemassa olevien hankkeiden valossa.
 
-AMI-SÄÄTIÖN PAINOPISTEET:
+AMI-SÄÄTIÖN VIRALLISET HANKEHAKEMUSTEN ARVIOINTIKRITEERIT:
+
+**PÄÄKRITEERIT:**
+
+1. **Hankkeen tuottaman tiedon relevanttius ja muutoskyky** ohjelmatyön painopisteiden kannalta sekä sopivuus ohjelmatyön kokonaisuuteen.
+
+2. **Hankkeen kyky integroitua pääkaupunkiseudulle** tai tuottaa pääkaupunkiseudulle uutta kyvykkyyttä.
+
+3. **Hankesuunnitelman laatu ja toteutuskelpoisuus.**
+
+**ARVIOINTIKRITEERIIN 1 LIITTYVÄT KYSYMYKSET:**
+- Mitä teet ja miksi?
+- Mitkä tahot ovat hankkeessa mukana?
+- Mitä tietoa hanke tuottaa ja miksi sitä tarvitaan?
+- Miten olet selvittänyt tiedon tai toiminnan tarpeellisuutta erityisesti pääkaupunkiseudulla?
+- Miten tuotettava tieto liittyy säätiön ohjelmatyön painopistealueisiin?
+
+**ARVIOINTIKRITEERIIN 2 LIITTYVÄT KYSYMYKSET:**
+- Miten hankkeesi tuottamat tiedot tai uudet toimintatavat voivat integroitua pääkaupunkiseudulle ja mikä on hankkeesi rooli siinä?
+- Miten olet varmistanut tiedon integroitumista tai uusien toimintatapojen käyttöönottoa jo hankesuunnitelmaa valmistellessa ja miten varmistat sitä hankeaikana?
+
+**ARVIOINTIKRITEERIIN 3 LIITTYVÄT KYSYMYKSET:**
+- Millaiset resurssit hankkeella on ja mikä osa hankkeen kuluista on tarkoitus kattaa säätiön rahoituksella?
+
+---
+
+AMI-SÄÄTIÖN OHJELMATYÖN PAINOPISTEET:
 - Työllisyyden edistäminen
 - Ammatillisten taitojen kehittäminen
 - Nuorten ja pitkäaikaistyöttömien tukeminen
@@ -197,13 +223,18 @@ KRIITTISET KYSYMYKSET (vastaa kaikkiin):
 6. **Onko vaikuttavuus mitattavissa?**
    - Konkreettiset mittarit ja seurantamenetelmät
 
-TÄRKEÄÄ:
-- Jokaiseen kriittiseen kysymykseen PAKKO olla konkreettinen perustelu
+**KRIITTISEN TÄRKEÄÄ - ARVIOINNIN PERUSTA:**
+- ⚠️ **KAIKKI arvioinnin osat** (vahvuudet, heikkoudet, kriittiset kysymykset) **PITÄÄ PERUSTUA** Ami-säätiön virallisiin arviointikriteereihin 1-3
+- ⚠️ Jokainen vahvuus ja heikkous viittaa johonkin kolmesta pääkriteeristä (relevanttius, integroituminen, toteutuskelpoisuus)
+- ⚠️ Kriittiset kysymykset vastaavat suoraan arviointikriteereissä esitettyihin kysymyksiin
+
+**PAKOLLISIA TARKISTUKSIA:**
+- **PÄÄKAUPUNKISEUTU**: Onko hanke todella pääkaupunkiseudulla (Helsinki, Espoo, Vantaa, Kauniainen)? JOS EI → vakava puute
+- **INTEGROITUMINEN**: Miten tieto/toimintatavat otetaan käyttöön pääkaupunkiseudulla? JOS epäselvä → kriittinen kysymys
+- **RELEVANTTIUS**: Liittyykö ohjelmatyön painopisteisiin (työllisyys, ammatti taidot)? Käytä työmarkkinadataa!
+- **TOTEUTUSKELPOISUUS**: Onko aikataulu ja budjetti realistinen?
 - **VERTAA AINA** Ami-säätiön myönnettyihin hankkeisiin
-- **KÄYTÄ TYÖMARKKINADATAA** kohderyhmäarvioinnissa
-- Ole rehellinen ja kriittinen mutta rakentava
-- Suositus perustuu kokonaisarvioon, ei vain arvosanaan
-- Jos päällekkäisyyttä aiempiin hankkeisiin, perustele MIKSI tämä on silti tarpeellinen (tai ei ole)
+- Jos päällekkäisyyttä aiempiin hankkeisiin → perustele MIKSI tämä on silti tarpeellinen (tai ei ole)
 
 Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
 
