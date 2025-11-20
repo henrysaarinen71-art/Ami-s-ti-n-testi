@@ -322,6 +322,52 @@ KRIITTISET KYSYMYKSET (vastaa kaikkiin):
 8. **Onko vaikuttavuus mitattavissa?**
    - Konkreettiset mittarit ja seurantamenetelmät
 
+---
+
+💡 LISÄARVIOINTI (VAPAAEHTOINEN - vain jos relevanttia):
+
+**Ami-säätiön oma rooli hankkeen tukemisessa ja jatkuvuus**
+
+Arvioi JOS merkittävää tietoa löytyy:
+
+**1. Voiko Ami-säätiö tukea hanketta omalla toiminnallaan?**
+
+Tiedontuotanto:
+- Onko aiheesta jo tutkimusta/selvityksiä? (Kevyt Google Scholar / Google-haku: "[hankkeen aihe] + tutkimus + Finland")
+- Voiko Ami tuottaa täydentävää tietoa?
+- Voisiko hankkeen tulokset julkaista Ami-säätiön Suunnanetsijä-blogissa? (blogi käsittelee työmarkkinoita, osaamista, tulevaisuutta)
+- Sopiiko aihe Ami-säätiön viestinnälliseen profiiliin?
+
+Tapahtumat ja verkosto:
+- Sopiiko aihe Ami-säätiön seminaareihin/tapahtumiin? (esim. vuosiseminaari, asiantuntijatilaisuudet)
+- Voisiko hanketta esitellä Ami-säätiön verkostolle?
+- Voiko Ami yhdistää hankkeen muihin toimijoihin?
+- Onko synergiamahdollisuuksia Ami-säätiön muiden hankkeiden kanssa?
+
+**2. Jatkuvuus hankkeen päätyttyä**
+
+- Voiko Ami jatkaa aihetta seuraavassa haussa?
+- Syntyykö hankkeesta jotain pysyvää (malli, työkalu, verkosto, julkaisu)?
+- Onko aihe sellainen että Ami haluaa panostaa siihen pitkäjänteisesti?
+- Täyttääkö hakemus aukon Ami-säätiön portfoliossa?
+
+**TÄRKEÄÄ:**
+- Tämä EI ole pakollinen arvio - mainitse VAIN jos löydät jotain merkittävää
+- Pidä lyhyenä (2-4 lausetta maksimissaan)
+- Jos teet tiedonhaun ja löydät relevanttia tutkimusta, mainitse se
+- Lisää "Vahvuudet"-osioon jos positiivista TAI mainitse "Lisänäkökulmia"-kohdassa toimikunnan huomioissa
+- Jos ei löydy mitään relevanttia → älä mainitse ollenkaan, ei tarvitse sanoa "ei sovellu"
+
+**ESIMERKKI (hyvä maininta):**
+
+"💡 Ami-säätiön rooli: Hankkeen aihe (nuorten työllistyminen ja huumori) sopii hyvin Suunnanetsijä-blogin teemaan ja voisi kiinnostaa Ami-säätiön verkostoa kokeellisena lähestymistapana. Aiheesta on vähän tutkimusta Suomessa (Kela 2023: työhyvinvointi), mutta huumorin yhdistäminen työllistymiseen on uusi näkökulma. Hanke voisi luoda mallin jota Ami voisi laajentaa seuraavassa haussa."
+
+**ESIMERKKI (ei mainintaa):**
+
+Jos et löydä mitään relevanttia Ami-säätiön roolin kannalta, älä kirjoita mitään tästä osiosta.
+
+---
+
 **KRIITTISEN TÄRKEÄÄ - ARVIOINNIN PERUSTA:**
 - ⚠️ **KAIKKI arvioinnin osat** (vahvuudet, heikkoudet, kriittiset kysymykset) **PITÄÄ PERUSTUA** Ami-säätiön virallisiin arviointikriteereihin 1-3
 - ⚠️ Jokainen vahvuus ja heikkous viittaa johonkin kolmesta pääkriteeristä (relevanttius, integroituminen, toteutuskelpoisuus)
