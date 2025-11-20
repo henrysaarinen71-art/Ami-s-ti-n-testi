@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 
 interface Hakemus {
   id: string
@@ -16,12 +17,22 @@ interface Hakemus {
 }
 
 export default function HakemuksetPage() {
+  const searchParams = useSearchParams()
   const [hakemukset, setHakemukset] = useState<Hakemus[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   useEffect(() => {
     fetchHakemukset()
+
+    // Näytä onnistumisviesti jos tultiin poiston jälkeen
+    if (searchParams.get('deleted') === 'true') {
+      setShowSuccess(true)
+      setTimeout(() => setShowSuccess(false), 5000)
+    }
   }, [])
 
   const fetchHakemukset = async () => {
@@ -36,6 +47,29 @@ export default function HakemuksetPage() {
       setError(err.message || 'Virhe hakemusten haussa')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    setIsDeleting(true)
+    try {
+      const response = await fetch(`/api/hakemukset/${id}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Virhe hakemuksen poistamisessa')
+      }
+
+      // Päivitä lista poistamalla poistettu hakemus
+      setHakemukset(hakemukset.filter((h) => h.id !== id))
+      setDeleteId(null)
+      setShowSuccess(true)
+      setTimeout(() => setShowSuccess(false), 5000)
+    } catch (err: any) {
+      alert(err.message || 'Virhe hakemuksen poistamisessa')
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -80,6 +114,47 @@ export default function HakemuksetPage() {
 
   return (
     <div className="space-y-6">
+      {/* Poiston vahvistus dialogi */}
+      {deleteId && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md mx-4">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Vahvista poisto</h3>
+            <p className="text-gray-700 mb-6">
+              Haluatko varmasti poistaa tämän hakemuksen? Tätä toimintoa ei voi perua.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeleteId(null)}
+                disabled={isDeleting}
+                className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition disabled:opacity-50"
+              >
+                Peruuta
+              </button>
+              <button
+                onClick={() => handleDelete(deleteId)}
+                disabled={isDeleting}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition disabled:opacity-50"
+              >
+                {isDeleting ? 'Poistetaan...' : 'Poista'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Onnistumisviesti */}
+      {showSuccess && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-green-700 flex items-center justify-between">
+          <span>✓ Hakemus poistettu onnistuneesti</span>
+          <button
+            onClick={() => setShowSuccess(false)}
+            className="text-green-600 hover:text-green-800"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Otsikko */}
       <div>
         <Link
@@ -159,35 +234,57 @@ export default function HakemuksetPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Suositus
                   </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Toiminnot
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {hakemukset.map((hakemus) => (
-                  <tr
-                    key={hakemus.id}
-                    className="hover:bg-gray-50 cursor-pointer transition"
-                    onClick={() =>
-                      (window.location.href = `/dashboard/hakemukset/${hakemus.id}`)
-                    }
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <tr key={hakemus.id} className="hover:bg-gray-50 transition">
+                    <td
+                      className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 cursor-pointer"
+                      onClick={() =>
+                        (window.location.href = `/dashboard/hakemukset/${hakemus.id}`)
+                      }
+                    >
                       {formatDate(hakemus.created_at)}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
+                    <td
+                      className="px-6 py-4 text-sm text-gray-900 cursor-pointer"
+                      onClick={() =>
+                        (window.location.href = `/dashboard/hakemukset/${hakemus.id}`)
+                      }
+                    >
                       <div className="max-w-md">
                         {hakemus.kuvaus ||
                           hakemus.hakemus_teksti.substring(0, 80) + '...'}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td
+                      className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 cursor-pointer"
+                      onClick={() =>
+                        (window.location.href = `/dashboard/hakemukset/${hakemus.id}`)
+                      }
+                    >
                       {hakemus.haettava_summa.toLocaleString('fi-FI')} €
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <td
+                      className="px-6 py-4 whitespace-nowrap text-sm cursor-pointer"
+                      onClick={() =>
+                        (window.location.href = `/dashboard/hakemukset/${hakemus.id}`)
+                      }
+                    >
                       <span className={getArvosanaColor(hakemus.arviointi.arvosana)}>
                         {hakemus.arviointi.arvosana}/10
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td
+                      className="px-6 py-4 whitespace-nowrap cursor-pointer"
+                      onClick={() =>
+                        (window.location.href = `/dashboard/hakemukset/${hakemus.id}`)
+                      }
+                    >
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-semibold ${getSuositusColor(
                           hakemus.arviointi.suositus
@@ -195,6 +292,18 @@ export default function HakemuksetPage() {
                       >
                         {hakemus.arviointi.suositus}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setDeleteId(hakemus.id)
+                        }}
+                        className="text-red-600 hover:text-red-800 text-lg transition"
+                        title="Poista hakemus"
+                      >
+                        🗑️
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -205,38 +314,46 @@ export default function HakemuksetPage() {
           {/* Mobile-korttinäkymä */}
           <div className="md:hidden divide-y divide-gray-200">
             {hakemukset.map((hakemus) => (
-              <Link
-                key={hakemus.id}
-                href={`/dashboard/hakemukset/${hakemus.id}`}
-                className="block p-4 hover:bg-gray-50 transition"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <div className="text-sm text-gray-600">
-                    {formatDate(hakemus.created_at)}
-                  </div>
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${getSuositusColor(
-                      hakemus.arviointi.suositus
-                    )}`}
-                  >
-                    {hakemus.arviointi.suositus}
-                  </span>
-                </div>
-                <div className="font-medium text-gray-900 mb-2">
-                  {hakemus.kuvaus || hakemus.hakemus_teksti.substring(0, 80) + '...'}
-                </div>
-                <div className="flex items-center gap-4 text-sm">
-                  <span className="text-gray-600">
-                    Summa: <span className="font-semibold">{hakemus.haettava_summa.toLocaleString('fi-FI')} €</span>
-                  </span>
-                  <span className="text-gray-600">
-                    Arvosana:{' '}
-                    <span className={getArvosanaColor(hakemus.arviointi.arvosana)}>
-                      {hakemus.arviointi.arvosana}/10
+              <div key={hakemus.id} className="relative p-4 hover:bg-gray-50 transition">
+                <Link href={`/dashboard/hakemukset/${hakemus.id}`} className="block">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="text-sm text-gray-600">
+                      {formatDate(hakemus.created_at)}
+                    </div>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${getSuositusColor(
+                        hakemus.arviointi.suositus
+                      )}`}
+                    >
+                      {hakemus.arviointi.suositus}
                     </span>
-                  </span>
-                </div>
-              </Link>
+                  </div>
+                  <div className="font-medium text-gray-900 mb-2">
+                    {hakemus.kuvaus || hakemus.hakemus_teksti.substring(0, 80) + '...'}
+                  </div>
+                  <div className="flex items-center gap-4 text-sm">
+                    <span className="text-gray-600">
+                      Summa: <span className="font-semibold">{hakemus.haettava_summa.toLocaleString('fi-FI')} €</span>
+                    </span>
+                    <span className="text-gray-600">
+                      Arvosana:{' '}
+                      <span className={getArvosanaColor(hakemus.arviointi.arvosana)}>
+                        {hakemus.arviointi.arvosana}/10
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setDeleteId(hakemus.id)
+                  }}
+                  className="absolute top-4 right-4 text-red-600 hover:text-red-800 text-lg"
+                  title="Poista hakemus"
+                >
+                  🗑️
+                </button>
+              </div>
             ))}
           </div>
         </div>

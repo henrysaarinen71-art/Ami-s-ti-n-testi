@@ -56,3 +56,67 @@ export async function GET(
     )
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    // 1. Await params (Next.js 15+ requirement)
+    const { id } = await params
+
+    // 2. Autentikointi
+    const supabase = await createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Kirjautuminen vaaditaan' },
+        { status: 401 }
+      )
+    }
+
+    // 3. Varmista että hakemus on olemassa ja käyttäjä omistaa sen
+    const { data: existing } = await supabase
+      .from('hakemukset')
+      .select('id, user_id')
+      .eq('id', id)
+      .eq('user_id', user.id)
+      .single()
+
+    if (!existing) {
+      return NextResponse.json(
+        { error: 'Hakemusta ei löytynyt tai sinulla ei ole oikeutta poistaa sitä' },
+        { status: 404 }
+      )
+    }
+
+    // 4. Poista hakemus
+    const { error } = await supabase
+      .from('hakemukset')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', user.id)
+
+    if (error) {
+      throw new Error('Virhe hakemuksen poistamisessa: ' + error.message)
+    }
+
+    // 5. Palauta onnistuminen
+    return NextResponse.json({
+      success: true,
+      message: 'Hakemus poistettu onnistuneesti',
+    })
+  } catch (error: any) {
+    console.error('Virhe hakemuksen poistamisessa:', error)
+    return NextResponse.json(
+      {
+        error: 'Virhe hakemuksen poistamisessa',
+        message: error.message || 'Tuntematon virhe',
+      },
+      { status: 500 }
+    )
+  }
+}
