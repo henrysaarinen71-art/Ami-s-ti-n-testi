@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import WelcomeModal from './components/WelcomeModal'
 
 interface Stats {
   count: number
@@ -40,16 +39,9 @@ export default function DashboardPage() {
   const [metaAnalysis, setMetaAnalysis] = useState<MetaAnalysis | null>(null)
   const [metaLoading, setMetaLoading] = useState(false)
   const [metaError, setMetaError] = useState('')
-  const [showWelcome, setShowWelcome] = useState(false)
 
   useEffect(() => {
     fetchDashboardData()
-
-    // Tarkista onko käyttäjä nähnyt tervetuloa-viestin
-    const hasSeenWelcome = localStorage.getItem('welcome_modal_seen')
-    if (!hasSeenWelcome) {
-      setShowWelcome(true)
-    }
   }, [])
 
   useEffect(() => {
@@ -119,22 +111,10 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* WelcomeModal */}
-      <WelcomeModal isOpen={showWelcome} onClose={() => setShowWelcome(false)} />
-
-      {/* Otsikko ja Tietoja-nappi */}
-      <div className="flex justify-between items-start">
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h2>
-          <p className="text-gray-600">Tervetuloa hakemusarviointisovellukseen</p>
-        </div>
-        <button
-          onClick={() => setShowWelcome(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg font-medium transition text-sm"
-          title="Näytä järjestelmän tiedot"
-        >
-          ℹ️ Tietoja järjestelmästä
-        </button>
+      {/* Otsikko */}
+      <div>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h2>
+        <p className="text-gray-600">Tervetuloa hakemusarviointisovellukseen</p>
       </div>
 
       {/* Tilastoboksit */}
