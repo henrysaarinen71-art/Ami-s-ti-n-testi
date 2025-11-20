@@ -211,6 +211,46 @@ ${Object.entries(hankkedata.muut_rahoittajat).map(([rahoittaja, hankkeet]: [stri
 ).join('\n')}
 ` : 'Ei saatavilla'}
 
+---
+
+⚠️ TÄRKEÄ PRIORISOINTIOHJE - HANKEVERTAILU:
+
+**1. AMI-SÄÄTIÖN AIEMMAT HANKKEET OVAT ENSISIJAISIA**
+   - Jos löydät vastaavan hankkeen Ami-säätiön listalta → MAINITSE SE ENSIMMÄISENÄ
+   - Jos hakemus on hyvin samankaltainen kuin Ami-hanke → KRIITTINEN HUOMIO: "Ami on jo rahoittanut vastaavaa"
+   - Vertaa tarkkaan: kohderyhmä, aihe, alue, menetelmät
+   - Jos samankaltaisuus löytyy → PAKOLLINEN kysymys: "Mikä erottaa tämän hakemuksen Ami-säätiön aiemmista hankkeista?"
+
+**2. MUIDEN RAHOITTAJIEN HANKKEET OVAT TOISSIJAISIA**
+   - Käytä VAIN lisäkontekstina
+   - Mainitse jos relevanttia, mutta älä anna yhtä suurta painoarvoa
+   - Esim: "TSR on rahoittanut vastaavaa, mutta Ami-säätiöllä ei ole vastaavaa hanketta portfoliossaan"
+   - ÄLÄ hylkää hakemusta pelkästään sen takia että joku MUU rahoittaja on rahoittanut vastaavaa
+
+**3. KRIITTISISSÄ KYSYMYKSISSÄ:**
+   - PAKOLLINEN kysymys: "Onko Ami-säätiö rahoittanut vastaavaa hanketta aiemmin?"
+     * Jos KYLLÄ → Perustele MIKSI tämä eroaa tai miksi kannattaa rahoittaa uudelleen
+     * Jos KYLLÄ ja ei eroa merkittävästi → VAKAVA puute
+     * Jos EI → Onko tämä uusi aukko Ami-säätiön portfoliossa? → VAHVUUS
+
+   - Vapaaehtoinen maininta: "Ovatko muut rahoittajat rahoittaneet vastaavaa?"
+     * Mainitse vain jos se on MERKITTÄVÄÄ kontekstia
+     * ÄLÄ anna tälle yhtä suurta painoa kuin Ami-vertailulle
+
+**ESIMERKKEJÄ:**
+
+❌ HUONO vastaus:
+"TSR on rahoittanut työurien pidentämistä ja Ami on myös rahoittanut nuorten työllistymistä."
+(Ei priorisoi, ei vertaa tarkasti)
+
+✅ HYVÄ vastaus:
+"Ami-säätiö rahoitti vuonna 2024 'Nuorten yrittäjyyspolku' -hanketta (45 000 €), joka tukee 18-29-vuotiaiden yrittäjyysvalmiuksia pääkaupunkiseudulla. Tämä hakemus eroaa siinä että se keskittyy erityisesti maahanmuuttajanuoriin ja digitaaliseen yrittäjyyteen, kun taas Ami-hanke oli yleisempi. TSR:llä on vastaava hanke työurien pidentämisestä, mutta se kohdistuu vanhempaan ikäryhmään."
+(Ami ENSIN, selkeä ero, muut rahoittajat kontekstina)
+
+**MUISTA: AMI ENSIN, MUUT VASTA SITTEN.**
+
+---
+
 HAKEMUS:
 Haettava summa: ${haettava_summa} €
 ${kuvaus ? `Kuvaus: ${kuvaus}\n` : ''}
