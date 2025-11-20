@@ -1,6 +1,72 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
+interface Stats {
+  count: number
+  total_summa: number
+  avg_arvosana: number
+}
+
+interface Hakemus {
+  id: string
+  hakemus_teksti: string
+  haettava_summa: number
+  kuvaus: string | null
+  arviointi: {
+    arvosana: number
+    suositus: string
+  }
+  created_at: string
+}
+
 export default function DashboardPage() {
+  const [stats, setStats] = useState<Stats>({ count: 0, total_summa: 0, avg_arvosana: 0 })
+  const [recentApplications, setRecentApplications] = useState<Hakemus[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetchDashboardData()
+  }, [])
+
+  const fetchDashboardData = async () => {
+    try {
+      // Hae tilastot
+      const statsRes = await fetch('/api/stats')
+      if (statsRes.ok) {
+        const statsData = await statsRes.json()
+        setStats(statsData.stats)
+      }
+
+      // Hae viimeisimmät hakemukset
+      const appsRes = await fetch('/api/hakemukset?limit=5')
+      if (appsRes.ok) {
+        const appsData = await appsRes.json()
+        setRecentApplications(appsData.hakemukset || [])
+      }
+    } catch (error) {
+      console.error('Virhe datan haussa:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('fi-FI', {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+    })
+  }
+
+  const getSuositusColor = (suositus: string) => {
+    if (suositus === 'Myönnettävä') return 'text-green-600 bg-green-100'
+    if (suositus === 'Harkittava') return 'text-yellow-600 bg-yellow-100'
+    return 'text-red-600 bg-red-100'
+  }
+
   return (
     <div className="space-y-8">
       {/* Otsikko */}
@@ -18,7 +84,9 @@ export default function DashboardPage() {
               <p className="text-sm font-medium text-gray-600 mb-1">
                 Haettu summa yhteensä
               </p>
-              <p className="text-3xl font-bold text-gray-900">0 €</p>
+              <p className="text-3xl font-bold text-gray-900">
+                {loading ? '...' : `${stats.total_summa.toLocaleString('fi-FI')} €`}
+              </p>
             </div>
             <div className="bg-indigo-100 rounded-full p-3">
               <svg
@@ -45,7 +113,9 @@ export default function DashboardPage() {
               <p className="text-sm font-medium text-gray-600 mb-1">
                 Hakemusten määrä
               </p>
-              <p className="text-3xl font-bold text-gray-900">0 kpl</p>
+              <p className="text-3xl font-bold text-gray-900">
+                {loading ? '...' : `${stats.count} kpl`}
+              </p>
             </div>
             <div className="bg-green-100 rounded-full p-3">
               <svg
@@ -72,7 +142,9 @@ export default function DashboardPage() {
               <p className="text-sm font-medium text-gray-600 mb-1">
                 Keskiarvoarvosana
               </p>
-              <p className="text-3xl font-bold text-gray-900">0/10</p>
+              <p className="text-3xl font-bold text-gray-900">
+                {loading ? '...' : `${stats.avg_arvosana.toFixed(1)}/10`}
+              </p>
             </div>
             <div className="bg-yellow-100 rounded-full p-3">
               <svg
@@ -92,6 +164,60 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Viimeisimmät hakemukset */}
+      {!loading && recentApplications.length > 0 && (
+        <div className="bg-white rounded-xl shadow-md p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-bold text-gray-900">Viimeisimmät hakemukset</h3>
+            <Link
+              href="/dashboard/hakemukset"
+              className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+            >
+              Näytä kaikki →
+            </Link>
+          </div>
+
+          <div className="space-y-3">
+            {recentApplications.map((app) => (
+              <Link
+                key={app.id}
+                href={`/dashboard/hakemukset/${app.id}`}
+                className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+              >
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="text-sm text-gray-600 mb-1">
+                      {formatDate(app.created_at)}
+                    </div>
+                    <div className="font-medium text-gray-900 mb-2">
+                      {app.kuvaus ||
+                        app.hakemus_teksti.substring(0, 100) + '...'}
+                    </div>
+                    <div className="flex items-center gap-4 text-sm">
+                      <span className="text-gray-600">
+                        Summa: <span className="font-semibold">{app.haettava_summa.toLocaleString('fi-FI')} €</span>
+                      </span>
+                      <span className="text-gray-600">
+                        Arvosana: <span className="font-semibold">{app.arviointi.arvosana}/10</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${getSuositusColor(
+                        app.arviointi.suositus
+                      )}`}
+                    >
+                      {app.arviointi.suositus}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Call-to-action boksi */}
       <div className="bg-white rounded-xl shadow-md p-8 text-center">
@@ -113,7 +239,9 @@ export default function DashboardPage() {
               </svg>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">
-              Aloita analysoimalla ensimmäinen hakemus
+              {stats.count === 0
+                ? 'Aloita analysoimalla ensimmäinen hakemus'
+                : 'Analysoi uusi hakemus'}
             </h3>
             <p className="text-gray-600 mb-6">
               Käytä Claude AI:ta arvioimaan hankehakemus automaattisesti
@@ -121,7 +249,7 @@ export default function DashboardPage() {
           </div>
           <div className="space-y-3">
             <Link
-              href="/dashboard/analysoi"
+              href="/dashboard/analyze"
               className="block w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition"
             >
               Analysoi hakemus
