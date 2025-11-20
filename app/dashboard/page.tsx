@@ -406,6 +406,226 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Tulevat ominaisuudet - Kolmannen tason AI */}
+      <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-sm p-8">
+        <div className="mb-6">
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+            🚀 Tulossa pian - Kolmannen tason tekoäly
+          </h3>
+          <p className="text-gray-600">
+            Konsepteja joita voitaisiin toteuttaa AI-agenttien avulla
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          {/* 1. Strateginen chatbot - Green */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-green-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">🤖</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">Strateginen chatbot</h4>
+                <p className="text-sm text-gray-600">
+                  Kysy mitä tahansa hankkeista - AI vastaa perustuen kaikkeen dataan
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full">
+                🔜 Tulossa
+              </span>
+            </div>
+          </div>
+
+          {/* 2. AI-Agentti kokouksiin - Blue */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-blue-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">🗓️</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">
+                  AI-Agentti kokouksiin <span className="text-xs text-blue-600">⭐ UUSI</span>
+                </h4>
+                <p className="text-sm text-gray-600">
+                  Chatbot tiivistää keskustelut ja lähettää muistion automaattisesti seuraavaan kokoukseen
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                🔜 Agentti-toiminto
+              </span>
+            </div>
+          </div>
+
+          {/* 3. Portfolioanalyysi - Green */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-green-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">📊</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">Portfolioanalyysi</h4>
+                <p className="text-sm text-gray-600">
+                  Visualisoinnit hankeportfoliosta - teemat, kohderyhmät, budjetit
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full">
+                🔜 Tulossa
+              </span>
+            </div>
+          </div>
+
+          {/* 4. Ennakoiva analyysi - Green */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-green-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">🔮</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">Ennakoiva analyysi</h4>
+                <p className="text-sm text-gray-600">
+                  AI suosittelee mitä hankkeita rahoittaa seuraavaksi työmarkkinatrendien perusteella
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full">
+                🔜 Tulossa
+              </span>
+            </div>
+          </div>
+
+          {/* 5. Synergioiden tunnistus - Blue */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-blue-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">🔗</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">Synergioiden tunnistus</h4>
+                <p className="text-sm text-gray-600">
+                  AI yhdistää automaattisesti samankaltaiset hankkeet - ehdottaa yhteistyötä
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                🔜 Agentti-toiminto
+              </span>
+            </div>
+          </div>
+
+          {/* 6. Vaikuttavuusennuste - Orange */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-orange-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">📈</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">Vaikuttavuusennuste</h4>
+                <p className="text-sm text-gray-600">
+                  Arvio hankkeen todennäköisestä vaikuttavuudesta aiempien tulosten perusteella
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
+                🔜 Vaatii lisädataa
+              </span>
+            </div>
+          </div>
+
+          {/* 7. Hakujen suunnittelu-assistentti - Blue */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-blue-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">📝</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">Hakujen suunnittelu-assistentti</h4>
+                <p className="text-sm text-gray-600">
+                  AI auttaa suunnittelemaan seuraavan haun - kohderyhmät, budjetti, teksti
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                🔜 Agentti-toiminto
+              </span>
+            </div>
+          </div>
+
+          {/* 8. Reaaliaikainen seuranta - Blue */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-blue-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">📍</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">Reaaliaikainen seuranta</h4>
+                <p className="text-sm text-gray-600">
+                  Seuraa käynnissä olevia hankkeita - automaattiset väliraportit ja varoitukset
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                🔜 Agentti-toiminto
+              </span>
+            </div>
+          </div>
+
+          {/* 9. Benchmark-vertailu - Green */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-green-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">🏆</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">Benchmark-vertailu</h4>
+                <p className="text-sm text-gray-600">
+                  Vertaa Ami-säätiötä muihin rahoittajiin - mitä muut tekevät eri tavalla?
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full">
+                🔜 Tulossa
+              </span>
+            </div>
+          </div>
+
+          {/* 10. Uutisseuranta-agentti - Blue */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-blue-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">📰</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">Uutisseuranta-agentti</h4>
+                <p className="text-sm text-gray-600">
+                  AI seuraa aihealueiden uutisia ja lähettää viikoittaisen yhteenvedon
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                🔜 Agentti-toiminto
+              </span>
+            </div>
+          </div>
+
+          {/* 11. Hakijaprofilointi - Orange */}
+          <div className="bg-gray-50 rounded-lg p-5 border-l-4 border-orange-500 hover:shadow-md transition-shadow cursor-not-allowed opacity-75">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">👥</span>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 mb-1">Hakijaprofilointi</h4>
+                <p className="text-sm text-gray-600">
+                  Tunnista luotettavat hakijat historian perusteella - riskiarvio
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
+                🔜 Vaatii lisädataa
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-blue-50 border-l-4 border-blue-400 rounded-lg p-4">
+          <p className="text-sm text-gray-700 leading-relaxed">
+            💡 <strong>Nämä ominaisuudet edustavat kolmannen tason tekoälyä</strong>, jossa AI toimii autonomisesti osana prosesseja (agentit), ei vain yksittäisten tehtävien suorittajana.
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
