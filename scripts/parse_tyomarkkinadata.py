@@ -61,16 +61,21 @@ def parse_12r5_file(tree):
         'cities': {}
     }
 
-    # Käsittele datarivit
+    # Käsittele datarivit (rivit 6-12 sisältävät varsinaisen datan)
+    # Lopeta kun tulee ensimmäinen tyhjä rivi
     for row in rows[5:]:
         cells = row.findall('ss:Cell', NS)
         if not cells:
-            continue
+            break  # Lopeta kun tulee tyhjä rivi (footer alkaa)
 
         # Ensimmäinen solu sisältää rivin otsikon
         label = get_cell_value(cells[0])
-        if not label:
-            continue
+        if not label or not isinstance(label, str):
+            break  # Lopeta jos label puuttuu
+
+        # Tarkista että kyseessä on datarivi (sisältää "(lkm.)")
+        if '(lkm.)' not in label:
+            break  # Lopeta kun footer-teksti alkaa
 
         # Hae arvot kullekin kaupungille
         values = []
