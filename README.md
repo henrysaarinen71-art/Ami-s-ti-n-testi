@@ -5,10 +5,10 @@ Sovellus hankehaakemusten automaattiseen arviointiin Claude API:n avulla.
 ## Ominaisuudet
 
 - Käyttäjien kirjautuminen (Supabase Auth)
-- Chatbot-käyttöliittymä hankehakemuksen lähettämiseen
-- Claude API analysoi hakemuksen perustuen työllisyystilastoihin ja tutkimukseen
-- Arvio lähetetään käyttäjän sähköpostiin
-- Dashboard aiempien hakemusten tarkasteluun
+- Dashboard yhteenvetotiedoilla
+- Hakemusten analysointi Claude AI:lla
+- Chatbot-käyttöliittymä
+- Hakemushistoria
 
 ## Tech Stack
 
@@ -65,6 +65,20 @@ RESEND_FROM_EMAIL=your_verified_email@yourdomain.com
 2. Luo uusi API-avain
 3. Vahvista lähettäjän sähköpostiosoite tai domain
 
+## Testikäyttäjän luominen
+
+Luo testikäyttäjä Supabase-konsolissa:
+
+1. Mene osoitteeseen: https://supabase.com/dashboard
+2. Valitse projektisi
+3. Valitse vasemmalta **Authentication** → **Users**
+4. Klikkaa **Add user** → **Create new user**
+5. Täytä:
+   - Email: `ami1@test.com`
+   - Password: `Ami1234!_1`
+   - Auto Confirm User: **Kyllä/Yes** (tärkeää!)
+6. Klikkaa **Create user**
+
 ## Kehitys
 
 Käynnistä kehityspalvelin:
@@ -75,37 +89,45 @@ npm run dev
 
 Avaa selaimessa [http://localhost:3000](http://localhost:3000)
 
-## Tietokannan setup
+Kirjaudu sisään testikäyttäjällä:
+- Email: `ami1@test.com`
+- Salasana: `Ami1234!_1`
 
-Supabase-tietokannan schema luodaan myöhemmin. Tulemme tarvitsemaan taulut:
-- `applications` - Hankehakemukset
-- `evaluations` - Arvioinnit
-- `users` - Käyttäjätiedot (Supabase Auth)
-
-## Rakenne
+## Sovelluksen rakenne
 
 ```
-├── app/                   # Next.js App Router
-│   ├── api/              # API routes
-│   ├── auth/             # Autentikointi sivut
-│   ├── dashboard/        # Dashboard
-│   └── page.tsx          # Etusivu
-├── components/           # React komponentit
-├── lib/                  # Apufunktiot ja konfiguraatiot
-│   ├── supabase.ts      # Supabase client
-│   ├── claude.ts        # Claude API wrapper
-│   └── resend.ts        # Resend email wrapper
-└── types/               # TypeScript tyyppimäärittelyt
+├── app/
+│   ├── login/              # Kirjautumissivu
+│   ├── dashboard/          # Dashboard ja sisäsivut
+│   │   ├── layout.tsx     # Dashboard layout navigaatiolla
+│   │   ├── page.tsx       # Dashboard-etusivu tilastoineen
+│   │   ├── analysoi/      # Hakemusten analysointi
+│   │   └── chatbot/       # Chatbot-käyttöliittymä
+│   └── page.tsx           # Etusivu
+├── lib/
+│   └── supabase/          # Supabase client utilityt
+├── components/            # Jaetut komponentit
+└── scripts/               # Apuskriptit (esim. testikäyttäjän luonti)
 ```
+
+## Dashboard-ominaisuudet
+
+Dashboard sisältää:
+- **Yläpalkki**: Navigaatio (Dashboard, Analysoi hakemus, Chatbot) ja logout
+- **Tilastoboksit**:
+  - Haettu summa yhteensä
+  - Hakemusten määrä
+  - Keskiarvoarvosana
+- **Call-to-action**: Linkit hakemusten analysointiin ja chatbotiin
 
 ## Seuraavat vaiheet
 
-1. Luo Supabase tietokantaskeema
-2. Toteuta autentikointi
-3. Rakenna chatbot-käyttöliittymä
-4. Integrointi Claude API:n kanssa
-5. Sähköpostilähetys
-6. Dashboard-näkymä
+1. ✅ Projektin perusrakenne
+2. ✅ Kirjautuminen ja dashboard
+3. 🔲 Hakemusten analysointi Claude API:lla
+4. 🔲 Chatbot-käyttöliittymä
+5. 🔲 Tietokantaskeema ja tietojen tallennus
+6. 🔲 Sähköpostilähetys
 
 ## Lisenssi
 
