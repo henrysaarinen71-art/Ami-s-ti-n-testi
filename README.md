@@ -206,14 +206,161 @@ console.log(data.ammattiryhmat);  // Ammattiryhmädata
 }
 ```
 
-## Seuraavat vaiheet
+## Deployment Verceliin
 
-1. ✅ Projektin perusrakenne
-2. ✅ Kirjautuminen ja dashboard
-3. 🔲 Hakemusten analysointi Claude API:lla
-4. 🔲 Chatbot-käyttöliittymä
-5. 🔲 Tietokantaskeema ja tietojen tallennus
-6. 🔲 Sähköpostilähetys
+Tämä sovellus on optimoitu ajettavaksi Vercel-alustalla. Seuraa näitä ohjeita deployataksesi sovellus tuotantoon.
+
+### Esivalmistelut
+
+Ennen deployausta varmista, että sinulla on:
+- ✅ GitHub-tili ja tämä repositorio GitHubissa
+- ✅ Vercel-tili (ilmainen, kirjaudu osoitteessa [vercel.com](https://vercel.com))
+- ✅ Supabase-projekti ja sen API-avaimet
+- ✅ Anthropic Claude API-avain
+
+### Vaihe 1: Kirjaudu Verceliin
+
+1. Mene osoitteeseen [vercel.com](https://vercel.com)
+2. Klikkaa **Sign Up** tai **Log In**
+3. Valitse **Continue with GitHub**
+4. Valtuuta Vercel pääsemään GitHub-repositorioihisi
+
+### Vaihe 2: Importtaa projekti
+
+1. Vercel-dashboardissa klikkaa **Add New...** → **Project**
+2. Etsi ja valitse tämä repositorio (`Ami-s-ti-n-testi`)
+3. Klikkaa **Import**
+
+### Vaihe 3: Konfiguroi projekti
+
+Vercel tunnistaa automaattisesti Next.js-projektin. Varmista seuraavat asetukset:
+
+- **Framework Preset**: Next.js
+- **Root Directory**: `./` (oletus)
+- **Build Command**: `npm run build` (oletus)
+- **Output Directory**: `.next` (oletus)
+
+### Vaihe 4: Lisää Environment Variables
+
+**TÄRKEÄÄ**: Lisää seuraavat ympäristömuuttujat ennen deployausta:
+
+Klikkaa **Environment Variables** -osiota ja lisää:
+
+| Muuttuja | Arvo | Kuvaus |
+|----------|------|--------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://xxxxx.supabase.co` | Supabase-projektisi URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | `eyJhbGc...` | Supabase anon/public avain |
+| `ANTHROPIC_API_KEY` | `sk-ant-api03-...` | Claude API-avaimesi |
+
+**Mistä löydät arvot?**
+
+#### Supabase
+1. Mene osoitteeseen [supabase.com/dashboard](https://supabase.com/dashboard)
+2. Valitse projektisi
+3. Mene **Settings** → **API**
+4. Kopioi:
+   - **Project URL** → `NEXT_PUBLIC_SUPABASE_URL`
+   - **anon/public** → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+#### Anthropic Claude
+1. Mene osoitteeseen [console.anthropic.com](https://console.anthropic.com)
+2. Valitse **API Keys**
+3. Kopioi tai luo uusi API-avain → `ANTHROPIC_API_KEY`
+
+**Huomio**: Varmista, että lisäät muuttujat kaikkiin ympäristöihin (Production, Preview, Development) valitsemalla kaikki kolme vaihtoehtoa.
+
+### Vaihe 5: Deploy
+
+1. Klikkaa **Deploy**
+2. Odota 1-3 minuuttia kun Vercel:
+   - Asentaa riippuvuudet (`npm install`)
+   - Buildaa sovelluksen (`npm run build`)
+   - Deployaa tuotantoon
+3. Kun näet "Congratulations!" -ilmoituksen, sovelluksesi on valmis!
+
+### Vaihe 6: Testaa sovellus
+
+1. Klikkaa **Visit** tai avaa Vercelin antama URL (esim. `https://your-app.vercel.app`)
+2. Kirjaudu testikäyttäjällä:
+   - Email: `ami1@test.com`
+   - Salasana: `Ami1234!_1`
+3. Testaa toiminnot:
+   - Dashboard-tilastojen lataaminen
+   - Uuden hakemuksen analysointi
+   - Hakemuslistan tarkastelu
+
+### Automatisoitu deployment
+
+Jokainen push `main`-branchiin (tai Vercelin konfiguroimaan branchiin) käynnistää automaattisesti uuden deploymentin:
+
+```bash
+git add .
+git commit -m "Päivitä sovellusta"
+git push origin main
+```
+
+Vercel:
+1. Havaitsee pushin automaattisesti
+2. Buildaa ja deployaa uuden version
+3. Lähettää ilmoituksen kun valmis
+
+### Custom domain (valinnainen)
+
+Voit lisätä oman domainin Vercel-projektiin:
+
+1. Mene Vercel-dashboardiin → projektisi → **Settings** → **Domains**
+2. Klikkaa **Add**
+3. Syötä domainisi (esim. `hakemusarviointi.fi`)
+4. Seuraa ohjeita DNS-asetusten päivittämiseksi
+
+### Ympäristömuuttujien päivittäminen
+
+Jos tarvitset päivittää API-avaimia tuotannossa:
+
+1. Mene Vercel-dashboardiin → projektisi → **Settings** → **Environment Variables**
+2. Etsi muuttuja ja klikkaa **Edit**
+3. Päivitä arvo ja tallenna
+4. **Redeploy** sovellus, jotta muutokset tulevat voimaan:
+   - Mene **Deployments**-välilehdelle
+   - Klikkaa viimeisintä deploymenttia → **...** → **Redeploy**
+
+### Vianhaku
+
+#### Build epäonnistuu
+- Tarkista että kaikki ympäristömuuttujat on lisätty oikein
+- Varmista että koodi buildautuu lokaalisti: `npm run build`
+- Tarkista Vercelin build-loki virheviestejä varten
+
+#### API-kutsut epäonnistuvat
+- Tarkista että `ANTHROPIC_API_KEY` on asetettu oikein
+- Varmista että Supabase-avaimet ovat oikeat
+- Tarkista Vercel Functions -logit: Dashboard → **Logs**
+
+#### Supabase Auth ei toimi
+- Varmista että Vercelin domain on lisätty Supabase:n sallittuihin URL:eihin:
+  1. Mene [supabase.com/dashboard](https://supabase.com/dashboard)
+  2. Valitse projektisi → **Authentication** → **URL Configuration**
+  3. Lisää Vercel-URL:si kohtaan **Site URL** ja **Redirect URLs**
+
+### Lisätietoja
+
+- [Vercel-dokumentaatio](https://vercel.com/docs)
+- [Next.js deployment-ohjeet](https://nextjs.org/docs/deployment)
+- [Supabase + Vercel -integraatio](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs)
+
+---
+
+## Toteutetut ominaisuudet
+
+1. ✅ Projektin perusrakenne (Next.js 14 App Router)
+2. ✅ Käyttäjien kirjautuminen (Supabase Auth)
+3. ✅ Dashboard reaaliaikaisilla tilastoilla
+4. ✅ Hakemusten analysointi Claude API:lla
+5. ✅ Hakemuslista ja yksittäisen hakemuksen näkymä
+6. ✅ Työmarkkinadatan käsittely (XML → JSON)
+7. ✅ API-endpointit (stats, hakemukset, analyze)
+8. 🔲 Chatbot-käyttöliittymä
+9. 🔲 Sähköpostilähetys
 
 ## Lisenssi
 
