@@ -91,10 +91,25 @@ Arvosana: ${h.arviointi?.arvosana || 'N/A'}/10
 
     const prompt = `Analysoi seuraavat ${hakemukset.length} Ami-säätiöön tullutta hakemusta META-TASOLLA.
 
-AMI-SÄÄTIÖN TOIMINTAKENTTÄ:
-- Fokus: Työllisyyden edistäminen, ammatillisten taitojen kehittäminen
-- Kohdealueet: Nuoret, pitkäaikaistyöttömät, ulkomaalaiset, vammaiset/pitkäaikaissairaat
-- Maantieteellinen alue: Pääkaupunkiseutu (Espoo, Helsinki, Vantaa)
+AMI-SÄÄTIÖN OHJELMALLISET TEEMAT (2025-):
+
+**TEEMA 1: OSAAMINEN JA KOHTAANNOSSA ONNISTUMINEN**
+- Työntekijöiden osaaminen ja työnantajien tarpeet
+- Koulutus, osaamisen kehittäminen, uudelleenkoulutus
+- Työllistyminen osaamisen kautta
+
+**TEEMA 2: MONIMUOTOISUUS TYÖMARKKINOILLA**
+- Eri taustaisten ihmisten työllistyminen
+- Maahanmuuttajat, vammaiset, ikääntyneet
+- Yhdenvertaisuus ja osallisuus
+
+**TEEMA 3: TYÖHYVINVOINTI JA TYÖSSÄ JAKSAMINEN**
+- Työntekijöiden hyvinvointi
+- Työuupumus, stressi
+- Kestävä työura
+
+**MAANTIETEELLINEN RAJAUS:**
+- Pääkaupunkiseutu: Helsinki, Espoo, Vantaa, Kauniainen
 
 HAKEMUKSET:
 ${hakemusYhteenveto}
@@ -112,12 +127,12 @@ TEHTÄVÄ - Analysoi meta-tasolla:
 
 2. VIESTINNÄN SELKEYS - Arvioi 1-10:
    Kuinka hyvin hakijat ovat ymmärtäneet Ami-säätiön:
-   - Painopistealueet (työllisyys, ammatilliset taidot)?
-   - Kohderyhmät (nuoret, pitkäaikaistyöttömät, ulkomaalaiset, vammaiset)?
+   - Ohjelmalliset teemat (1: Osaaminen, 2: Monimuotoisuus, 3: Työhyvinvointi)?
+   - Onko hakemus selkeästi kohdistettu johonkin teemaan?
    - Maantieteellisen fokuksen (pääkaupunkiseutu)?
 
-   Jos monet hakijat eivät ymmärrä toimintakenttää → matala arvosana
-   Jos hakijat kohdentavat hyvin → korkea arvosana
+   Jos monet hakijat eivät ymmärrä teemoja tai maantieteellistä fokusta → matala arvosana
+   Jos hakijat kohdentavat selkeästi yhteen tai useampaan teemaan → korkea arvosana
 
 3. SUOSITUKSET VIESTINTÄÄN:
    Anna 3-5 KONKREETTISTA suositusta miten Ami-säätiön verkkosivuja/viestintää voisi parantaa,

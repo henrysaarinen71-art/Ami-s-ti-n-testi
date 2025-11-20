@@ -137,12 +137,29 @@ AMI-SÄÄTIÖN VIRALLISET HANKEHAKEMUSTEN ARVIOINTIKRITEERIT:
 
 ---
 
-AMI-SÄÄTIÖN OHJELMATYÖN PAINOPISTEET:
-- Työllisyyden edistäminen
-- Ammatillisten taitojen kehittäminen
-- Nuorten ja pitkäaikaistyöttömien tukeminen
-- Ulkomaalaisten työllistymisen tukeminen
-- Vammaisten ja pitkäaikaissairaiden työllistymisen tukeminen
+AMI-SÄÄTIÖN OHJELMALLISET TEEMAT (2025-):
+
+**TEEMA 1: OSAAMINEN JA KOHTAANNOSSA ONNISTUMINEN**
+- Miten työntekijöiden osaaminen ja työnantajien tarpeet kohtaavat?
+- Koulutus, osaamisen kehittäminen, uudelleenkoulutus
+- Työllistymisen edistäminen osaamisen kautta
+- Työmarkkinoiden muutos ja osaamisvaje
+
+**TEEMA 2: MONIMUOTOISUUS TYÖMARKKINOILLA**
+- Eri taustaisten ihmisten työllistyminen ja osallisuus
+- Maahanmuuttajat, ulkomaalaistaustaiset
+- Vammaiset ja pitkäaikaissairaat
+- Ikääntyneet työntekijät
+- Yhdenvertaisuus ja syrjinnän ehkäisy
+
+**TEEMA 3: TYÖHYVINVOINTI JA TYÖSSÄ JAKSAMINEN**
+- Työntekijöiden hyvinvointi ja terveys
+- Työuupumus, stressi, henkinen kuormitus
+- Työelämän laatu ja tasapaino
+- Kestävä työura ja työssä jatkaminen
+
+**MAANTIETEELLINEN RAJAUS:**
+- Pääkaupunkiseutu: Helsinki, Espoo, Vantaa, Kauniainen
 
 TYÖMARKKINADATA (Espoo, Helsinki, Vantaa):
 ${tyomarkkinadata ? JSON.stringify(tyomarkkinadata.metadata, null, 2) : 'Ei saatavilla'}
@@ -201,26 +218,36 @@ Analysoi hakemus ja anna arvio JSON-muodossa seuraavasti:
 }
 
 KRIITTISET KYSYMYKSET (vastaa kaikkiin):
-1. **Onko Ami rahoittanut vastaavaa aiemmin?**
+
+1. **KRIITTISINTÄ: Mihin Ami-säätiön teemaan hakemus liittyy?**
+   - [ ] TEEMA 1: Osaaminen ja kohtaannossa onnistuminen
+   - [ ] TEEMA 2: Monimuotoisuus työmarkkinoilla
+   - [ ] TEEMA 3: Työhyvinvointi ja työssä jaksaminen
+   - [ ] EI SOVI SELKEÄSTI MIHINKÄÄN → KRIITTINEN PUUTE
+
+   **PAKOLLINEN PERUSTELU:** Miksi hakemus sopii (tai ei sovi) valittuun teemaan?
+   Jos sopii useampaan, kumpi on vahvin? Jos ei sovi mihinkään, miksi?
+
+2. **Onko Ami rahoittanut vastaavaa aiemmin?**
    - Vertaa Ami-säätiön myönnettyihin hankkeisiin
    - Onko päällekkäisyyttä kohderyhmän, aiheen tai alueen kanssa?
    - Jos on vastaavia, MIKÄ EROTTAA tämän hakemuksen niistä?
 
-2. **Onko joku muu rahoittanut vastaavaa?**
+3. **Onko joku muu rahoittanut vastaavaa?**
    - Vertaa muiden rahoittajien hankkeisiin (TSR, Diak, EURA jne.)
    - Voisiko hakija hakea avustusta muualta?
 
-3. **Vastaavatko kohderyhmät työmarkkinatarpeisiin?**
+4. **Vastaavatko kohderyhmät työmarkkinatarpeisiin?**
    - Käytä työmarkkinadataa (ikäryhmät, ulkomaalaiset, pitkäaikaistyöttömät)
    - Onko kohderyhmävalinta perusteltu datan valossa?
 
-4. **Onko hakemus teknisesti heikkolaatuinen?**
+5. **Onko hakemus teknisesti heikkolaatuinen?**
    - Puutteet, epäselvyydet, ristiriitaisuudet
 
-5. **Onko aikataulu ja budjetti realistinen?**
+6. **Onko aikataulu ja budjetti realistinen?**
    - Suhteessa tavoitteisiin ja kohderyhmän kokoon
 
-6. **Onko vaikuttavuus mitattavissa?**
+7. **Onko vaikuttavuus mitattavissa?**
    - Konkreettiset mittarit ja seurantamenetelmät
 
 **KRIITTISEN TÄRKEÄÄ - ARVIOINNIN PERUSTA:**
@@ -229,9 +256,10 @@ KRIITTISET KYSYMYKSET (vastaa kaikkiin):
 - ⚠️ Kriittiset kysymykset vastaavat suoraan arviointikriteereissä esitettyihin kysymyksiin
 
 **PAKOLLISIA TARKISTUKSIA:**
+- **TEEMASOPIVUUS** (KRIITTISIN): Soveltuuko hakemus selkeästi johonkin kolmesta teemasta? JOS EI → hylättävä
 - **PÄÄKAUPUNKISEUTU**: Onko hanke todella pääkaupunkiseudulla (Helsinki, Espoo, Vantaa, Kauniainen)? JOS EI → vakava puute
 - **INTEGROITUMINEN**: Miten tieto/toimintatavat otetaan käyttöön pääkaupunkiseudulla? JOS epäselvä → kriittinen kysymys
-- **RELEVANTTIUS**: Liittyykö ohjelmatyön painopisteisiin (työllisyys, ammatti taidot)? Käytä työmarkkinadataa!
+- **RELEVANTTIUS**: Liittyykö selkeästi johonkin teemaan (1-3)? Käytä työmarkkinadataa vahvistukseksi!
 - **TOTEUTUSKELPOISUUS**: Onko aikataulu ja budjetti realistinen?
 - **VERTAA AINA** Ami-säätiön myönnettyihin hankkeisiin
 - Jos päällekkäisyyttä aiempiin hankkeisiin → perustele MIKSI tämä on silti tarpeellinen (tai ei ole)
