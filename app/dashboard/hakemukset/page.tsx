@@ -51,22 +51,33 @@ export default function HakemuksetPage() {
   }
 
   const handleDelete = async (id: string) => {
+    console.log('[FRONTEND] handleDelete called with id:', id)
     setIsDeleting(true)
     try {
+      console.log('[FRONTEND] Sending DELETE request to:', `/api/hakemukset/${id}`)
       const response = await fetch(`/api/hakemukset/${id}`, {
         method: 'DELETE',
       })
 
+      console.log('[FRONTEND] Response status:', response.status)
+      console.log('[FRONTEND] Response ok:', response.ok)
+
+      const data = await response.json()
+      console.log('[FRONTEND] Response data:', data)
+
       if (!response.ok) {
-        throw new Error('Virhe hakemuksen poistamisessa')
+        console.error('[FRONTEND] Delete failed:', data)
+        throw new Error(data.error || 'Virhe hakemuksen poistamisessa')
       }
 
+      console.log('[FRONTEND] Delete successful, updating list')
       // Päivitä lista poistamalla poistettu hakemus
       setHakemukset(hakemukset.filter((h) => h.id !== id))
       setDeleteId(null)
       setShowSuccess(true)
       setTimeout(() => setShowSuccess(false), 5000)
     } catch (err: any) {
+      console.error('[FRONTEND] Delete error:', err)
       alert(err.message || 'Virhe hakemuksen poistamisessa')
     } finally {
       setIsDeleting(false)
@@ -121,17 +132,25 @@ export default function HakemuksetPage() {
             <h3 className="text-xl font-bold text-gray-900 mb-4">Vahvista poisto</h3>
             <p className="text-gray-700 mb-6">
               Haluatko varmasti poistaa tämän hakemuksen? Tätä toimintoa ei voi perua.
+              <br />
+              <span className="text-xs text-gray-500">ID: {deleteId}</span>
             </p>
             <div className="flex gap-3">
               <button
-                onClick={() => setDeleteId(null)}
+                onClick={() => {
+                  console.log('[FRONTEND] Cancel button clicked')
+                  setDeleteId(null)
+                }}
                 disabled={isDeleting}
                 className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition disabled:opacity-50"
               >
                 Peruuta
               </button>
               <button
-                onClick={() => handleDelete(deleteId)}
+                onClick={() => {
+                  console.log('[FRONTEND] Confirm delete button clicked for id:', deleteId)
+                  handleDelete(deleteId)
+                }}
                 disabled={isDeleting}
                 className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition disabled:opacity-50"
               >
@@ -296,8 +315,10 @@ export default function HakemuksetPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <button
                         onClick={(e) => {
+                          console.log('[FRONTEND] Delete button clicked for id:', hakemus.id)
                           e.stopPropagation()
                           setDeleteId(hakemus.id)
+                          console.log('[FRONTEND] deleteId state set to:', hakemus.id)
                         }}
                         className="text-red-600 hover:text-red-800 text-lg transition"
                         title="Poista hakemus"
@@ -345,8 +366,10 @@ export default function HakemuksetPage() {
                 </Link>
                 <button
                   onClick={(e) => {
+                    console.log('[FRONTEND MOBILE] Delete button clicked for id:', hakemus.id)
                     e.preventDefault()
                     setDeleteId(hakemus.id)
+                    console.log('[FRONTEND MOBILE] deleteId state set to:', hakemus.id)
                   }}
                   className="absolute top-4 right-4 text-red-600 hover:text-red-800 text-lg"
                   title="Poista hakemus"
