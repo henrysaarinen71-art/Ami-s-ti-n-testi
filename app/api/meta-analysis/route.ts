@@ -14,6 +14,14 @@ interface MetaAnalysis {
     arvosana: number
     selitys: string
   }
+  muutoskohteet: {
+    jakautuminen: {
+      [key: string]: number
+    }
+    suosituimmat: string[]
+    aliedustetut: string[]
+    strateginen_analyysi: string
+  }
   suositukset: string[]
 }
 
@@ -108,6 +116,17 @@ AMI-SÄÄTIÖN OHJELMALLISET TEEMAT (2025-):
 - Työuupumus, stressi
 - Kestävä työura
 
+AMI-SÄÄTIÖN KONKREETTISET MUUTOSKOHTEET:
+
+1. Osaamistarpeiden ennakointi ja tulevaisuusajattelu
+2. Pääsemme eroon sitkeistä ja piilossakin olevista haasteista
+3. Heikommassa työmarkkina-asemassa olevien oppiminen vahvistuu
+4. Työllisyyttä tukevat palvelut ovat toimivia
+5. Osaaminen työmarkkinoiden katveesta keskiöön
+6. Työ- ja opiskeluperäinen maahanmuutto rakentuu kestävälle pohjalle
+7. Rekrytointikäytänteet ja rekrytoituminen uudistuvat
+8. Kun työ itsessään tukee hyvinvointia, kyvyt tulevat paremmin käyttöön
+
 **MAANTIETEELLINEN RAJAUS:**
 - Pääkaupunkiseutu: Helsinki, Espoo, Vantaa, Kauniainen
 
@@ -134,7 +153,13 @@ TEHTÄVÄ - Analysoi meta-tasolla:
    Jos monet hakijat eivät ymmärrä teemoja tai maantieteellistä fokusta → matala arvosana
    Jos hakijat kohdentavat selkeästi yhteen tai useampaan teemaan → korkea arvosana
 
-3. SUOSITUKSET VIESTINTÄÄN:
+3. MUUTOSKOHTEIDEN JAKAUTUMINEN:
+   Analysoi mihin 8 konkreettiseen muutoskohteeseen hakemukset liittyvät:
+   - Mitkä muutoskohteet ovat SUOSITUIMPIA hakijoiden keskuudessa? (montako hakemusta)
+   - Mitkä muutoskohteet ovat ALIEDUSTETTUINA? (harvoja tai ei yhtään hakemusta)
+   - Mikä on strateginen analyysi: Pitäisikö Ami-säätiön kohdistaa viestintää aliedustettuihin kohteisiin?
+
+4. SUOSITUKSET VIESTINTÄÄN:
    Anna 3-5 KONKREETTISTA suositusta miten Ami-säätiön verkkosivuja/viestintää voisi parantaa,
    jotta oikeat hakijat löytäisivät ja väärät ymmärtäisivät ettei heidän hankkeensa sovi.
 
@@ -154,6 +179,21 @@ Vastaa VAIN JSON-muodossa:
   "viestinnan_selkeys": {
     "arvosana": <1-10>,
     "selitys": "<2-3 lauseen selitys>"
+  },
+  "muutoskohteet": {
+    "jakautuminen": {
+      "1": <hakemuksia>,
+      "2": <hakemuksia>,
+      "3": <hakemuksia>,
+      "4": <hakemuksia>,
+      "5": <hakemuksia>,
+      "6": <hakemuksia>,
+      "7": <hakemuksia>,
+      "8": <hakemuksia>
+    },
+    "suosituimmat": ["<muutoskohde numero ja nimi>", "..."],
+    "aliedustetut": ["<muutoskohde numero ja nimi>", "..."],
+    "strateginen_analyysi": "<2-3 lauseen analyysi>"
   },
   "suositukset": [
     "<Suositus 1>",

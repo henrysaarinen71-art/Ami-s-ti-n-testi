@@ -158,6 +158,32 @@ AMI-SÄÄTIÖN OHJELMALLISET TEEMAT (2025-):
 - Työelämän laatu ja tasapaino
 - Kestävä työura ja työssä jatkaminen
 
+---
+
+AMI-SÄÄTIÖN KONKREETTISET MUUTOSKOHTEET:
+
+Hakemus voi liittyä yhteen tai useampaan näistä muutoskohteista:
+
+1. **Osaamistarpeiden ennakointi ja tulevaisuusajattelu** on systemaattinen osa koulutus- ja työllisyystoimijoiden sekä organisaatioiden toimintaa
+
+2. **Pääsemme eroon sitkeistä ja piilossakin olevista haasteista**, jotka vaikuttavat osaamisen hyödyntämiseen
+
+3. **Heikommassa työmarkkina-asemassa olevien oppiminen** vahvistuu
+
+4. **Työllisyyttä tukevat palvelut** ovat toimivia
+
+5. **Osaaminen työmarkkinoiden katveesta keskiöön**
+
+6. **Työ- ja opiskeluperäinen maahanmuutto** rakentuu kestävälle pohjalle
+
+7. **Rekrytointikäytänteet ja rekrytoituminen** uudistuvat ja mahdollistavat laajemman osaajapoolin hyödyntämisen
+
+8. **Kun työ itsessään tukee hyvinvointia**, kyvyt tulevat paremmin käyttöön
+
+**HUOM:** Hakemus EI tarvitse liittyä kaikkiin muutoskohteisiin, mutta JOS se liittyy johonkin, mainitse se analyysissä vahvuutena. Arvioi kriittisesti, mihin muutoskohteisiin hakemus KONKREETTISESTI vaikuttaa.
+
+---
+
 **MAANTIETEELLINEN RAJAUS:**
 - Pääkaupunkiseutu: Helsinki, Espoo, Vantaa, Kauniainen
 
@@ -228,26 +254,32 @@ KRIITTISET KYSYMYKSET (vastaa kaikkiin):
    **PAKOLLINEN PERUSTELU:** Miksi hakemus sopii (tai ei sovi) valittuun teemaan?
    Jos sopii useampaan, kumpi on vahvin? Jos ei sovi mihinkään, miksi?
 
-2. **Onko Ami rahoittanut vastaavaa aiemmin?**
+2. **Mihin konkreettisiin muutoskohteisiin hakemus vaikuttaa?**
+   - Arvioi KRIITTISESTI, mihin 8 muutoskohteesta (listattuna edellä) hakemus TODELLA vaikuttaa
+   - Mainitse vain ne muutoskohteet, joihin on KONKREETTISTA vaikutusta
+   - Jos ei vaikuta mihinkään → mainitse tämä kehityskohteena
+   - Jos vaikuttaa johonkin → mainitse se vahvuutena numerolla, esim: "✅ Liittyy muutoskohteeseen 3: Heikommassa työmarkkina-asemassa olevien oppiminen vahvistuu"
+
+3. **Onko Ami rahoittanut vastaavaa aiemmin?**
    - Vertaa Ami-säätiön myönnettyihin hankkeisiin
    - Onko päällekkäisyyttä kohderyhmän, aiheen tai alueen kanssa?
    - Jos on vastaavia, MIKÄ EROTTAA tämän hakemuksen niistä?
 
-3. **Onko joku muu rahoittanut vastaavaa?**
+4. **Onko joku muu rahoittanut vastaavaa?**
    - Vertaa muiden rahoittajien hankkeisiin (TSR, Diak, EURA jne.)
    - Voisiko hakija hakea avustusta muualta?
 
-4. **Vastaavatko kohderyhmät työmarkkinatarpeisiin?**
+5. **Vastaavatko kohderyhmät työmarkkinatarpeisiin?**
    - Käytä työmarkkinadataa (ikäryhmät, ulkomaalaiset, pitkäaikaistyöttömät)
    - Onko kohderyhmävalinta perusteltu datan valossa?
 
-5. **Onko hakemus teknisesti heikkolaatuinen?**
+6. **Onko hakemus teknisesti heikkolaatuinen?**
    - Puutteet, epäselvyydet, ristiriitaisuudet
 
-6. **Onko aikataulu ja budjetti realistinen?**
+7. **Onko aikataulu ja budjetti realistinen?**
    - Suhteessa tavoitteisiin ja kohderyhmän kokoon
 
-7. **Onko vaikuttavuus mitattavissa?**
+8. **Onko vaikuttavuus mitattavissa?**
    - Konkreettiset mittarit ja seurantamenetelmät
 
 **KRIITTISEN TÄRKEÄÄ - ARVIOINNIN PERUSTA:**
