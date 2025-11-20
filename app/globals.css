@@ -1,20 +1,120 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f4f2ef;
   --foreground: #171717;
 }
 
 @theme inline {
+  /* Backgrounds & Foregrounds */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  /* Fonts */
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* AMI BRAND COLORS - Primary (Green #d3f763) */
+  /* Replaces indigo/purple for primary actions */
+  --color-indigo-50: #f7fce8;
+  --color-indigo-100: #eef9d1;
+  --color-indigo-200: #e4f6ba;
+  --color-indigo-300: #daf3a3;
+  --color-indigo-400: #d7f57d;
+  --color-indigo-500: #d3f763;
+  --color-indigo-600: #c5ed45;
+  --color-indigo-700: #a8d22b;
+  --color-indigo-800: #7a9920;
+  --color-indigo-900: #4d6013;
+
+  --color-purple-50: #f7fce8;
+  --color-purple-100: #eef9d1;
+  --color-purple-200: #e4f6ba;
+  --color-purple-300: #daf3a3;
+  --color-purple-400: #d7f57d;
+  --color-purple-500: #d3f763;
+  --color-purple-600: #c5ed45;
+  --color-purple-700: #a8d22b;
+  --color-purple-800: #7a9920;
+  --color-purple-900: #4d6013;
+
+  /* AMI BRAND COLORS - Secondary (Blue #a9d2ff) */
+  /* Replaces blue for secondary elements */
+  --color-blue-50: #f0f7ff;
+  --color-blue-100: #e1efff;
+  --color-blue-200: #d2e7ff;
+  --color-blue-300: #c3dfff;
+  --color-blue-400: #b6d9ff;
+  --color-blue-500: #a9d2ff;
+  --color-blue-600: #8bb8e6;
+  --color-blue-700: #6d9ecc;
+  --color-blue-800: #5084b3;
+  --color-blue-900: #326a99;
+
+  /* AMI BRAND COLORS - Accent (Orange #fc7a30) */
+  /* Replaces yellow/orange for accents and warnings */
+  --color-yellow-50: #fff5ed;
+  --color-yellow-100: #ffebdb;
+  --color-yellow-200: #ffd7b8;
+  --color-yellow-300: #ffbc8a;
+  --color-yellow-400: #ff9b5d;
+  --color-yellow-500: #fc7a30;
+  --color-yellow-600: #e35f1a;
+  --color-yellow-700: #c04710;
+  --color-yellow-800: #9d330a;
+  --color-yellow-900: #7a2105;
+
+  --color-orange-50: #fff5ed;
+  --color-orange-100: #ffebdb;
+  --color-orange-200: #ffd7b8;
+  --color-orange-300: #ffbc8a;
+  --color-orange-400: #ff9b5d;
+  --color-orange-500: #fc7a30;
+  --color-orange-600: #e35f1a;
+  --color-orange-700: #c04710;
+  --color-orange-800: #9d330a;
+  --color-orange-900: #7a2105;
+
+  /* Success (keep green for success states) */
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-green-200: #bbf7d0;
+  --color-green-300: #86efac;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
+
+  /* Error (keep red for error states) */
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-900: #7f1d1d;
+
+  /* Gray scale */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #1a1916;
     --foreground: #ededed;
   }
 }
