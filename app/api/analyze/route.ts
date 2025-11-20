@@ -209,11 +209,18 @@ Data saatavilla: Alempi perusaste, Ylempi perusaste, Keskiaste, Alin korkea-aste
 (Huom: Täysi data on saatavilla tyomarkkinadata.koulutusasteet-objektissa. Käytä sitä tarpeen mukaan vertailuun.)
 ` : ''}
 
+⚠️ **KRIITTINEN: ÄLÄ HALLUSINOI HANKKEITA!** ⚠️
+
 AMI-SÄÄTIÖN MYÖNTÄMÄT HANKKEET (vertailua varten):
 ${hankkedata && hankkedata.ami?.myonnetyt ? `
-Ami-säätiö on myöntänyt avustuksia seuraaville hankkeille:
+**TÄRKEÄÄ:** Käytä VAIN näitä hankkeita. ÄLÄ keksi muita hankkeita. Jos et löydä vastaavaa, sano "Ei löytynyt vastaavaa Ami-hanketta".
+
+Ami-säätiö on myöntänyt avustuksia ${hankkedata.ami.myonnetyt.length} hankkeelle:
 ${hankkedata.ami.myonnetyt.map((h: any) => `- ${h.nimi} (${h.vuosi}): ${h.kuvaus}${h.summa ? ` | Summa: ${h.summa} €` : ''}`).join('\n')}
-` : 'Ei saatavilla'}
+
+HUOM: Tämä lista ei välttämättä ole täydellinen. Täysi lista: https://ami.fi/avustukset/hankerahoitus/myonnetyt/
+Jos et ole VARMA että vastaava hanke löytyy yllä olevasta listasta, sano: "Ei tietoa vastaavista Ami-hankkeista nykyisessä datassa."
+` : 'Ei saatavilla - ei voida vertailla Ami-säätiön aiempiin hankkeisiin'}
 
 MUIDEN RAHOITTAJIEN HANKKEET (vertailua varten):
 ${hankkedata && hankkedata.muut_rahoittajat && Object.keys(hankkedata.muut_rahoittajat).length > 0 ? `
