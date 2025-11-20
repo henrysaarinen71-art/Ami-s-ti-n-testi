@@ -262,6 +262,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* DEBUG: Hallitusraportti tila */}
+      {console.log('[DASHBOARD] Hallitusraportti ehto:', { loading, statsCount: stats.count, shouldShow: !loading && stats.count > 0 })}
+
       {/* Hallitusraportti-nappi */}
       {!loading && stats.count > 0 && (
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl shadow-lg p-6 border-2 border-green-200">
