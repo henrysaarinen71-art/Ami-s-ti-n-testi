@@ -18,9 +18,10 @@
 import { config } from 'dotenv'
 import { createClient } from '@supabase/supabase-js'
 import { scrapeAmiSaatio } from '../lib/scrapers/ami-scraper'
+import { join } from 'path'
 
-// Lataa ympäristömuuttujat
-config()
+// Lataa ympäristömuuttujat (.env.local on Next.js:n standardi)
+config({ path: join(process.cwd(), '.env.local') })
 
 // Tarkista ympäristömuuttujat
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
