@@ -6,7 +6,7 @@ Päivitetty: 2025-11-21
 
 ## ✅ Tehty tässä sessiossa (2025-11-21)
 
-### Session 2: MCP-toiminnan valmistelu ja debug (2025-11-21 13:00-14:00)
+### Session 2: MCP-toiminnan valmistelu ja debug (2025-11-21 13:00-14:30)
 
 **Osa 1: Ympäristön valmistelu**
 - ✅ Asennettu npm-riippuvuudet (573 pakettia)
@@ -39,19 +39,30 @@ Päivitetty: 2025-11-21
   - Fallback-viesti: "Ei löydy vastaavaa AMI-hanketta tietokannasta"
 - ✅ Lisätty TODO: Tuo kaikki historialliset AMI-hankkeet (2020-2024)
 
-**Commitit:**
-1. `1f53dc6` - MCP testing setup ja ohjeet
-2. `6c9fe34` - Vercel deployment guide
-3. `10daa1b` - Debug-logitus
-4. `49cbc44` - Anti-hallusinaatio-suojaukset
-5. `b136eb4` - TODO: Historialliset AMI-hankkeet
+**Osa 5: main-branch luominen GitHubissa**
+- 🔍 Havaittu KRIITTINEN ongelma: Repositoriossa EI OLE "main"-branchia!
+- ✅ Luotu `LUO_MAIN_BRANCH.md` - Ohjeet main-branchin luomiseen GitHubissa
+- ✅ Luotu `GITHUB_MAIN_SETUP.md` - Vaihtoehtoiset tavat main-branchin luomiseen
+- ✅ Käyttäjä loi main-branchin GitHubissa (UI:ssa)
+- ✅ Käyttäjä asetti main:n default branchiksi
+- ✅ GitHub: 61 commits, 2/2 checks passed, default = main
+
+**Commitit (8 kpl):**
+1. `ee0851e` - Main branch creation instructions (LUO_MAIN_BRANCH.md)
+2. `8be58e0` - GitHub setup guide (GITHUB_MAIN_SETUP.md)
+3. `6f77b0a` - Session 2 summary
+4. `b136eb4` - TODO: Historical AMI projects
+5. `49cbc44` - Anti-hallucination safeguards
+6. `10daa1b` - Debug logging
+7. `6c9fe34` - Vercel deployment guide
+8. `1f53dc6` - MCP testing setup
 
 **Seuraava askel:**
-1. Käyttäjä päivittää Vercel Production Branch → `claude/continue-work-01AzW6TNkiV8QGbSwaQWYHbk`
-2. Käyttäjä lisää `ENABLE_MCP=true` Vercelin Environment Variables
-3. Käyttäjä deployaa ja testaa
-4. Käyttäjä tarkistaa Runtime Logs → selvittää miksi MCP ei aktivoidu
-5. Käyttäjä raportoi lokit → jatketaan debuggausta
+1. ✅ GitHub main-branch luotu ja default branch asetettu
+2. ⏳ Käyttäjä päivittää Vercel Production Branch → `main`
+3. ⏳ Käyttäjä lisää/varmistaa `ENABLE_MCP=true` Vercelin Environment Variables
+4. ⏳ Käyttäjä deployaa ja testaa
+5. ⏳ Käyttäjä tarkistaa Runtime Logs → varmistaa että MCP aktivoituu
 
 ---
 
