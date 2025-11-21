@@ -6,6 +6,7 @@ Tämä kansio sisältää kaikki Supabase-tietokantamigraatiot. Migraatiot on nu
 
 1. **001_hakemukset_table.sql** - Hakemukset-taulu (käyttäjien hakemukset ja arvioinnit)
 2. **002_hankkeet_table.sql** - Hankkeet-taulu (AMI ja muut rahoittajat, MCP-käyttöön)
+3. **003_tyomarkkinadata_table.sql** - Työmarkkinadata kuukausittain (korvaa data/tyomarkkinadata.json)
 
 ## Miten migraatiot ajetaan
 

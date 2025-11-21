@@ -55,45 +55,78 @@ Sivustolla on todennäköisesti:
 
 **Ongelma:** AI mainitsee "Helsingissä 76 485 työnhakijaa (syyskuu 2025)" analyysissa, mutta luku on väärä
 
-**Syy:**
-- Supabasessa on vain 4 riviä testidataa (2025M09: Espoo, Helsinki, Vantaa, Koko pk-seutu)
-- AI joko keksii lukuja TAI käyttää vanhaa `data/tyomarkkinadata.json`
-- Historiallinen data puuttuu kokonaan (2020-2025)
-- "Koko pk-seutu" ei laske automaattisesti Espoo+Helsinki+Vantaa
+**Syy (SELVITETTY 2025-11-21):**
+- ❌ Vanha `data/tyomarkkinadata.json` sisälsi **VÄÄRÄN metriikin**:
+  - Se sisälsi "Työnhakijoita laskentapäivänä" (ALL job seekers) = 76,485
+  - Pitää olla "Työttömät työnhakijat" (UNEMPLOYED only) = 48,958
+- ❌ `/api/data/tyomarkkinadata` luki suoraan JSON-tiedostosta, ei Supabasesta
+- ❌ Ei ollut migraatiota `tyomarkkinadata_kuukausittain` tauluun
 
-**Ratkaisu:**
-- [ ] Tarkista mistä "76 485" tulee (Supabase vai vanha JSON?)
-- [ ] Poista vanha `data/tyomarkkinadata.json` JOS se vielä on käytössä
-- [ ] Tuo historiallinen data Excelistä (2020-2025) Supabaseen
-- [ ] Laske "Koko pk-seutu" automaattisesti (Espoo+Helsinki+Vantaa)
-- [ ] Automatisoi kuukausipäivitys Tilastokeskuksen API:sta
-- [ ] Testaa että AI saa OIKEAN datan Supabasesta
+**✅ KORJATTU (2025-11-21):**
+- ✅ Luotu migraatio: `supabase/migrations/003_tyomarkkinadata_table.sql`
+- ✅ Taulu sisältää OIKEAT luvut syyskuulle 2025:
+  - Espoo: 17,623 työtöntä
+  - Helsinki: 48,958 työtöntä (EI 76,485!)
+  - Vantaa: 17,739 työtöntä
+  - Koko pk-seutu: 84,320 työtöntä (laskettu automaattisesti)
+- ✅ API-route päivitetty lukemaan Supabasesta
+- ✅ Poistettu riippuvuus `data/tyomarkkinadata.json` tiedostoon
+
+**📋 KÄYTTÄJÄN TEHTÄVÄT:**
+1. **Aja migraatio Supabase Dashboardissa:**
+   - Avaa: https://supabase.com/dashboard/project/bgrjaihmctqkayyochwd
+   - Mene: SQL Editor
+   - Kopioi: `supabase/migrations/003_tyomarkkinadata_table.sql` sisältö
+   - Aja SQL-komento
+   - Tarkista että taulu luotiin: `SELECT COUNT(*) FROM tyomarkkinadata_kuukausittain;`
+   - Pitäisi palauttaa 4 riviä (Espoo, Helsinki, Vantaa, Koko pk-seutu)
+
+2. **Testaa että API toimii:**
+   ```bash
+   # Lokaali testi:
+   curl http://localhost:3000/api/data/tyomarkkinadata \
+     -H "Authorization: Bearer YOUR_TOKEN"
+
+   # Pitäisi palauttaa data.tyonhakijat_kaupungeittain.cities.Helsinki
+   # jossa "Työttömät työnhakijat (lkm.)" = 48958 (EI 76485!)
+   ```
+
+3. **Testaa analyysissa:**
+   - Tee testihakemus
+   - Tarkista että AI mainitsee "Helsingissä 48,958 työtöntä työnhakijaa"
+   - HUOM: Ei enää "76,485"!
 
 **SQL-kyselyillä tarkistus:**
 ```sql
--- Tarkista mitä dataa on
+-- Tarkista että data on oikein
 SELECT kuukausi_koodi, alue, tyottomat_tyonhakijat
 FROM tyomarkkinadata_kuukausittain
-WHERE kuukausi_koodi = '2025M09';
+WHERE kuukausi_koodi = '2025M09'
+ORDER BY alue;
 
 -- Pitäisi näkyä:
--- Espoo: 17,623
--- Helsinki: 48,958
--- Vantaa: 17,739
--- Koko pk-seutu: 84,320 (YHTEENSÄ)
+-- Espoo:          17,623
+-- Helsinki:       48,958  ← OIKEA luku!
+-- Koko pk-seutu:  84,320
+-- Vantaa:         17,739
 ```
 
 **Odotettu tulos analyysissa:**
 > "Pääkaupunkiseudulla (Helsinki, Espoo, Vantaa) oli syyskuussa 2025 yhteensä **84,320 työtöntä työnhakijaa**, josta Helsingissä **48,958**."
 
-**Tiedostot:**
-- `data/tyomarkkinadata.json` - POISTETTAVA (jos käytössä)
-- `scripts/parse_tyomarkkinadata.py` - Vanha parseri
-- Supabase: `tyomarkkinadata_kuukausittain` taulu
+**📝 JATKOTOIMENPITEET (myöhemmin):**
+- [ ] Tuo historiallinen data 2020-2025 Excelistä Supabaseen
+- [ ] Automatisoi kuukausipäivitys Tilastokeskuksen API:sta (ks. TODO #6)
+- [ ] Harkitse `data/tyomarkkinadata.json` poistamista (ei enää käytössä)
 
-**Tila:** ⏸️ ODOTTAA - Ensin korjataan MCP-hankedata, sitten tämä
-**Prioriteetti:** 🔴 Korkea (vääriä lukuja analyysissa nyt)
-**Riippuvuus:** Vaatii vanha tyomarkkinadata.json poiston
+**Tiedostot:**
+- ✅ `supabase/migrations/003_tyomarkkinadata_table.sql` - UUSI migraatio
+- ✅ `app/api/data/tyomarkkinadata/route.ts` - Päivitetty käyttämään Supabasea
+- ⚠️ `data/tyomarkkinadata.json` - Vanhentunut (ei enää käytössä API:ssa)
+
+**Tila:** ✅ KORJATTU - Odottaa migraation ajoa
+**Prioriteetti:** 🔴 Korkea (vaatii käyttäjän toimenpiteitä)
+**Seuraava askel:** Käyttäjä ajaa migraation Supabasessa
 
 ---
 
