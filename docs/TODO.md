@@ -177,6 +177,38 @@ ORDER BY alue;
 
 ## 🟡 TÄRKEÄT (tee pian)
 
+### 3.5 📊 Lisää kaikki AMI-hankkeet tietokantaan
+
+**Ongelma:** Tietokannassa on vain 6 AMI-hanketta (2024)
+
+**Tavoite:** Lisää kaikki AMI:n myöntämät hankkeet vuosilta 2020-2024
+
+**Syy:**
+- Anti-hallusinaatio-säännöt rajoittavat Claude:n vain tietokannassa oleviin hankkeisiin
+- Mitä enemmän hankkeita, sitä parempi vertailu ja analyysi
+- Estää että Claude sanoo "ei löydy vastaavaa" vaikka AMI on rahoittanut vastaavaa
+
+**Mistä data:**
+- AMI.fi:n sivuilta: https://ami.fi/avustukset/hankerahoitus/myonnetyt/
+- TAI AMI:lta suoraan (jos antavat Excel-tiedoston)
+
+**Tehtävät:**
+1. [ ] Skrapaa/pyydä AMI:lta lista kaikista hankkeista (2020-2024)
+2. [ ] Puhdista data ja tallenna JSON/CSV-muotoon
+3. [ ] Luo SQL-migraatio: `supabase/migrations/008_insert_all_ami_projects.sql`
+4. [ ] Aja migraatio Supabasessa
+5. [ ] Testaa että Claude mainitsee nyt enemmän vertailuhankkeita
+
+**Odotettu lopputulos:**
+- ~50-100 AMI-hanketta tietokannassa (riippuu kuinka monta AMI on myöntänyt)
+- Claude voi vertailla hakemuksia laajempaan historiaan
+- Parempi analyysin laatu
+
+**Tila:** ❌ EI ALOITETTU
+**Prioriteetti:** 🟡 Korkea (parantaa merkittävästi analyysin laatua)
+
+---
+
 ### 4. Muiden rahoittajien scraperit
 
 **Tavoite:** Lisää monilähteiset hanketiedot (ei vain AMI)
