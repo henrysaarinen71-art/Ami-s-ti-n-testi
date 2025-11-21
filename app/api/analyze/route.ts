@@ -85,16 +85,22 @@ async function fetchProjectDataFromMCP() {
 
     // 3. Hae AMI-hankkeet
     console.log('[ANALYZE] Calling MCP: get_ami_hankkeet')
-    const amiResult = await mcpClient.callTool('get_ami_hankkeet', { limit: 200 })
-    const amiContent = amiResult.content.find((c: any) => c.type === 'text')
+    const amiResult = await mcpClient.callTool({
+      name: 'get_ami_hankkeet',
+      arguments: { limit: 200 }
+    })
+    const amiContent = (amiResult.content as any[]).find((c: any) => c.type === 'text')
     const amiData = amiContent ? JSON.parse(amiContent.text) : { hankkeet: [] }
 
     console.log(`[ANALYZE] MCP returned ${amiData.hankkeet?.length || 0} AMI projects`)
 
     // 4. Hae muut hankkeet
     console.log('[ANALYZE] Calling MCP: get_muut_hankkeet')
-    const muutResult = await mcpClient.callTool('get_muut_hankkeet', { limit: 200 })
-    const muutContent = muutResult.content.find((c: any) => c.type === 'text')
+    const muutResult = await mcpClient.callTool({
+      name: 'get_muut_hankkeet',
+      arguments: { limit: 200 }
+    })
+    const muutContent = (muutResult.content as any[]).find((c: any) => c.type === 'text')
     const muutData = muutContent ? JSON.parse(muutContent.text) : { hankkeet: [] }
 
     console.log(`[ANALYZE] MCP returned ${muutData.hankkeet?.length || 0} other projects`)
