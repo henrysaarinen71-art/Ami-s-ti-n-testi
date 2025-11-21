@@ -6,7 +6,30 @@ Päivitetty: 2025-11-21
 
 ## ✅ Tehty tässä sessiossa (2025-11-21)
 
-### 1. AMI-hankkeiden tuonti Supabaseen
+### Session 2: MCP-toiminnan valmistelu (2025-11-21 13:00-13:10)
+
+**Toteutus:**
+- ✅ Asennettu npm-riippuvuudet (573 pakettia)
+- ✅ Luotu `.env.local` tiedosto:
+  - `ENABLE_MCP=true` (MCP aktivoitu)
+  - Supabase URL ja publishable key
+  - Anthropic API-avain
+- ✅ Käynnistetty dev-palvelin (http://localhost:3000)
+- ✅ Luotu `TESTAA_MCP.md` - Kattavat testausohjeet käyttäjälle
+
+**Tila:**
+- ⏳ Palvelin käynnissä ja odottaa testausta
+- ⏳ MCP-logit näkyvät kun käyttäjä tekee ensimmäisen analyysin
+- ⏳ Käyttäjä voi nyt testata MCP-toimintaa selaimessa
+
+**Seuraava askel:**
+1. Käyttäjä testaa sovellusta selaimessa (seuraa `TESTAA_MCP.md` ohjeita)
+2. Varmistetaan että MCP-logit näkyvät palvelimen konsolissa
+3. Tarkistetaan että AMI-hankkeet mainitaan analyysissä
+
+---
+
+### Session 1: AMI-hankkeiden tuonti Supabaseen
 
 **Ongelma:** Web scraping epäonnistui (403 Forbidden) → Päätettiin syöttää hankkeet manuaalisesti
 
