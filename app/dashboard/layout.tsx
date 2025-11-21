@@ -2,6 +2,9 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import NavigationBar from './components/NavigationBar'
 
+// Prevent static generation at build time (requires auth)
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardLayout({
   children,
 }: {

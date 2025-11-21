@@ -1,199 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient as createSupabaseClient } from '@/lib/supabase/server'
-import { createClient as createSupabaseDirectClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
-import { Client } from '@modelcontextprotocol/sdk/client/index.js'
-import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 })
 
-/**
- * FEATURE FLAG: Vaihda tru MCP-pohjaisen hankehaun ja vanhan staattisen JSON-tiedoston välillä
- *
- * false (oletus) = Käytä vanhaa toimivaa versiota (data/hankkeet.json)
- * true = Käytä uutta MCP-versiota (Supabase + MCP server)
- *
- * Aseta ympäristömuuttuja: ENABLE_MCP=true
- */
-
-// DEBUG: Log at module load time
-console.log('[MODULE LOAD] Initializing analyze route')
-console.log('[MODULE LOAD] process.env.ENABLE_MCP:', process.env.ENABLE_MCP)
-console.log('[MODULE LOAD] typeof:', typeof process.env.ENABLE_MCP)
-
-const USE_MCP = process.env.ENABLE_MCP === 'true'
-
-console.log('[MODULE LOAD] USE_MCP constant set to:', USE_MCP)
-
-/**
- * VANHA TOIMIVA VERSIO - Hakee hanketiedot JSON-tiedostosta
- * ⭐ SÄILYTETÄÄN AINA - tämä on turvallinen fallback
- */
-async function fetchProjectDataFromJSON() {
-  console.log('[ANALYZE] Using STATIC JSON data (old version)')
-
-  try {
-    const hankkeetPath = join(process.cwd(), 'data', 'hankkeet.json')
-    const hankkeetContent = await readFile(hankkeetPath, 'utf-8')
-    const hankkedata = JSON.parse(hankkeetContent)
-
-    console.log('[ANALYZE] Project data loaded from JSON:', {
-      ami_projects: hankkedata.ami?.myonnetyt?.length || 0,
-      other_funders: Object.keys(hankkedata.muut_rahoittajat || {}).length,
-      eura_projects: hankkedata.eura?.length || 0,
-    })
-
-    return hankkedata
-  } catch (error: any) {
-    console.warn('[ANALYZE] Could not load project data from JSON:', error.message)
-    return null
-  }
-}
-
-/**
- * UUSI MCP-POHJAINEN VERSIO - Hakee hanketiedot Supabasesta MCP:n kautta
- * ⭐ KOKEELLINEN - voidaan ottaa käyttöön feature flagilla
- */
-async function fetchProjectDataFromMCP() {
-  console.log('[ANALYZE] Using MCP data (new version)')
-
-  let mcpClient: Client | null = null
-
-  try {
-    // 1. Luo MCP client
-    mcpClient = new Client(
-      {
-        name: 'ami-analyzer-client',
-        version: '1.0.0',
-      },
-      {
-        capabilities: {},
-      }
-    )
-
-    // 2. Yhdistä MCP serveriin
-    const serverPath = join(process.cwd(), 'mcp-server', 'hanke-server.ts')
-    const transport = new StdioClientTransport({
-      command: 'node',
-      args: ['--loader', 'tsx', serverPath],
-      env: {
-        ...process.env,
-        NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-        SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-      },
-    })
-
-    console.log('[ANALYZE] Connecting to MCP server...')
-    await mcpClient.connect(transport)
-    console.log('[ANALYZE] MCP client connected successfully')
-
-    // 3. Hae AMI-hankkeet
-    console.log('[ANALYZE] Calling MCP: get_ami_hankkeet')
-    const amiResult = await mcpClient.callTool({
-      name: 'get_ami_hankkeet',
-      arguments: { limit: 200 }
-    })
-    const amiContent = (amiResult.content as any[]).find((c: any) => c.type === 'text')
-    const amiData = amiContent ? JSON.parse(amiContent.text) : { hankkeet: [] }
-
-    console.log(`[ANALYZE] MCP returned ${amiData.hankkeet?.length || 0} AMI projects`)
-
-    // 4. Hae muut hankkeet
-    console.log('[ANALYZE] Calling MCP: get_muut_hankkeet')
-    const muutResult = await mcpClient.callTool({
-      name: 'get_muut_hankkeet',
-      arguments: { limit: 200 }
-    })
-    const muutContent = (muutResult.content as any[]).find((c: any) => c.type === 'text')
-    const muutData = muutContent ? JSON.parse(muutContent.text) : { hankkeet: [] }
-
-    console.log(`[ANALYZE] MCP returned ${muutData.hankkeet?.length || 0} other projects`)
-
-    // 5. Muunna MCP-data samaan formaattiin kuin vanha JSON
-    // Tämä varmistaa että prompt säilyy TÄYSIN SAMANA
-    const muutRahoittajat: Record<string, any[]> = {}
-    muutData.hankkeet?.forEach((hanke: any) => {
-      const rahoittaja = hanke.rahoittaja || 'Muu'
-      if (!muutRahoittajat[rahoittaja]) {
-        muutRahoittajat[rahoittaja] = []
-      }
-      muutRahoittajat[rahoittaja].push({
-        nimi: hanke.otsikko,
-        kuvaus: hanke.kuvaus,
-        summa: hanke.rahoitus_summa?.toString(),
-        vuosi: hanke.vuosi?.toString(),
-      })
-    })
-
-    const hankkedata = {
-      paivitetty: new Date().toISOString().split('T')[0],
-      ami: {
-        myonnetyt: amiData.hankkeet?.map((h: any) => ({
-          nimi: h.otsikko,
-          kuvaus: h.kuvaus,
-          summa: h.rahoitus_summa?.toString(),
-          vuosi: h.vuosi?.toString(),
-        })) || [],
-      },
-      muut_rahoittajat: muutRahoittajat,
-      eura: muutData.hankkeet?.filter((h: any) => h.rahoittaja === 'EURA2021') || [],
-    }
-
-    console.log('[ANALYZE] MCP data transformed to JSON format:', {
-      ami_projects: hankkedata.ami.myonnetyt.length,
-      other_funders: Object.keys(hankkedata.muut_rahoittajat).length,
-      eura_projects: hankkedata.eura.length,
-    })
-
-    // 6. Sulje MCP-yhteys
-    await mcpClient.close()
-
-    return hankkedata
-  } catch (error: any) {
-    console.error('[ANALYZE] MCP error:', error.message)
-    console.error('[ANALYZE] Falling back to static JSON data')
-
-    // Sulje MCP-yhteys virheen sattuessa
-    if (mcpClient) {
-      try {
-        await mcpClient.close()
-      } catch (closeError) {
-        // Ei haittaa jos sulkeminen ep äonnistuu
-      }
-    }
-
-    // FALLBACK: Jos MCP epäonnistuu, käytä vanhaa JSON-dataa
-    return fetchProjectDataFromJSON()
-  }
-}
-
-/**
- * PÄÄFUNKTIO - Hankeanalyysi
- * ⭐ Käyttää feature flagia valitakseen datalähteen
- */
 export async function POST(request: NextRequest) {
   let currentStep = 'initialization'
   let requestBody: any = null
-
-  // DEBUG: Yksityiskohtainen feature flag -logitus
-  console.log('=== FEATURE FLAG DEBUG ===')
-  console.log('[DEBUG] process.env.ENABLE_MCP:', process.env.ENABLE_MCP)
-  console.log('[DEBUG] typeof ENABLE_MCP:', typeof process.env.ENABLE_MCP)
-  console.log('[DEBUG] ENABLE_MCP === "true":', process.env.ENABLE_MCP === 'true')
-  console.log('[DEBUG] USE_MCP constant:', USE_MCP)
-  console.log('[DEBUG] Will use:', USE_MCP ? 'MCP (new)' : 'JSON (old)')
-  console.log('==========================')
 
   try {
     // 1. Autentikointi
     currentStep = 'authentication'
     console.log('[ANALYZE] Step: Authentication')
 
-    const supabase = await createSupabaseClient()
+    const supabase = await createClient()
     const {
       data: { user },
     } = await supabase.auth.getUser()
@@ -218,7 +42,7 @@ export async function POST(request: NextRequest) {
     console.log('[ANALYZE] Request data:', {
       hakemus_length: hakemus_teksti?.length,
       haettava_summa,
-      kuvaus_length: kuvaus?.length,
+      kuvaus_length: kuvaus?.length
     })
 
     if (!hakemus_teksti || !haettava_summa) {
@@ -229,15 +53,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // 3. Hae työmarkkinadata (EI MUUTOKSIA)
+    // 3. Hae työmarkkinadata
     currentStep = 'fetching_labor_data'
     console.log('[ANALYZE] Step: Fetching labor market data')
 
     let tyomarkkinadata
     try {
+      // Käytä suhteellista URL:ia Vercelin sisäisiin kutsuihin
       const baseUrl = process.env.VERCEL_URL
         ? `https://${process.env.VERCEL_URL}`
-        : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+        : (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
 
       const dataUrl = `${baseUrl}/api/data/tyomarkkinadata`
       console.log('[ANALYZE] Fetching from:', dataUrl)
@@ -265,29 +90,25 @@ export async function POST(request: NextRequest) {
     }
 
     // 4. Hae hankkedata vertailua varten
-    // ⭐ FEATURE FLAG: Valitaan datalähde
     currentStep = 'fetching_project_data'
     console.log('[ANALYZE] Step: Fetching project comparison data')
-    console.log('[DEBUG] About to choose data source, USE_MCP =', USE_MCP)
 
     let hankkedata: any = null
-
-    if (USE_MCP) {
-      // UUSI: MCP-pohjainen haku
-      console.log('[DEBUG] ✅ Calling fetchProjectDataFromMCP()')
-      hankkedata = await fetchProjectDataFromMCP()
-      console.log('[DEBUG] MCP data received, AMI projects:', hankkedata?.ami?.myonnetyt?.length || 0)
-    } else {
-      // VANHA: Staattinen JSON-tiedosto
-      console.log('[DEBUG] ⚠️ Calling fetchProjectDataFromJSON()')
-      hankkedata = await fetchProjectDataFromJSON()
-      console.log('[DEBUG] JSON data received, AMI projects:', hankkedata?.ami?.myonnetyt?.length || 0)
+    try {
+      const hankkeetPath = join(process.cwd(), 'data', 'hankkeet.json')
+      const hankkeetContent = await readFile(hankkeetPath, 'utf-8')
+      hankkedata = JSON.parse(hankkeetContent)
+      console.log('[ANALYZE] Project data loaded:', {
+        ami_projects: hankkedata.ami?.myonnetyt?.length || 0,
+        other_funders: Object.keys(hankkedata.muut_rahoittajat || {}).length,
+        eura_projects: hankkedata.eura?.length || 0
+      })
+    } catch (error: any) {
+      console.warn('[ANALYZE] Could not load project data:', error.message)
+      hankkedata = null
     }
 
-    // Tästä eteenpäin kaikki on TÄYSIN SAMAA KUIN VANHASSA VERSIOSSA
-    // Prompt, Claude API, JSON-parsinta, Supabase-tallennus - KAIKKI SAMA
-
-    // 5. Luo prompt Claudelle (TÄYSIN SAMA KUIN VANHASSA)
+    // 5. Luo prompt Claudelle
     const prompt = `Analysoi seuraava hankehakemus työmarkkinadatan, Ami-säätiön painopisteiden JA olemassa olevien hankkeiden valossa.
 
 AMI-SÄÄTIÖN VIRALLISET HANKEHAKEMUSTEN ARVIOINTIKRITEERIT:
@@ -370,31 +191,13 @@ TYÖMARKKINADATA (Espoo, Helsinki, Vantaa):
 ${tyomarkkinadata ? JSON.stringify(tyomarkkinadata.metadata, null, 2) : 'Ei saatavilla'}
 
 Työttömyystilanne pääkaupunkiseudulla (syyskuu 2025):
-${
-  tyomarkkinadata && tyomarkkinadata.tyonhakijat_kaupungeittain?.cities
-    ? `
-- Espoo: ${
-        tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Espoo?.[
-          'Työnhakijoita laskentapäivänä (lkm.)'
-        ]?.['2025M09'] || 'N/A'
-      } työnhakijaa
-- Helsinki: ${
-        tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Helsinki?.[
-          'Työnhakijoita laskentapäivänä (lkm.)'
-        ]?.['2025M09'] || 'N/A'
-      } työnhakijaa
-- Vantaa: ${
-        tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Vantaa?.[
-          'Työnhakijoita laskentapäivänä (lkm.)'
-        ]?.['2025M09'] || 'N/A'
-      } työnhakijaa
-`
-    : 'Ei saatavilla'
-}
+${tyomarkkinadata && tyomarkkinadata.tyonhakijat_kaupungeittain?.cities ? `
+- Espoo: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Espoo?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
+- Helsinki: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Helsinki?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
+- Vantaa: ${tyomarkkinadata.tyonhakijat_kaupungeittain.cities.Vantaa?.['Työnhakijoita laskentapäivänä (lkm.)']?.['2025M09'] || 'N/A'} työnhakijaa
+` : 'Ei saatavilla'}
 
-${
-  tyomarkkinadata && tyomarkkinadata.koulutusasteet
-    ? `
+${tyomarkkinadata && tyomarkkinadata.koulutusasteet ? `
 TYÖTTÖMÄT KOULUTUSASTEITTAIN (pääkaupunkiseutu):
 Käytä tätä dataa arvioidessasi onko hakemuksen kohderyhmä relevantti:
 - Jos hakemus kohdistuu matalan koulutuksen ryhmiin, tarkista onko heitä paljon työttömänä
@@ -404,46 +207,28 @@ Käytä tätä dataa arvioidessasi onko hakemuksen kohderyhmä relevantti:
 Data saatavilla: Alempi perusaste, Ylempi perusaste, Keskiaste, Alin korkea-aste, Alempi korkeakouluaste, Ylempi korkeakouluaste, Tutkijakoulutusaste
 
 (Huom: Täysi data on saatavilla tyomarkkinadata.koulutusasteet-objektissa. Käytä sitä tarpeen mukaan vertailuun.)
-`
-    : ''
-}
+` : ''}
 
 ⚠️ **KRIITTINEN: ÄLÄ HALLUSINOI HANKKEITA!** ⚠️
 
 AMI-SÄÄTIÖN MYÖNTÄMÄT HANKKEET (vertailua varten):
-${
-  hankkedata && hankkedata.ami?.myonnetyt
-    ? `
+${hankkedata && hankkedata.ami?.myonnetyt ? `
 **TÄRKEÄÄ:** Käytä VAIN näitä hankkeita. ÄLÄ keksi muita hankkeita. Jos et löydä vastaavaa, sano "Ei löytynyt vastaavaa Ami-hanketta".
 
 Ami-säätiö on myöntänyt avustuksia ${hankkedata.ami.myonnetyt.length} hankkeelle:
-${hankkedata.ami.myonnetyt
-  .map(
-    (h: any) =>
-      `- ${h.nimi} (${h.vuosi}): ${h.kuvaus}${h.summa ? ` | Summa: ${h.summa} €` : ''}`
-  )
-  .join('\n')}
+${hankkedata.ami.myonnetyt.map((h: any) => `- ${h.nimi} (${h.vuosi}): ${h.kuvaus}${h.summa ? ` | Summa: ${h.summa} €` : ''}`).join('\n')}
 
 HUOM: Tämä lista ei välttämättä ole täydellinen. Täysi lista: https://ami.fi/avustukset/hankerahoitus/myonnetyt/
 Jos et ole VARMA että vastaava hanke löytyy yllä olevasta listasta, sano: "Ei tietoa vastaavista Ami-hankkeista nykyisessä datassa."
-`
-    : 'Ei saatavilla - ei voida vertailla Ami-säätiön aiempiin hankkeisiin'
-}
+` : 'Ei saatavilla - ei voida vertailla Ami-säätiön aiempiin hankkeisiin'}
 
 MUIDEN RAHOITTAJIEN HANKKEET (vertailua varten):
-${
-  hankkedata && hankkedata.muut_rahoittajat && Object.keys(hankkedata.muut_rahoittajat).length > 0
-    ? `
+${hankkedata && hankkedata.muut_rahoittajat && Object.keys(hankkedata.muut_rahoittajat).length > 0 ? `
 Muut rahoittajat pääkaupunkiseudulla:
-${Object.entries(hankkedata.muut_rahoittajat)
-  .map(
-    ([rahoittaja, hankkeet]: [string, any]) =>
-      `${rahoittaja.toUpperCase()}: ${hankkeet.map((h: any) => h.nimi).join(', ')}`
-  )
-  .join('\n')}
-`
-    : 'Ei saatavilla'
-}
+${Object.entries(hankkedata.muut_rahoittajat).map(([rahoittaja, hankkeet]: [string, any]) =>
+  `${rahoittaja.toUpperCase()}: ${hankkeet.map((h: any) => h.nimi).join(', ')}`
+).join('\n')}
+` : 'Ei saatavilla'}
 
 ---
 
@@ -627,7 +412,7 @@ Jos et löydä mitään relevanttia Ami-säätiön roolin kannalta, älä kirjoi
 
 Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
 
-    // 6. Lähetä Claudelle (TÄYSIN SAMA KUIN VANHASSA)
+    // 6. Lähetä Claudelle
     currentStep = 'calling_claude_api'
     console.log('[ANALYZE] Step: Calling Claude API')
     console.log('[ANALYZE] Prompt length:', prompt.length)
@@ -646,15 +431,17 @@ Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
     console.log('[ANALYZE] Claude API response received')
     console.log('[ANALYZE] Response type:', message.content[0].type)
 
-    // 7. Parsii Claude-vastaus (TÄYSIN SAMA KUIN VANHASSA)
+    // 7. Parsii Claude-vastaus
     currentStep = 'parsing_claude_response'
     console.log('[ANALYZE] Step: Parsing Claude response')
 
-    const responseText = message.content[0].type === 'text' ? message.content[0].text : ''
+    const responseText =
+      message.content[0].type === 'text' ? message.content[0].text : ''
 
     console.log('[ANALYZE] Response text length:', responseText.length)
     console.log('[ANALYZE] Response preview:', responseText.substring(0, 200))
 
+    // Etsi JSON-osuus vastauksesta
     const jsonMatch = responseText.match(/\{[\s\S]*\}/)
     if (!jsonMatch) {
       console.error('[ANALYZE] No JSON found in Claude response')
@@ -673,9 +460,10 @@ Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
       throw new Error('Virheellinen JSON-muoto Claude-vastauksessa: ' + parseError.message)
     }
 
+    // Lisää haettava summa arviointiin
     arviointi.haettava_summa = haettava_summa
 
-    // 8. Tallenna Supabaseen (TÄYSIN SAMA KUIN VANHASSA)
+    // 8. Tallenna Supabaseen
     currentStep = 'saving_to_supabase'
     console.log('[ANALYZE] Step: Saving to Supabase')
 
@@ -702,7 +490,7 @@ Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
 
     console.log('[ANALYZE] Saved successfully with ID:', savedData.id)
 
-    // 9. Palauta arviointi (TÄYSIN SAMA KUIN VANHASSA)
+    // 9. Palauta arviointi
     return NextResponse.json({
       success: true,
       arviointi,
@@ -717,6 +505,7 @@ Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
     console.error('Request body:', requestBody)
     console.error('=====================')
 
+    // Palauta tarkempi virheviesti käyttäjälle
     let userMessage = 'Virhe analysoinnissa'
 
     if (currentStep === 'authentication') {
