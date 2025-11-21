@@ -6,9 +6,9 @@ Päivitetty: 2025-11-21
 
 ## ✅ Tehty tässä sessiossa (2025-11-21)
 
-### Session 2: MCP-toiminnan valmistelu (2025-11-21 13:00-13:10)
+### Session 2: MCP-toiminnan valmistelu ja debug (2025-11-21 13:00-14:00)
 
-**Toteutus:**
+**Osa 1: Ympäristön valmistelu**
 - ✅ Asennettu npm-riippuvuudet (573 pakettia)
 - ✅ Luotu `.env.local` tiedosto:
   - `ENABLE_MCP=true` (MCP aktivoitu)
@@ -17,22 +17,41 @@ Päivitetty: 2025-11-21
 - ✅ Käynnistetty dev-palvelin (http://localhost:3000)
 - ✅ Luotu `TESTAA_MCP.md` - Kattavat testausohjeet käyttäjälle
 
-**Ongelma havaittu:**
-- Vercel käyttää vanhaa branchia: `claude/build-review-chatbot-app-01SYuumEKiK8JZbU8DXe9NJg`
-- Vercel-logit näyttävät: `[ANALYZE] Falling back to static JSON data`
-- MCP ei ole käytössä tuotannossa vaikka koodi on valmis
-
-**Ratkaisu:**
+**Osa 2: Vercel-ongelma ja dokumentointi**
+- ⚠️ Havaittu: Vercel käyttää vanhaa branchia `claude/build-review-chatbot-app-01SYuumEKiK8JZbU8DXe9NJg`
+- ⚠️ Vercel-logit näyttävät: `[ANALYZE] Falling back to static JSON data`
 - ✅ Varmistettu että MCP-koodi on branchissa `claude/continue-work-01AzW6TNkiV8QGbSwaQWYHbk`
 - ✅ Luotu `VERCEL_PAIVITYS.md` - Ohjeet Vercelin päivittämiseen
-- ✅ Dokumentoitu kuinka vaihtaa Vercelin Production Branch
-- ✅ Dokumentoitu kuinka lisätä `ENABLE_MCP=true` ympäristömuuttuja
+
+**Osa 3: Debug-logitus**
+- ✅ Lisätty kattava debug-logitus `app/api/analyze/route.ts`:
+  - Module load time: ENABLE_MCP arvo ja tyyppi
+  - Data source selection: Kumpi branch valitaan (MCP vs JSON)
+  - MCP connection: Step-by-step logit yhteyden muodostuksesta
+  - Error handling: Yksityiskohtaiset virhelogit stack traceineen
+- ✅ Luotu `DEBUG_OHJEET.md` - Logien tulkintaohjeet (3 skenaariota)
+
+**Osa 4: Anti-hallusinaatio-suojaukset**
+- ✅ Vahvistettu Claude-promptia estämään hallusinaatioita:
+  - ❌ Kielletty: AMI-hankkeiden keksiminen, arvaileminen
+  - ✅ Sallittu: Vain tietokannassa olevat hankkeet
+  - Eksplisiittinen lista: "Nämä ovat AINOAT hankkeet joita saa mainita"
+  - Fallback-viesti: "Ei löydy vastaavaa AMI-hanketta tietokannasta"
+- ✅ Lisätty TODO: Tuo kaikki historialliset AMI-hankkeet (2020-2024)
+
+**Commitit:**
+1. `1f53dc6` - MCP testing setup ja ohjeet
+2. `6c9fe34` - Vercel deployment guide
+3. `10daa1b` - Debug-logitus
+4. `49cbc44` - Anti-hallusinaatio-suojaukset
+5. `b136eb4` - TODO: Historialliset AMI-hankkeet
 
 **Seuraava askel:**
-1. Käyttäjä päivittää Vercel Production Branch -asetuksen
+1. Käyttäjä päivittää Vercel Production Branch → `claude/continue-work-01AzW6TNkiV8QGbSwaQWYHbk`
 2. Käyttäjä lisää `ENABLE_MCP=true` Vercelin Environment Variables
-3. Käyttäjä käynnistää uuden deploymentin
-4. Käyttäjä testaa että MCP toimii tuotannossa
+3. Käyttäjä deployaa ja testaa
+4. Käyttäjä tarkistaa Runtime Logs → selvittää miksi MCP ei aktivoidu
+5. Käyttäjä raportoi lokit → jatketaan debuggausta
 
 ---
 
