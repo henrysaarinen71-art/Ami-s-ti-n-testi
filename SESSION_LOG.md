@@ -17,15 +17,22 @@ Päivitetty: 2025-11-21
 - ✅ Käynnistetty dev-palvelin (http://localhost:3000)
 - ✅ Luotu `TESTAA_MCP.md` - Kattavat testausohjeet käyttäjälle
 
-**Tila:**
-- ⏳ Palvelin käynnissä ja odottaa testausta
-- ⏳ MCP-logit näkyvät kun käyttäjä tekee ensimmäisen analyysin
-- ⏳ Käyttäjä voi nyt testata MCP-toimintaa selaimessa
+**Ongelma havaittu:**
+- Vercel käyttää vanhaa branchia: `claude/build-review-chatbot-app-01SYuumEKiK8JZbU8DXe9NJg`
+- Vercel-logit näyttävät: `[ANALYZE] Falling back to static JSON data`
+- MCP ei ole käytössä tuotannossa vaikka koodi on valmis
+
+**Ratkaisu:**
+- ✅ Varmistettu että MCP-koodi on branchissa `claude/continue-work-01AzW6TNkiV8QGbSwaQWYHbk`
+- ✅ Luotu `VERCEL_PAIVITYS.md` - Ohjeet Vercelin päivittämiseen
+- ✅ Dokumentoitu kuinka vaihtaa Vercelin Production Branch
+- ✅ Dokumentoitu kuinka lisätä `ENABLE_MCP=true` ympäristömuuttuja
 
 **Seuraava askel:**
-1. Käyttäjä testaa sovellusta selaimessa (seuraa `TESTAA_MCP.md` ohjeita)
-2. Varmistetaan että MCP-logit näkyvät palvelimen konsolissa
-3. Tarkistetaan että AMI-hankkeet mainitaan analyysissä
+1. Käyttäjä päivittää Vercel Production Branch -asetuksen
+2. Käyttäjä lisää `ENABLE_MCP=true` Vercelin Environment Variables
+3. Käyttäjä käynnistää uuden deploymentin
+4. Käyttäjä testaa että MCP toimii tuotannossa
 
 ---
 
