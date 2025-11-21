@@ -45,9 +45,30 @@ Sivustolla on todennäköisesti:
    - Kiertää IP-esto
    - Ei suositella ilman AMI.fi:n lupaa
 
-**Tila:** ⏸️ ESTETTY - Käytetään Supabase-testidataa (3 hanketta) kunnes ratkaistaan
-**Prioriteetti:** 🟡 Keskitaso (toimii testidatalla, tarvitaan automaattiseen päivitykseen)
-**Seuraava askel:** Harkitse Playwright-toteutusta TAI ota yhteyttä AMI.fi:hin
+**✅ RATKAISU LÖYDETTY (2025-11-21):**
+- ✅ Luotu SQL-scripti: `supabase/migrations/004_insert_ami_projects.sql`
+- ✅ Sisältää 5 todellista AMI-hanketta `data/hankkeet.json` tiedostosta
+- ✅ Käyttäjä voi ajaa tämän suoraan Supabase Dashboardissa
+- ✅ Ei tarvitse odottaa web scraperin korjausta!
+
+**Hankkeet jotka importoidaan:**
+1. Nuorten yrittäjyyspolku 2024 (45,000 €)
+2. Maahanmuuttajanaisten ammatillinen koulutus (62,000 €)
+3. Pitkäaikaistyöttömien mentorointiohjelma (38,000 €)
+4. Digitaidot työelämään -verkkokurssi (28,000 €)
+5. Työpajatoiminta nuorille syrjäytymisvaarassa oleville (55,000 €)
+
+**📋 KÄYTTÄJÄN TEHTÄVÄ:**
+Aja migraatio Supabase Dashboardissa:
+- Avaa: https://supabase.com/dashboard/project/bgrjaihmctqkayyochwd
+- Mene: SQL Editor
+- Kopioi: `supabase/migrations/004_insert_ami_projects.sql` sisältö
+- Aja SQL
+- Tarkista: `SELECT COUNT(*) FROM hankkeet WHERE on_ami_hanke = true;` → pitäisi olla 5 riviä
+
+**Tila:** ✅ RATKAISTU (SQL-scriptillä) - Odottaa käyttäjän toimenpiteitä
+**Prioriteetti:** 🟡 Keskitaso (tulevaisuudessa voisi automatisoida Playwright:llä)
+**Seuraava askel:** Käyttäjä ajaa migraation 004
 
 ---
 
