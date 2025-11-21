@@ -6,6 +6,24 @@ Tämä kansio sisältää kaikki Supabase-tietokantamigraatiot. Migraatiot on nu
 
 1. **001_hakemukset_table.sql** - Hakemukset-taulu (käyttäjien hakemukset ja arvioinnit)
 2. **002_hankkeet_table.sql** - Hankkeet-taulu (AMI ja muut rahoittajat, MCP-käyttöön)
+3. **003_tyomarkkinadata_table.sql** - Työmarkkinadata kuukausittain (korvaa data/tyomarkkinadata.json)
+4. **004_insert_ami_projects.sql** - ⚠️ TESTIDATA (5 testihanketta, EI OIKEITA!)
+5. **005_delete_test_projects.sql** - POISTA testihankkeet ennen oikeiden lisäämistä
+6. **006_insert_real_ami_projects_TEMPLATE.sql** - Template oikeiden hankkeiden lisäämiseen
+7. **007_insert_real_ami_projects.sql** - ✅ 6 OIKEAA AMI-hanketta (2024)
+
+## ⚠️ TÄRKEÄ HUOMAUTUS HANKKEISTA
+
+**Testihankeet (migration 004):**
+- Migration 004 sisältää 5 TESTIhanketta, EI oikeita AMI-hankkeita
+- Nämä pitää POISTAA ennen oikeiden hankkeiden lisäämistä
+- Aja: `005_delete_test_projects.sql`
+
+**Oikeat hankkeet:**
+- ✅ `007_insert_real_ami_projects.sql` sisältää 6 oikeaa AMI-hanketta (2024)
+- Aja tämä SQL Supabase Dashboardissa
+- Lisää hankkeita myöhemmin kopioimalla projektiblokki ja muokkaamalla tietoja
+- Voit myös käyttää `006_insert_real_ami_projects_TEMPLATE.sql` templatena
 
 ## Miten migraatiot ajetaan
 

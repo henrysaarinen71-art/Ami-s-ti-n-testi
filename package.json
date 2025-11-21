@@ -9,7 +9,8 @@
     "lint": "eslint",
     "parse-data": "python3 scripts/parse_tyomarkkinadata.py",
     "scrape-data": "tsx scripts/scrape-all.ts",
-    "import-ami-hankkeet": "tsx scripts/import-ami-hankkeet.ts"
+    "import-ami-hankkeet": "tsx scripts/import-ami-hankkeet.ts",
+    "import-ami-from-json": "tsx scripts/import-ami-from-json.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.0",

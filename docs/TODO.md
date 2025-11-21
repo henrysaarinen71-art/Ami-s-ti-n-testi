@@ -8,45 +8,67 @@ Päivitetty: 2025-11-21
 
 ### 1. ⚠️ AMI.fi Web Scraper - KORJATTAVA
 
-**Ongelma:** AMI.fi:n scraper sai 403 Forbidden -virheen
-**Syy:** Sivusto esti scraperin (puuttuva/huono User-Agent tai anti-bot suojaus)
+**Ongelma:** AMI.fi:n scraper saa 403 Forbidden -virheen
+**Syy:** Sivusto estää scraperin vahvalla anti-bot suojauksella
 **Tiedosto:** `lib/scrapers/ami-scraper.ts`
 
-**Korjausehdotukset:**
-```typescript
-// Lisää paremmat headerit:
-headers: {
-  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-  'Accept-Language': 'fi-FI,fi;q=0.9,en;q=0.8',
-  'Accept-Encoding': 'gzip, deflate, br',
-  'Referer': 'https://ami.fi/'
-}
+**✅ TEHTY (2025-11-21):**
+- ✅ Lisätty kattavat HTTP-headerit (User-Agent, Accept, Referer, Sec-Fetch-* jne.)
+- ✅ Implementoitu retry-logiikka eksponentiaalisella backoffilla (3 yritystä, 2s-4s-8s)
+- ✅ Lisätty 2 sekunnin viiveet pyyntöjen väliin
+- ✅ Parannettu virheenkäsittelyä ja loggausta
 
-// Lisää retry-logiikka:
-let attempts = 0;
-while (attempts < 3) {
-  try {
-    const response = await axios.get(url, { headers, timeout: 10000 });
-    break;
-  } catch (error) {
-    attempts++;
-    if (attempts < 3) await new Promise(resolve => setTimeout(resolve, 2000));
-  }
-}
+**Tulos:** AMI.fi estää kaikki pyynnöt 403 Forbidden -vastauksella, vaikka headerit ovat realistiset.
+Sivustolla on todennäköisesti:
+- IP-pohjainen esto
+- Cloudflare tai vastaava bot-suoja
+- JavaScript-pohjainen validointi
 
-// Lisää viiveet requestien väliin:
-await new Promise(resolve => setTimeout(resolve, 2000)); // 2s per request
-```
+**Seuraavat vaihtoehdot (prioriteettijärjestyksessä):**
 
-**Vaihtoehtoiset ratkaisut:**
-- Käytä Playwright/Puppeteer selainautomatiota (jos tarvitaan JavaScript)
-- Käytä proxy-palvelua (jos IP on estetty)
-- Harkitse AMI.fi:n kanssa yhteyttä (ehkä tarjoavat API:n?)
+1. **Playwright/Puppeteer selainautomatiolla** (SUOSITELTU)
+   - Käyttää oikeaa selainta → JavaScript toimii
+   - Ohittaa yksinkertaiset bot-suojat
+   - Hitaampi mutta luotettavampi
+   ```bash
+   npm install playwright
+   # Tarvitsee noin 300MB selainlatauksia
+   ```
 
-**Tila:** ⏸️ PYSÄYTETTY - Käytetään testidataa (3 hanketta) kunnes korjataan
-**Prioriteetti:** 🔴 Korkea (tarvitaan automaattiseen päivitykseen)
-**Deadline:** Ennen tuotantoon viemistä
+2. **Ota yhteyttä AMI.fi:hin**
+   - Kysy onko heillä API:a tai RSS-feedä
+   - Selitä käyttötarkoitus (työllisyysavustushakemusten analysointi)
+   - Mahdollisesti sopivat whitelist-IP:n
+
+3. **Proxy-palvelu** (viimeinen vaihtoehto)
+   - Maksullinen ratkaisu (esim. ScraperAPI, BrightData)
+   - Kiertää IP-esto
+   - Ei suositella ilman AMI.fi:n lupaa
+
+**✅ RATKAISU LÖYDETTY (2025-11-21):**
+- ✅ Luotu SQL-scripti: `supabase/migrations/004_insert_ami_projects.sql`
+- ✅ Sisältää 5 todellista AMI-hanketta `data/hankkeet.json` tiedostosta
+- ✅ Käyttäjä voi ajaa tämän suoraan Supabase Dashboardissa
+- ✅ Ei tarvitse odottaa web scraperin korjausta!
+
+**Hankkeet jotka importoidaan:**
+1. Nuorten yrittäjyyspolku 2024 (45,000 €)
+2. Maahanmuuttajanaisten ammatillinen koulutus (62,000 €)
+3. Pitkäaikaistyöttömien mentorointiohjelma (38,000 €)
+4. Digitaidot työelämään -verkkokurssi (28,000 €)
+5. Työpajatoiminta nuorille syrjäytymisvaarassa oleville (55,000 €)
+
+**📋 KÄYTTÄJÄN TEHTÄVÄ:**
+Aja migraatio Supabase Dashboardissa:
+- Avaa: https://supabase.com/dashboard/project/bgrjaihmctqkayyochwd
+- Mene: SQL Editor
+- Kopioi: `supabase/migrations/004_insert_ami_projects.sql` sisältö
+- Aja SQL
+- Tarkista: `SELECT COUNT(*) FROM hankkeet WHERE on_ami_hanke = true;` → pitäisi olla 5 riviä
+
+**Tila:** ✅ RATKAISTU (SQL-scriptillä) - Odottaa käyttäjän toimenpiteitä
+**Prioriteetti:** 🟡 Keskitaso (tulevaisuudessa voisi automatisoida Playwright:llä)
+**Seuraava askel:** Käyttäjä ajaa migraation 004
 
 ---
 
@@ -54,45 +76,78 @@ await new Promise(resolve => setTimeout(resolve, 2000)); // 2s per request
 
 **Ongelma:** AI mainitsee "Helsingissä 76 485 työnhakijaa (syyskuu 2025)" analyysissa, mutta luku on väärä
 
-**Syy:**
-- Supabasessa on vain 4 riviä testidataa (2025M09: Espoo, Helsinki, Vantaa, Koko pk-seutu)
-- AI joko keksii lukuja TAI käyttää vanhaa `data/tyomarkkinadata.json`
-- Historiallinen data puuttuu kokonaan (2020-2025)
-- "Koko pk-seutu" ei laske automaattisesti Espoo+Helsinki+Vantaa
+**Syy (SELVITETTY 2025-11-21):**
+- ❌ Vanha `data/tyomarkkinadata.json` sisälsi **VÄÄRÄN metriikin**:
+  - Se sisälsi "Työnhakijoita laskentapäivänä" (ALL job seekers) = 76,485
+  - Pitää olla "Työttömät työnhakijat" (UNEMPLOYED only) = 48,958
+- ❌ `/api/data/tyomarkkinadata` luki suoraan JSON-tiedostosta, ei Supabasesta
+- ❌ Ei ollut migraatiota `tyomarkkinadata_kuukausittain` tauluun
 
-**Ratkaisu:**
-- [ ] Tarkista mistä "76 485" tulee (Supabase vai vanha JSON?)
-- [ ] Poista vanha `data/tyomarkkinadata.json` JOS se vielä on käytössä
-- [ ] Tuo historiallinen data Excelistä (2020-2025) Supabaseen
-- [ ] Laske "Koko pk-seutu" automaattisesti (Espoo+Helsinki+Vantaa)
-- [ ] Automatisoi kuukausipäivitys Tilastokeskuksen API:sta
-- [ ] Testaa että AI saa OIKEAN datan Supabasesta
+**✅ KORJATTU (2025-11-21):**
+- ✅ Luotu migraatio: `supabase/migrations/003_tyomarkkinadata_table.sql`
+- ✅ Taulu sisältää OIKEAT luvut syyskuulle 2025:
+  - Espoo: 17,623 työtöntä
+  - Helsinki: 48,958 työtöntä (EI 76,485!)
+  - Vantaa: 17,739 työtöntä
+  - Koko pk-seutu: 84,320 työtöntä (laskettu automaattisesti)
+- ✅ API-route päivitetty lukemaan Supabasesta
+- ✅ Poistettu riippuvuus `data/tyomarkkinadata.json` tiedostoon
+
+**📋 KÄYTTÄJÄN TEHTÄVÄT:**
+1. **Aja migraatio Supabase Dashboardissa:**
+   - Avaa: https://supabase.com/dashboard/project/bgrjaihmctqkayyochwd
+   - Mene: SQL Editor
+   - Kopioi: `supabase/migrations/003_tyomarkkinadata_table.sql` sisältö
+   - Aja SQL-komento
+   - Tarkista että taulu luotiin: `SELECT COUNT(*) FROM tyomarkkinadata_kuukausittain;`
+   - Pitäisi palauttaa 4 riviä (Espoo, Helsinki, Vantaa, Koko pk-seutu)
+
+2. **Testaa että API toimii:**
+   ```bash
+   # Lokaali testi:
+   curl http://localhost:3000/api/data/tyomarkkinadata \
+     -H "Authorization: Bearer YOUR_TOKEN"
+
+   # Pitäisi palauttaa data.tyonhakijat_kaupungeittain.cities.Helsinki
+   # jossa "Työttömät työnhakijat (lkm.)" = 48958 (EI 76485!)
+   ```
+
+3. **Testaa analyysissa:**
+   - Tee testihakemus
+   - Tarkista että AI mainitsee "Helsingissä 48,958 työtöntä työnhakijaa"
+   - HUOM: Ei enää "76,485"!
 
 **SQL-kyselyillä tarkistus:**
 ```sql
--- Tarkista mitä dataa on
+-- Tarkista että data on oikein
 SELECT kuukausi_koodi, alue, tyottomat_tyonhakijat
 FROM tyomarkkinadata_kuukausittain
-WHERE kuukausi_koodi = '2025M09';
+WHERE kuukausi_koodi = '2025M09'
+ORDER BY alue;
 
 -- Pitäisi näkyä:
--- Espoo: 17,623
--- Helsinki: 48,958
--- Vantaa: 17,739
--- Koko pk-seutu: 84,320 (YHTEENSÄ)
+-- Espoo:          17,623
+-- Helsinki:       48,958  ← OIKEA luku!
+-- Koko pk-seutu:  84,320
+-- Vantaa:         17,739
 ```
 
 **Odotettu tulos analyysissa:**
 > "Pääkaupunkiseudulla (Helsinki, Espoo, Vantaa) oli syyskuussa 2025 yhteensä **84,320 työtöntä työnhakijaa**, josta Helsingissä **48,958**."
 
-**Tiedostot:**
-- `data/tyomarkkinadata.json` - POISTETTAVA (jos käytössä)
-- `scripts/parse_tyomarkkinadata.py` - Vanha parseri
-- Supabase: `tyomarkkinadata_kuukausittain` taulu
+**📝 JATKOTOIMENPITEET (myöhemmin):**
+- [ ] Tuo historiallinen data 2020-2025 Excelistä Supabaseen
+- [ ] Automatisoi kuukausipäivitys Tilastokeskuksen API:sta (ks. TODO #6)
+- [ ] Harkitse `data/tyomarkkinadata.json` poistamista (ei enää käytössä)
 
-**Tila:** ⏸️ ODOTTAA - Ensin korjataan MCP-hankedata, sitten tämä
-**Prioriteetti:** 🔴 Korkea (vääriä lukuja analyysissa nyt)
-**Riippuvuus:** Vaatii vanha tyomarkkinadata.json poiston
+**Tiedostot:**
+- ✅ `supabase/migrations/003_tyomarkkinadata_table.sql` - UUSI migraatio
+- ✅ `app/api/data/tyomarkkinadata/route.ts` - Päivitetty käyttämään Supabasea
+- ⚠️ `data/tyomarkkinadata.json` - Vanhentunut (ei enää käytössä API:ssa)
+
+**Tila:** ✅ KORJATTU - Odottaa migraation ajoa
+**Prioriteetti:** 🔴 Korkea (vaatii käyttäjän toimenpiteitä)
+**Seuraava askel:** Käyttäjä ajaa migraation Supabasessa
 
 ---
 

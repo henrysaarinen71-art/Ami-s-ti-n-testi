@@ -300,11 +300,26 @@ await new Promise(resolve => setTimeout(resolve, 2000)) // 2s per request
 - Proxy-palvelu (jos IP on estetty)
 - Yhteys AMI.fi:hin (ehkä tarjoavat API:n?)
 
-**Status:** ⏸️ PYSÄYTETTY - Odottaa korjausta
-**Prioriteetti:** 🔴 Korkea (tarvitaan automaattiseen päivitykseen)
+**Status:** ⚠️ PARANNETTU MUTTA ESTETTY - AMI.fi estää kaikki pyynnöt
+**Prioriteetti:** 🟡 Keskitaso (testidatalla toimii)
+
+**Päivitetty:** 2025-11-21
+
+**Toteutetut parannukset:**
+1. ✅ Lisätty kattavat HTTP-headerit (User-Agent, Accept, Accept-Language, Referer, Sec-Fetch-*, jne.)
+2. ✅ Implementoitu `fetchWithRetry()` funktio eksponentiaalisella backoffilla (2s, 4s, 8s)
+3. ✅ Lisätty `delay()` funktio 2s viiveillä pyyntöjen väliin
+4. ✅ Parannettu virheenkäsittelyä ja loggausta
+
+**Tulos:**
+AMI.fi estää edelleen kaikki pyynnöt 403 Forbidden -vastauksella. Sivustolla on vahva anti-bot suojaus (todennäköisesti Cloudflare tai vastaava).
+
+**Suositellut seuraavat vaiheet:**
+- Playwright/Puppeteer selainautomatiolla
+- Yhteydenotto AMI.fi:hin (mahdollinen API tai whitelist)
 
 **Tiedostot:**
-- `lib/scrapers/ami-scraper.ts`
+- `lib/scrapers/ami-scraper.ts` (päivitetty)
 - `docs/TODO.md` (dokumentoitu)
 
 ---
