@@ -8,10 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "parse-data": "python3 scripts/parse_tyomarkkinadata.py",
-    "scrape-data": "tsx scripts/scrape-all.ts"
+    "scrape-data": "tsx scripts/scrape-all.ts",
+    "import-ami-hankkeet": "tsx scripts/import-ami-hankkeet.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.0",
+    "@modelcontextprotocol/sdk": "^1.22.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.83.0",
     "axios": "^1.13.2",
