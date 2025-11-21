@@ -8,45 +8,46 @@ Päivitetty: 2025-11-21
 
 ### 1. ⚠️ AMI.fi Web Scraper - KORJATTAVA
 
-**Ongelma:** AMI.fi:n scraper sai 403 Forbidden -virheen
-**Syy:** Sivusto esti scraperin (puuttuva/huono User-Agent tai anti-bot suojaus)
+**Ongelma:** AMI.fi:n scraper saa 403 Forbidden -virheen
+**Syy:** Sivusto estää scraperin vahvalla anti-bot suojauksella
 **Tiedosto:** `lib/scrapers/ami-scraper.ts`
 
-**Korjausehdotukset:**
-```typescript
-// Lisää paremmat headerit:
-headers: {
-  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-  'Accept-Language': 'fi-FI,fi;q=0.9,en;q=0.8',
-  'Accept-Encoding': 'gzip, deflate, br',
-  'Referer': 'https://ami.fi/'
-}
+**✅ TEHTY (2025-11-21):**
+- ✅ Lisätty kattavat HTTP-headerit (User-Agent, Accept, Referer, Sec-Fetch-* jne.)
+- ✅ Implementoitu retry-logiikka eksponentiaalisella backoffilla (3 yritystä, 2s-4s-8s)
+- ✅ Lisätty 2 sekunnin viiveet pyyntöjen väliin
+- ✅ Parannettu virheenkäsittelyä ja loggausta
 
-// Lisää retry-logiikka:
-let attempts = 0;
-while (attempts < 3) {
-  try {
-    const response = await axios.get(url, { headers, timeout: 10000 });
-    break;
-  } catch (error) {
-    attempts++;
-    if (attempts < 3) await new Promise(resolve => setTimeout(resolve, 2000));
-  }
-}
+**Tulos:** AMI.fi estää kaikki pyynnöt 403 Forbidden -vastauksella, vaikka headerit ovat realistiset.
+Sivustolla on todennäköisesti:
+- IP-pohjainen esto
+- Cloudflare tai vastaava bot-suoja
+- JavaScript-pohjainen validointi
 
-// Lisää viiveet requestien väliin:
-await new Promise(resolve => setTimeout(resolve, 2000)); // 2s per request
-```
+**Seuraavat vaihtoehdot (prioriteettijärjestyksessä):**
 
-**Vaihtoehtoiset ratkaisut:**
-- Käytä Playwright/Puppeteer selainautomatiota (jos tarvitaan JavaScript)
-- Käytä proxy-palvelua (jos IP on estetty)
-- Harkitse AMI.fi:n kanssa yhteyttä (ehkä tarjoavat API:n?)
+1. **Playwright/Puppeteer selainautomatiolla** (SUOSITELTU)
+   - Käyttää oikeaa selainta → JavaScript toimii
+   - Ohittaa yksinkertaiset bot-suojat
+   - Hitaampi mutta luotettavampi
+   ```bash
+   npm install playwright
+   # Tarvitsee noin 300MB selainlatauksia
+   ```
 
-**Tila:** ⏸️ PYSÄYTETTY - Käytetään testidataa (3 hanketta) kunnes korjataan
-**Prioriteetti:** 🔴 Korkea (tarvitaan automaattiseen päivitykseen)
-**Deadline:** Ennen tuotantoon viemistä
+2. **Ota yhteyttä AMI.fi:hin**
+   - Kysy onko heillä API:a tai RSS-feedä
+   - Selitä käyttötarkoitus (työllisyysavustushakemusten analysointi)
+   - Mahdollisesti sopivat whitelist-IP:n
+
+3. **Proxy-palvelu** (viimeinen vaihtoehto)
+   - Maksullinen ratkaisu (esim. ScraperAPI, BrightData)
+   - Kiertää IP-esto
+   - Ei suositella ilman AMI.fi:n lupaa
+
+**Tila:** ⏸️ ESTETTY - Käytetään Supabase-testidataa (3 hanketta) kunnes ratkaistaan
+**Prioriteetti:** 🟡 Keskitaso (toimii testidatalla, tarvitaan automaattiseen päivitykseen)
+**Seuraava askel:** Harkitse Playwright-toteutusta TAI ota yhteyttä AMI.fi:hin
 
 ---
 
