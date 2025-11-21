@@ -50,25 +50,49 @@ await new Promise(resolve => setTimeout(resolve, 2000)); // 2s per request
 
 ---
 
-### 2. ⚠️ Vanha XML-pohjainen työmarkkinadata
+### 2. ⚠️ Työmarkkinadata - Väärät/vanhentuneet luvut
 
-**Ongelma:** `data/tyomarkkinadata.json` saattaa olla vanhentunut tai puutteellinen
-**Syy:** Data tulee manuaalisista XML-tiedostoista, ei automaattisesta päivityksestä
+**Ongelma:** AI mainitsee "Helsingissä 76 485 työnhakijaa (syyskuu 2025)" analyysissa, mutta luku on väärä
 
-**Tehtävät:**
-- [ ] Tarkista milloin `data/tyomarkkinadata.json` on viimeksi päivitetty
-- [ ] Tarkista että data on ajantasalla (sisältää 2025M09 tai uudempi)
-- [ ] Jos vanhentunut → lataa uusi XML Tilastokeskuksesta
-- [ ] Aja: `npm run parse-data` päivittääksesi JSON:n
-- [ ] Harkitse API-integraatiota automaattiseen päivitykseen
+**Syy:**
+- Supabasessa on vain 4 riviä testidataa (2025M09: Espoo, Helsinki, Vantaa, Koko pk-seutu)
+- AI joko keksii lukuja TAI käyttää vanhaa `data/tyomarkkinadata.json`
+- Historiallinen data puuttuu kokonaan (2020-2025)
+- "Koko pk-seutu" ei laske automaattisesti Espoo+Helsinki+Vantaa
+
+**Ratkaisu:**
+- [ ] Tarkista mistä "76 485" tulee (Supabase vai vanha JSON?)
+- [ ] Poista vanha `data/tyomarkkinadata.json` JOS se vielä on käytössä
+- [ ] Tuo historiallinen data Excelistä (2020-2025) Supabaseen
+- [ ] Laske "Koko pk-seutu" automaattisesti (Espoo+Helsinki+Vantaa)
+- [ ] Automatisoi kuukausipäivitys Tilastokeskuksen API:sta
+- [ ] Testaa että AI saa OIKEAN datan Supabasesta
+
+**SQL-kyselyillä tarkistus:**
+```sql
+-- Tarkista mitä dataa on
+SELECT kuukausi_koodi, alue, tyottomat_tyonhakijat
+FROM tyomarkkinadata_kuukausittain
+WHERE kuukausi_koodi = '2025M09';
+
+-- Pitäisi näkyä:
+-- Espoo: 17,623
+-- Helsinki: 48,958
+-- Vantaa: 17,739
+-- Koko pk-seutu: 84,320 (YHTEENSÄ)
+```
+
+**Odotettu tulos analyysissa:**
+> "Pääkaupunkiseudulla (Helsinki, Espoo, Vantaa) oli syyskuussa 2025 yhteensä **84,320 työtöntä työnhakijaa**, josta Helsingissä **48,958**."
 
 **Tiedostot:**
-- `data/tyomarkkinadata.json` - JSON-tuotos
-- `scripts/parse_tyomarkkinadata.py` - Parseri
-- `data/raw/*.xml` - XML-lähteet (gitignored)
+- `data/tyomarkkinadata.json` - POISTETTAVA (jos käytössä)
+- `scripts/parse_tyomarkkinadata.py` - Vanha parseri
+- Supabase: `tyomarkkinadata_kuukausittain` taulu
 
-**Tila:** ⚠️ TARKISTA TILANNE
-**Prioriteetti:** 🟡 Keskitaso (ei estä käyttöä, mutta data voi olla vanhaa)
+**Tila:** ⏸️ ODOTTAA - Ensin korjataan MCP-hankedata, sitten tämä
+**Prioriteetti:** 🔴 Korkea (vääriä lukuja analyysissa nyt)
+**Riippuvuus:** Vaatii vanha tyomarkkinadata.json poiston
 
 ---
 
@@ -220,7 +244,7 @@ await new Promise(resolve => setTimeout(resolve, 2000)); // 2s per request
 
 ### Kriittiset asiat:
 1. ⚠️ **"AMI.fi scraper on korjattava ennen tuotantoa (403 Forbidden)"**
-2. ⚠️ **"Tarkista että data/tyomarkkinadata.json on ajantasalla"**
+2. ⚠️ **"Työmarkkinadata antaa vääriä lukuja - tarkista data/tyomarkkinadata.json vs Supabase"**
 3. 🧪 **"MCP-integraatio odottaa tuotantotestausta (ENABLE_MCP=true)"**
 
 ### Testausvaiheet (kun jatkat):
@@ -250,9 +274,9 @@ await new Promise(resolve => setTimeout(resolve, 2000)); // 2s per request
 ## 🎯 Prioriteettijärjestys
 
 ### Tee ENSIN (kriittiset):
-1. Korjaa AMI.fi scraper (403 Forbidden)
-2. Tarkista työmarkkina-datan ajantasaisuus
-3. Testaa MCP-integraatio (ENABLE_MCP=true)
+1. Testaa ja korjaa MCP-integraatio (ENABLE_MCP=true)
+2. Korjaa työmarkkinadata (väärät luvut analyysissa)
+3. Korjaa AMI.fi scraper (403 Forbidden)
 
 ### Tee SEURAAVAKSI (tärkeät):
 4. Lisää muut rahoittajat (TSR, Diak, Laurea, EURA)

@@ -19,7 +19,15 @@ const anthropic = new Anthropic({
  *
  * Aseta ympäristömuuttuja: ENABLE_MCP=true
  */
+
+// DEBUG: Log at module load time
+console.log('[MODULE LOAD] Initializing analyze route')
+console.log('[MODULE LOAD] process.env.ENABLE_MCP:', process.env.ENABLE_MCP)
+console.log('[MODULE LOAD] typeof:', typeof process.env.ENABLE_MCP)
+
 const USE_MCP = process.env.ENABLE_MCP === 'true'
+
+console.log('[MODULE LOAD] USE_MCP constant set to:', USE_MCP)
 
 /**
  * VANHA TOIMIVA VERSIO - Hakee hanketiedot JSON-tiedostosta
@@ -171,7 +179,14 @@ export async function POST(request: NextRequest) {
   let currentStep = 'initialization'
   let requestBody: any = null
 
-  console.log(`[ANALYZE] Feature flag USE_MCP = ${USE_MCP}`)
+  // DEBUG: Yksityiskohtainen feature flag -logitus
+  console.log('=== FEATURE FLAG DEBUG ===')
+  console.log('[DEBUG] process.env.ENABLE_MCP:', process.env.ENABLE_MCP)
+  console.log('[DEBUG] typeof ENABLE_MCP:', typeof process.env.ENABLE_MCP)
+  console.log('[DEBUG] ENABLE_MCP === "true":', process.env.ENABLE_MCP === 'true')
+  console.log('[DEBUG] USE_MCP constant:', USE_MCP)
+  console.log('[DEBUG] Will use:', USE_MCP ? 'MCP (new)' : 'JSON (old)')
+  console.log('==========================')
 
   try {
     // 1. Autentikointi
@@ -253,15 +268,20 @@ export async function POST(request: NextRequest) {
     // ⭐ FEATURE FLAG: Valitaan datalähde
     currentStep = 'fetching_project_data'
     console.log('[ANALYZE] Step: Fetching project comparison data')
+    console.log('[DEBUG] About to choose data source, USE_MCP =', USE_MCP)
 
     let hankkedata: any = null
 
     if (USE_MCP) {
       // UUSI: MCP-pohjainen haku
+      console.log('[DEBUG] ✅ Calling fetchProjectDataFromMCP()')
       hankkedata = await fetchProjectDataFromMCP()
+      console.log('[DEBUG] MCP data received, AMI projects:', hankkedata?.ami?.myonnetyt?.length || 0)
     } else {
       // VANHA: Staattinen JSON-tiedosto
+      console.log('[DEBUG] ⚠️ Calling fetchProjectDataFromJSON()')
       hankkedata = await fetchProjectDataFromJSON()
+      console.log('[DEBUG] JSON data received, AMI projects:', hankkedata?.ami?.myonnetyt?.length || 0)
     }
 
     // Tästä eteenpäin kaikki on TÄYSIN SAMAA KUIN VANHASSA VERSIOSSA
