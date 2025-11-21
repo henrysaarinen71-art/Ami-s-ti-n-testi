@@ -431,22 +431,37 @@ Data saatavilla: Alempi perusaste, Ylempi perusaste, Keskiaste, Alin korkea-aste
 
 ⚠️ **KRIITTINEN: ÄLÄ HALLUSINOI HANKKEITA!** ⚠️
 
+**EHDOTTOMASTI KIELLETTYÄ:**
+- ❌ ÄLMAINITSE AMI-hankkeita jotka EIVÄT ole alla olevassa listassa
+- ❌ ÄLÄ keksi hankkeiden nimiä, summia tai kuvauksia
+- ❌ ÄLÄ arvaa tai päättele mitä AMI "voisi olla rahoittanut"
+- ❌ ÄLÄ käytä epämääräisiä viittauksia kuten "AMI on rahoittanut vastaavaa aiemmin" ilman tarkkaa hanketta
+
+**SALLITTUA:**
+- ✅ Viittaa VAIN alla olevaan listaan: "AMI on rahoittanut [tarkka nimi]..."
+- ✅ Jos ei löydy vastaavaa: "Ei löytynyt vastaavaa AMI-hanketta tietokannasta"
+- ✅ Jos epävarma: "Tietokannassa ei ole tietoa vastaavista AMI-hankkeista"
+
 AMI-SÄÄTIÖN MYÖNTÄMÄT HANKKEET (vertailua varten):
 ${
   hankkedata && hankkedata.ami?.myonnetyt
     ? `
-**TÄRKEÄÄ:** Käytä VAIN näitä hankkeita. ÄLÄ keksi muita hankkeita. Jos et löydä vastaavaa, sano "Ei löytynyt vastaavaa Ami-hanketta".
+**NÄMÄ OVAT AINOAT AMI-HANKKEET JOITA SAA MAINITA:**
 
-Ami-säätiö on myöntänyt avustuksia ${hankkedata.ami.myonnetyt.length} hankkeelle:
 ${hankkedata.ami.myonnetyt
   .map(
-    (h: any) =>
-      `- ${h.nimi} (${h.vuosi}): ${h.kuvaus}${h.summa ? ` | Summa: ${h.summa} €` : ''}`
+    (h: any, index: number) =>
+      `${index + 1}. "${h.nimi}" (${h.vuosi})
+   ${h.kuvaus}${h.summa ? `
+   Rahoitus: ${h.summa} €` : ''}`
   )
-  .join('\n')}
+  .join('\n\n')}
 
-HUOM: Tämä lista ei välttämättä ole täydellinen. Täysi lista: https://ami.fi/avustukset/hankerahoitus/myonnetyt/
-Jos et ole VARMA että vastaava hanke löytyy yllä olevasta listasta, sano: "Ei tietoa vastaavista Ami-hankkeista nykyisessä datassa."
+**TÄRKEÄÄ:** Yllä on ${hankkedata.ami.myonnetyt.length} hanketta. Nämä ovat AINOAT hankkeet jotka saat mainita.
+Jos mainitsit jonkin hankkeen jota EI ole yllä olevassa listassa → olet hallusinoinut!
+
+Jos et löydä vastaavaa hanketta listasta, SANO:
+"Tietokannassa ei ole tällä hetkellä AMI-rahoitteisia hankkeita jotka olisivat suoraan verrattavissa tähän hakemukseen."
 `
     : 'Ei saatavilla - ei voida vertailla Ami-säätiön aiempiin hankkeisiin'
 }
