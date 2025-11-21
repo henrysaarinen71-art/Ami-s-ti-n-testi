@@ -21,13 +21,17 @@ const anthropic = new Anthropic({
  */
 
 // DEBUG: Log at module load time
+console.log('=== MODULE LOAD TIME DEBUG ===')
 console.log('[MODULE LOAD] Initializing analyze route')
 console.log('[MODULE LOAD] process.env.ENABLE_MCP:', process.env.ENABLE_MCP)
 console.log('[MODULE LOAD] typeof:', typeof process.env.ENABLE_MCP)
+console.log('[MODULE LOAD] Comparison result (ENABLE_MCP === "true"):', process.env.ENABLE_MCP === 'true')
 
 const USE_MCP = process.env.ENABLE_MCP === 'true'
 
 console.log('[MODULE LOAD] USE_MCP constant set to:', USE_MCP)
+console.log('[MODULE LOAD] If USE_MCP is false, check Vercel Environment Variables!')
+console.log('===============================')
 
 /**
  * VANHA TOIMIVA VERSIO - Hakee hanketiedot JSON-tiedostosta
@@ -59,12 +63,15 @@ async function fetchProjectDataFromJSON() {
  * ⭐ KOKEELLINEN - voidaan ottaa käyttöön feature flagilla
  */
 async function fetchProjectDataFromMCP() {
+  console.log('=== MCP FUNCTION CALLED ===')
   console.log('[ANALYZE] Using MCP data (new version)')
+  console.log('[MCP] Starting MCP connection process...')
 
   let mcpClient: Client | null = null
 
   try {
     // 1. Luo MCP client
+    console.log('[MCP] Step 1: Creating MCP client...')
     mcpClient = new Client(
       {
         name: 'ami-analyzer-client',
@@ -76,7 +83,11 @@ async function fetchProjectDataFromMCP() {
     )
 
     // 2. Yhdistä MCP serveriin
+    console.log('[MCP] Step 2: Setting up MCP server connection...')
     const serverPath = join(process.cwd(), 'mcp-server', 'hanke-server.ts')
+    console.log('[MCP] Server path:', serverPath)
+    console.log('[MCP] Current working directory:', process.cwd())
+
     const transport = new StdioClientTransport({
       command: 'node',
       args: ['--loader', 'tsx', serverPath],
@@ -87,9 +98,9 @@ async function fetchProjectDataFromMCP() {
       },
     })
 
-    console.log('[ANALYZE] Connecting to MCP server...')
+    console.log('[MCP] Step 3: Connecting to MCP server...')
     await mcpClient.connect(transport)
-    console.log('[ANALYZE] MCP client connected successfully')
+    console.log('[MCP] ✅ MCP client connected successfully')
 
     // 3. Hae AMI-hankkeet
     console.log('[ANALYZE] Calling MCP: get_ami_hankkeet')
@@ -154,15 +165,20 @@ async function fetchProjectDataFromMCP() {
 
     return hankkedata
   } catch (error: any) {
-    console.error('[ANALYZE] MCP error:', error.message)
+    console.error('=== MCP ERROR OCCURRED ===')
+    console.error('[MCP ERROR] Error type:', error.constructor.name)
+    console.error('[MCP ERROR] Error message:', error.message)
+    console.error('[MCP ERROR] Full error:', error)
+    console.error('[MCP ERROR] Stack trace:', error.stack)
     console.error('[ANALYZE] Falling back to static JSON data')
+    console.error('==========================')
 
     // Sulje MCP-yhteys virheen sattuessa
     if (mcpClient) {
       try {
         await mcpClient.close()
       } catch (closeError) {
-        // Ei haittaa jos sulkeminen ep äonnistuu
+        // Ei haittaa jos sulkeminen epäonnistuu
       }
     }
 
@@ -267,22 +283,27 @@ export async function POST(request: NextRequest) {
     // 4. Hae hankkedata vertailua varten
     // ⭐ FEATURE FLAG: Valitaan datalähde
     currentStep = 'fetching_project_data'
+    console.log('=== DATA SOURCE SELECTION ===')
     console.log('[ANALYZE] Step: Fetching project comparison data')
-    console.log('[DEBUG] About to choose data source, USE_MCP =', USE_MCP)
+    console.log('[DEBUG] USE_MCP constant value:', USE_MCP)
+    console.log('[DEBUG] process.env.ENABLE_MCP at request time:', process.env.ENABLE_MCP)
+    console.log('[DEBUG] About to choose data source...')
 
     let hankkedata: any = null
 
     if (USE_MCP) {
       // UUSI: MCP-pohjainen haku
-      console.log('[DEBUG] ✅ Calling fetchProjectDataFromMCP()')
+      console.log('[DEBUG] ✅ USE_MCP is TRUE → Calling fetchProjectDataFromMCP()')
       hankkedata = await fetchProjectDataFromMCP()
       console.log('[DEBUG] MCP data received, AMI projects:', hankkedata?.ami?.myonnetyt?.length || 0)
     } else {
       // VANHA: Staattinen JSON-tiedosto
-      console.log('[DEBUG] ⚠️ Calling fetchProjectDataFromJSON()')
+      console.log('[DEBUG] ⚠️ USE_MCP is FALSE → Calling fetchProjectDataFromJSON()')
+      console.log('[DEBUG] ⚠️ This means ENABLE_MCP is NOT set to "true" in environment')
       hankkedata = await fetchProjectDataFromJSON()
       console.log('[DEBUG] JSON data received, AMI projects:', hankkedata?.ami?.myonnetyt?.length || 0)
     }
+    console.log('=============================')
 
     // Tästä eteenpäin kaikki on TÄYSIN SAMAA KUIN VANHASSA VERSIOSSA
     // Prompt, Claude API, JSON-parsinta, Supabase-tallennus - KAIKKI SAMA
