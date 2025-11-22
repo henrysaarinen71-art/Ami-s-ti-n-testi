@@ -302,6 +302,164 @@ Jos mainitset hankkeen jota EI ole yllä olevassa listassa, teet VAKAVAN virheen
 
 Analysoi seuraava hankehakemus työmarkkinadatan, Ami-säätiön painopisteiden JA olemassa olevien hankkeiden valossa.
 
+
+===================================================================
+ENSIN: HAKEMUSLAADUN JA HAKIJAN USKOTTAVUUDEN TARKISTUKSET
+===================================================================
+
+Ennen varsinaista arviointia - TARKISTA NÄMÄ:
+
+1️⃣ KOHDERYHMÄN SELKEYS
+────────────────────
+✓ Onko kohderyhmä SELKEÄSTI ilmoitettu? (esim. "NEET-nuoret 18-29v" ✅ vs. "nuoret" ❌)
+✓ Onko kohderyhmän KOKO arvioitu? (esim. "n. 500 henkilöä Helsingissä")
+❌ Jos epäselvä → VAKAVA PUUTE kriteerissä 1
+
+2️⃣ TODELLINEN TAVOITE
+────────────────────
+✓ Onko TUTKIMUS- tai KEHITTÄMISTAVOITE selkeästi ilmaistu?
+✓ AMI rahoittaa: tieteellinen tutkimus, selvitykset, yleishyödyllinen tiedontuotanto, 
+   kokeilut, skaalaushankkeet, ratkaisut, kyvykkyyksien synnyttäminen
+❌ Jos tavoite epäselvä → VAKAVA PUUTE kriteerissä 1
+
+3️⃣ TARPEEN SELVITTÄMINEN PÄÄKAUPUNKISEUDULLA
+────────────────────────────────────────────
+✓ Miten hakija on SELVITTÄNYT tarpeellisuutta pk-seudulla?
+  - Esiselvitykset? Tutkimukset? Keskustelut toimijoiden kanssa?
+  - Onko viittauksia dataan tai aiempaan tutkimukseen?
+❌ Jos ei mainintaa → VAKAVA PUUTE kriteerissä 1
+⚠️ Pelkkä "tiedämme että tarve on suuri" → EI RIITÄ
+
+4️⃣ EPÄLOOGISUUDET JA RISTIRIITAISUUDET
+────────────────────────────────────────
+✓ Tarkista VAKAVAT EPÄLOOGISUUDET:
+  - Budjetti vs. kohderyhmän koko (esim. 100 000 € / 5 henkilöä = 20 000 €/hlö ⚠️)
+  - Aikataulu vs. tavoitteet (esim. 500 haastattelua 3 kuukaudessa ❌)
+  - Lupaukset vs. resurssit (esim. "valtakunnallinen levitys" mutta 1 henkilö 6kk)
+❌ Jos VAKAVIA ristiriitoja → HYLÄTTÄVÄ
+
+5️⃣ KIRJOITUSTYYLI JA AMMATTIMAISUUS
+────────────────────────────────────
+ARVIOI TYYLI:
+
+✅ AMMATTIMAINEN:
+  - Selkeä rakenne
+  - Konkreettiset esimerkit ja numerot
+  - Viittauksia tutkimukseen/dataan
+  - Johdonmukainen argumentaatio
+
+❌ AMATÖÖRIMÄINEN:
+  - Epäselvä, sekava
+  - Pelkkää yleistä puhetta ilman konkretiaa
+  - Kirjoitusvirheitä, huonoa suomea
+  - Puutteellinen perustelut
+
+⚠️ JARGON ILMAN SISÄLTÖÄ:
+  - Paljon ammattisanoja mutta ei konkretiaa
+  - "Paradigman muutos", "ekosysteemi", "disruptio" ← tyhjät sanat
+  - Ei selitetä MITEN tai MIKSI
+
+6️⃣ TROLLI TAI TESTIHAKEMUS
+────────────────────────────
+TUNNISTA EPÄILYTTÄVÄT:
+
+🚨 TROLLI-MERKIT:
+  - Absurdi aihe tai kohderyhmä
+  - Ilmeisen epärealistinen budjetti (1 000 000 € yhdelle työpajalle)
+  - Provokatiivinen tai epäasiallinen kieli
+  - Ei aitoa tarvetta tai tavoitetta
+
+🚨 TESTIHAKEMUS-MERKIT:
+  - "Testi", "Test", "Demo" nimessä tai kuvauksessa
+  - Täytetty vähimmäisvaatimuksilla, ei aitoa sisältöä
+  - Placeholder-tekstiä (Lorem ipsum, "XXX", "TBD")
+  - Ilmeisen nopea täyttö ilman miettimistä
+
+❌ Jos TROLLI tai TESTI:
+   → Anna ARVOSANA: 0/10
+   → Ilmoita vahvuuksissa: "⚠️ EPÄILYTTÄVÄ HAKEMUS: Vaikuttaa trolli/testihakemukselta"
+   → Suositus: "Hylättävä"
+
+7️⃣ HAKIJAN RELEVANSSI JA USKOTTAVUUS
+──────────────────────────────────────
+ARVIOI HAKIJA:
+
+✅ ERITTÄIN USKOTTAVA:
+  - Tutkimuslaitos: THL, Labore, Kunnallisalan kehittämissäätiö, TTL, Työterveyslaitos
+  - Yliopisto tai ammattikorkeakoulu
+  - Tunnettu järjestötoimija (esim. Into ry, Spring House Oy tietokannasta)
+
+✅ USKOTTAVA:
+  - Tunnettu kaupungin/kunnan yksikkö
+  - Vakiintunut järjestö
+  - Tunnettu yritys toimialalla
+
+⚠️ TUNTEMATON MUTTA MAHDOLLISESTI OK:
+  - Pieni järjestö tai yhdistys
+  - Startup tai nuori yritys
+  - → Tarkista ERITYISEN TARKKAAN resurssit ja osaaminen (kriteeri 3)
+
+🚨 EPÄILYTTÄVÄ/ARVELUTTAVA:
+  - Epämääräinen yrityksen nimi (esim. "Nordic Excellence Solutions Oy")
+  - Ei löydy Googlesta tai Y-tunnuksella
+  - Nimi viittaa konsulttitoimintaan mutta ei kokemusta
+  - Nimi ei vastaa toimialaa
+  - → Jos epäilyttävä: "⚠️ EPÄILYTTÄVÄ HAKIJA: Hakijan uskottavuus kyseenalainen"
+
+8️⃣ SISÄLLÖN SYVYYS: JARGON VS. KONKRETIAA
+───────────────────────────────────────────
+TARKISTA ONKO AIDOSTI MIETITTY:
+
+✅ HYVIN MIETITTY:
+  - Konkreettiset esimerkit ja numerot
+  - Tarkat kuvaukset menetelmistä
+  - Selkeät virstanpylväät ja mittarit
+  - Realistiset haasteet tunnistettu
+  - Tieteellinen perustelu (jos tutkimus)
+
+❌ HUONOSTI MIETITTY:
+  - Vain yleisiä fraaseja ("edistämme", "kehitämme", "parannamme")
+  - Ei konkretiaa MITEN tai MIKSI
+  - Kopioi-liimaa -vaikutelma
+  - Ei tieteellistä perustaa (jos tutkimus)
+
+⚠️ JARGONIA ILMAN SISÄLTÖÄ:
+  - Täynnä muotisanoja mutta tyhjä sisältö
+  - Esim: "Luomme ekosysteemin paradigman muutokseen disruptiivisen innovaation kautta"
+  - → Kysy: "Mitä tämä KONKREETTISESTI tarkoittaa?"
+
+9️⃣ TIETEELLINEN PERUSTELU (jos tutkimus)
+──────────────────────────────────────────
+Jos hakemus on TIETEELLINEN TUTKIMUS:
+
+✓ Onko tutkimuskysymys SELKEÄ?
+✓ Onko viittauksia AIEMPAAN TUTKIMUKSEEN?
+✓ Onko MENETELMÄ kuvattu (kvalitatiivinen/kvantitatiivinen)?
+✓ Onko AINEISTO määritelty (koko, hankinta)?
+✓ Onko tutkijalla PÄTEVYYS (akateeminen tausta)?
+
+❌ Jos tutkimus mutta ei tieteellistä perustaa → VAKAVA PUUTE
+
+===================================================================
+TÄRKEÄÄ: INTEGROITUMINEN PÄÄKAUPUNKISEUDULLE
+===================================================================
+
+AMI-säätiön mukaan: "Meille on tärkeää, että hankkeiden tuottama tieto tai 
+muu lisäarvo INTEGROITUU PÄÄKAUPUNKISEUDULLE tai hyödyttää pääkaupunkiseudulla 
+toimivia hakijatahoja laajemmin. Tiedon integroitumiseen on hyvä kiinnittää 
+huomiota jo hankkeen suunnitteluvaiheessa."
+
+TARKISTA INTEGROITUMINEN (linkittyy kriteeriin 2):
+✓ Onko KONKREETTINEN suunnitelma miten tieto/ratkaisu otetaan käyttöön?
+✓ Onko SITOUTUNEET kumppanit pk-seudulla?
+✓ Onko LEVITYSSUUNNITELMA pk-seudun toimijoille?
+
+❌ Pelkkä "tieto on kaikkien saatavilla" → EI RIITÄ!
+✅ "Järjestämme 3 työpajaa pk-seudun TE-toimistoille + jaetaan malli 
+   Helsingin kaupungin nuorisopalveluille" → HYVÄ!
+
+===================================================================
+
 ===================================================================
 AMI-SÄÄTIÖN VIRALLISET ARVIOINTIKRITEERIT
 ===================================================================
@@ -404,7 +562,12 @@ ANALYYSIN RAKENNE
 
 Rakenna analyysi ARVIOINTIKRITEERIEN YMPÄRILLE:
 
-1. ARVOSANA (1-10)
+1. ARVOSANA (0-10)
+   - 0 = Trolli tai testihakemus (HYLÄTTÄVÄ)
+   - 1-3 = Vakavia puutteita
+   - 4-6 = Kehityskohtia, harkittava
+   - 7-8 = Hyvä, pieniä kehityskohtia
+   - 9-10 = Erinomainen
    - Perustele ARVIOINTIKRITEERIEN valossa
 
 2. VAHVUUDET
@@ -584,7 +747,7 @@ TEHTÄVÄ:
 Analysoi hakemus ja anna arvio JSON-muodossa seuraavasti:
 
 {
-  "arvosana": <numero 1-10>,
+  "arvosana": <numero 0-10>,
   "vahvuudet": [
     "<3-5 konkreettista vahvuutta>"
   ],
