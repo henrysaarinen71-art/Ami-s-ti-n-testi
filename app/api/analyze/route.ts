@@ -375,7 +375,10 @@ TUNNISTA EPÄILYTTÄVÄT:
   - Placeholder-tekstiä (Lorem ipsum, "XXX", "TBD")
   - Ilmeisen nopea täyttö ilman miettimistä
 
-❌ Jos TROLLI tai TESTI → Ilmoita HETI: "⚠️ EPÄILYTTÄVÄ HAKEMUS: Vaikuttaa trolli/testihakemukselta"
+❌ Jos TROLLI tai TESTI:
+   → Anna ARVOSANA: 0/10
+   → Ilmoita vahvuuksissa: "⚠️ EPÄILYTTÄVÄ HAKEMUS: Vaikuttaa trolli/testihakemukselta"
+   → Suositus: "Hylättävä"
 
 7️⃣ HAKIJAN RELEVANSSI JA USKOTTAVUUS
 ──────────────────────────────────────
@@ -559,7 +562,12 @@ ANALYYSIN RAKENNE
 
 Rakenna analyysi ARVIOINTIKRITEERIEN YMPÄRILLE:
 
-1. ARVOSANA (1-10)
+1. ARVOSANA (0-10)
+   - 0 = Trolli tai testihakemus (HYLÄTTÄVÄ)
+   - 1-3 = Vakavia puutteita
+   - 4-6 = Kehityskohtia, harkittava
+   - 7-8 = Hyvä, pieniä kehityskohtia
+   - 9-10 = Erinomainen
    - Perustele ARVIOINTIKRITEERIEN valossa
 
 2. VAHVUUDET
@@ -739,7 +747,7 @@ TEHTÄVÄ:
 Analysoi hakemus ja anna arvio JSON-muodossa seuraavasti:
 
 {
-  "arvosana": <numero 1-10>,
+  "arvosana": <numero 0-10>,
   "vahvuudet": [
     "<3-5 konkreettista vahvuutta>"
   ],
