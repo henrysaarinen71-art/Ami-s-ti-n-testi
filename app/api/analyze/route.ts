@@ -67,7 +67,7 @@ async function fetchProjectDataFromSupabase() {
   console.log('[SUPABASE] Fetching AMI projects directly from Supabase')
 
   try {
-    const supabase = createSupabaseClient()
+    const supabase = await createSupabaseClient()
 
     // 1. Hae AMI-hankkeet suoraan
     console.log('[SUPABASE] Step 1: Fetching AMI projects...')
