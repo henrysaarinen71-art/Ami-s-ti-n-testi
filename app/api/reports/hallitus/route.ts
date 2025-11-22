@@ -340,7 +340,7 @@ TÄRKEÄÄ:
     console.log('[REPORT] Prompt length:', prompt.length)
 
     const message = await anthropic.messages.create({
-      model: 'claude-3-haiku-20240307',
+      model: 'claude-sonnet-4-5-20250929',
       max_tokens: 8192,
       messages: [
         {

@@ -902,8 +902,8 @@ Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
     console.log('[ANALYZE] Prompt length:', prompt.length)
 
     const message = await anthropic.messages.create({
-      model: 'claude-3-haiku-20240307',
-      max_tokens: 4096,
+      model: 'claude-sonnet-4-5-20250929',
+      max_tokens: 8192,
       messages: [
         {
           role: 'user',
