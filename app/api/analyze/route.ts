@@ -59,75 +59,49 @@ async function fetchProjectDataFromJSON() {
 }
 
 /**
- * UUSI MCP-POHJAINEN VERSIO - Hakee hanketiedot Supabasesta MCP:n kautta
- * ⭐ KOKEELLINEN - voidaan ottaa käyttöön feature flagilla
+ * SUORA SUPABASE-HAKU - Hakee hanketiedot suoraan Supabasesta
+ * ✅ YKSINKERTAINEN - ei MCP-monimutkaisuutta
  */
-async function fetchProjectDataFromMCP() {
-  console.log('=== MCP FUNCTION CALLED ===')
-  console.log('[ANALYZE] Using MCP data (new version)')
-  console.log('[MCP] Starting MCP connection process...')
-
-  let mcpClient: Client | null = null
+async function fetchProjectDataFromSupabase() {
+  console.log('=== SUPABASE FUNCTION CALLED ===')
+  console.log('[SUPABASE] Fetching AMI projects directly from Supabase')
 
   try {
-    // 1. Luo MCP client
-    console.log('[MCP] Step 1: Creating MCP client...')
-    mcpClient = new Client(
-      {
-        name: 'ami-analyzer-client',
-        version: '1.0.0',
-      },
-      {
-        capabilities: {},
-      }
-    )
+    const supabase = createSupabaseClient()
 
-    // 2. Yhdistä MCP serveriin
-    console.log('[MCP] Step 2: Setting up MCP server connection...')
-    const serverPath = join(process.cwd(), 'mcp-server', 'hanke-server.ts')
-    console.log('[MCP] Server path:', serverPath)
-    console.log('[MCP] Current working directory:', process.cwd())
+    // 1. Hae AMI-hankkeet suoraan
+    console.log('[SUPABASE] Step 1: Fetching AMI projects...')
+    const { data: amiProjects, error: amiError } = await supabase
+      .from('hankkeet')
+      .select('*')
+      .eq('rahoittaja', 'AMI')
+      .order('created_at', { ascending: false })
 
-    const transport = new StdioClientTransport({
-      command: 'node',
-      args: ['--loader', 'tsx', serverPath],
-      env: {
-        ...process.env,
-        NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-        SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-      },
-    })
+    if (amiError) {
+      console.error('[SUPABASE ERROR] AMI projects fetch failed:', amiError)
+      throw amiError
+    }
 
-    console.log('[MCP] Step 3: Connecting to MCP server...')
-    await mcpClient.connect(transport)
-    console.log('[MCP] ✅ MCP client connected successfully')
+    console.log(`[SUPABASE] ✅ Found ${amiProjects?.length || 0} AMI projects`)
 
-    // 3. Hae AMI-hankkeet
-    console.log('[ANALYZE] Calling MCP: get_ami_hankkeet')
-    const amiResult = await mcpClient.callTool({
-      name: 'get_ami_hankkeet',
-      arguments: { limit: 200 }
-    })
-    const amiContent = (amiResult.content as any[]).find((c: any) => c.type === 'text')
-    const amiData = amiContent ? JSON.parse(amiContent.text) : { hankkeet: [] }
+    // 2. Hae muut rahoittajat
+    console.log('[SUPABASE] Step 2: Fetching other funders projects...')
+    const { data: muutProjects, error: muutError } = await supabase
+      .from('hankkeet')
+      .select('*')
+      .neq('rahoittaja', 'AMI')
+      .order('created_at', { ascending: false })
 
-    console.log(`[ANALYZE] MCP returned ${amiData.hankkeet?.length || 0} AMI projects`)
+    if (muutError) {
+      console.error('[SUPABASE ERROR] Other projects fetch failed:', muutError)
+      throw muutError
+    }
 
-    // 4. Hae muut hankkeet
-    console.log('[ANALYZE] Calling MCP: get_muut_hankkeet')
-    const muutResult = await mcpClient.callTool({
-      name: 'get_muut_hankkeet',
-      arguments: { limit: 200 }
-    })
-    const muutContent = (muutResult.content as any[]).find((c: any) => c.type === 'text')
-    const muutData = muutContent ? JSON.parse(muutContent.text) : { hankkeet: [] }
+    console.log(`[SUPABASE] ✅ Found ${muutProjects?.length || 0} other funder projects`)
 
-    console.log(`[ANALYZE] MCP returned ${muutData.hankkeet?.length || 0} other projects`)
-
-    // 5. Muunna MCP-data samaan formaattiin kuin vanha JSON
-    // Tämä varmistaa että prompt säilyy TÄYSIN SAMANA
+    // 3. Muunna Supabase-data samaan formaattiin kuin vanha JSON
     const muutRahoittajat: Record<string, any[]> = {}
-    muutData.hankkeet?.forEach((hanke: any) => {
+    muutProjects?.forEach((hanke: any) => {
       const rahoittaja = hanke.rahoittaja || 'Muu'
       if (!muutRahoittajat[rahoittaja]) {
         muutRahoittajat[rahoittaja] = []
@@ -137,52 +111,42 @@ async function fetchProjectDataFromMCP() {
         kuvaus: hanke.kuvaus,
         summa: hanke.rahoitus_summa?.toString(),
         vuosi: hanke.vuosi?.toString(),
+        toteutaja: hanke.toteutaja,
       })
     })
 
     const hankkedata = {
       paivitetty: new Date().toISOString().split('T')[0],
       ami: {
-        myonnetyt: amiData.hankkeet?.map((h: any) => ({
+        myonnetyt: amiProjects?.map((h: any) => ({
           nimi: h.otsikko,
           kuvaus: h.kuvaus,
           summa: h.rahoitus_summa?.toString(),
           vuosi: h.vuosi?.toString(),
+          toteutaja: h.toteutaja,
         })) || [],
       },
       muut_rahoittajat: muutRahoittajat,
-      eura: muutData.hankkeet?.filter((h: any) => h.rahoittaja === 'EURA2021') || [],
+      eura: muutProjects?.filter((h: any) => h.rahoittaja === 'EURA2021') || [],
     }
 
-    console.log('[ANALYZE] MCP data transformed to JSON format:', {
+    console.log('[SUPABASE] ✅ Data transformed successfully:', {
       ami_projects: hankkedata.ami.myonnetyt.length,
       other_funders: Object.keys(hankkedata.muut_rahoittajat).length,
       eura_projects: hankkedata.eura.length,
     })
 
-    // 6. Sulje MCP-yhteys
-    await mcpClient.close()
-
     return hankkedata
   } catch (error: any) {
-    console.error('=== MCP ERROR OCCURRED ===')
-    console.error('[MCP ERROR] Error type:', error.constructor.name)
-    console.error('[MCP ERROR] Error message:', error.message)
-    console.error('[MCP ERROR] Full error:', error)
-    console.error('[MCP ERROR] Stack trace:', error.stack)
+    console.error('=== SUPABASE ERROR OCCURRED ===')
+    console.error('[SUPABASE ERROR] Error type:', error.constructor.name)
+    console.error('[SUPABASE ERROR] Error message:', error.message)
+    console.error('[SUPABASE ERROR] Full error:', error)
+    console.error('[SUPABASE ERROR] Stack trace:', error.stack)
     console.error('[ANALYZE] Falling back to static JSON data')
-    console.error('==========================')
+    console.error('=================================')
 
-    // Sulje MCP-yhteys virheen sattuessa
-    if (mcpClient) {
-      try {
-        await mcpClient.close()
-      } catch (closeError) {
-        // Ei haittaa jos sulkeminen epäonnistuu
-      }
-    }
-
-    // FALLBACK: Jos MCP epäonnistuu, käytä vanhaa JSON-dataa
+    // FALLBACK: Jos Supabase epäonnistuu, käytä vanhaa JSON-dataa
     return fetchProjectDataFromJSON()
   }
 }
@@ -292,10 +256,10 @@ export async function POST(request: NextRequest) {
     let hankkedata: any = null
 
     if (USE_MCP) {
-      // UUSI: MCP-pohjainen haku
-      console.log('[DEBUG] ✅ USE_MCP is TRUE → Calling fetchProjectDataFromMCP()')
-      hankkedata = await fetchProjectDataFromMCP()
-      console.log('[DEBUG] MCP data received, AMI projects:', hankkedata?.ami?.myonnetyt?.length || 0)
+      // UUSI: Suora Supabase-haku
+      console.log('[DEBUG] ✅ USE_MCP is TRUE → Calling fetchProjectDataFromSupabase()')
+      hankkedata = await fetchProjectDataFromSupabase()
+      console.log('[DEBUG] Supabase data received, AMI projects:', hankkedata?.ami?.myonnetyt?.length || 0)
     } else {
       // VANHA: Staattinen JSON-tiedosto
       console.log('[DEBUG] ⚠️ USE_MCP is FALSE → Calling fetchProjectDataFromJSON()')
@@ -308,8 +272,35 @@ export async function POST(request: NextRequest) {
     // Tästä eteenpäin kaikki on TÄYSIN SAMAA KUIN VANHASSA VERSIOSSA
     // Prompt, Claude API, JSON-parsinta, Supabase-tallennus - KAIKKI SAMA
 
-    // 5. Luo prompt Claudelle (TÄYSIN SAMA KUIN VANHASSA)
-    const prompt = `Analysoi seuraava hankehakemus työmarkkinadatan, Ami-säätiön painopisteiden JA olemassa olevien hankkeiden valossa.
+    // 5. Luo prompt Claudelle
+    const prompt = `🚨 KRIITTINEN OHJE - AMI-SÄÄTIÖN HANKKEET:
+
+Sinulle on annettu lista AMI-säätiön TODELLISISTA hankkeista Supabase-tietokannasta.
+
+EHDOTTOMASTI KIELLETTYÄ:
+❌ ÄLÄ KOSKAAN keksi tai mainitse hankkeita joita ei ole annetussa listassa
+❌ ÄLÄ viittaa hankkeisiin kuten "Pitkäaikaistyöttömien mentorointiohjelma"
+❌ ÄLÄ viittaa hankkeisiin kuten "Maahanmuuttajanaisten ammatillinen koulutus"
+❌ ÄLÄ viittaa mihinkään hankkeisiin vuodelta 2023 tai aiemmilta
+❌ ÄLÄ keksi budjetteja tai summia
+
+NÄMÄ OVAT AINOAT OIKEAT AMI-HANKKEET (${hankkedata?.ami?.myonnetyt?.length || 0} kpl):
+
+${hankkedata?.ami?.myonnetyt?.map((p: any, i: number) =>
+  `${i + 1}. ${p.nimi} ${p.toteutaja ? `(${p.toteutaja})` : ''} ${p.summa ? `- ${p.summa} €` : ''}`
+).join('\n') || 'Ei hankkeita tietokannassa'}
+
+SÄÄNNÖT:
+✅ Viittaa VAIN yllä oleviin hankkeisiin
+✅ Käytä TARKKOJA hankkeiden nimiä
+✅ Jos et löydä relevanttia hanketta, sano: "Ei vastaavia AMI-hankkeita tietokannassa"
+✅ Tämä on AMI-säätiön AINOA virallinen hankelista
+
+Jos mainitset hankkeen jota EI ole yllä olevassa listassa, teet VAKAVAN virheen.
+
+---
+
+Analysoi seuraava hankehakemus työmarkkinadatan, Ami-säätiön painopisteiden JA olemassa olevien hankkeiden valossa.
 
 AMI-SÄÄTIÖN VIRALLISET HANKEHAKEMUSTEN ARVIOINTIKRITEERIT:
 
@@ -669,7 +660,7 @@ Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
     console.log('[ANALYZE] Prompt length:', prompt.length)
 
     const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-5-20250929',
+      model: 'claude-3-5-sonnet-20241022',
       max_tokens: 4096,
       messages: [
         {
