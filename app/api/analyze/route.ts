@@ -302,33 +302,82 @@ Jos mainitset hankkeen jota EI ole yllä olevassa listassa, teet VAKAVAN virheen
 
 Analysoi seuraava hankehakemus työmarkkinadatan, Ami-säätiön painopisteiden JA olemassa olevien hankkeiden valossa.
 
-AMI-SÄÄTIÖN VIRALLISET HANKEHAKEMUSTEN ARVIOINTIKRITEERIT:
+===================================================================
+AMI-SÄÄTIÖN VIRALLISET ARVIOINTIKRITEERIT
+===================================================================
 
-**PÄÄKRITEERIT:**
+Jokainen hakemus TÄYTYY arvioida näiden KOLMEN kriteerin mukaan:
 
-1. **Hankkeen tuottaman tiedon relevanttius ja muutoskyky** ohjelmatyön painopisteiden kannalta sekä sopivuus ohjelmatyön kokonaisuuteen.
+ARVIOINTIKRITEERI 1: Tiedon relevanttius ja muutoskyky
+────────────────────────────────────────────────────
+KYSYMYKSET joihin hakemus TÄYTYY vastata:
 
-2. **Hankkeen kyky integroitua pääkaupunkiseudulle** tai tuottaa pääkaupunkiseudulle uutta kyvykkyyttä.
+✓ Mitä teet ja MIKSI? (konkreettinen toiminta + perustelut)
+✓ Mitkä tahot ovat mukana? (kumppanit, sidosryhmät)
+✓ Mitä tietoa tuottaa ja MIKSI sitä tarvitaan?
+✓ Miten SELVITETTY tarve PÄÄKAUPUNKISEUDULLA? (esiselvitykset, tutkimukset, keskustelut)
+✓ Miten liittyy säätiön TEEMOIHIN ja MUUTOSKOHTEISIIN?
 
-3. **Hankesuunnitelman laatu ja toteutuskelpoisuus.**
+ARVIOI KRIITTISESTI:
+- Jos hakemus ei vastaa → VAKAVA PUUTE
+- Jos vastaukset epämääräisiä → KEHITYSKOHDE
+- Jos hyvin perusteltu → VAHVUUS
 
-**ARVIOINTIKRITEERIIN 1 LIITTYVÄT KYSYMYKSET:**
-- Mitä teet ja miksi?
-- Mitkä tahot ovat hankkeessa mukana?
-- Mitä tietoa hanke tuottaa ja miksi sitä tarvitaan?
-- Miten olet selvittänyt tiedon tai toiminnan tarpeellisuutta erityisesti pääkaupunkiseudulla?
-- Miten tuotettava tieto liittyy säätiön ohjelmatyön painopistealueisiin?
+MUUTOSKOHTEET (viittaa näihin numeroilla):
+1. Työmarkkinoiden rakenteellinen muutos huomioidaan paremmin
+2. Kohtaannon onnistumista edistetään
+3. Heikommassa työmarkkina-asemassa olevien oppiminen vahvistuu
+4. Erilaiset urapolut mahdollistuvat
+5. Työelämän laatu paranee
+6. Työn mielekkyyden kokemus vahvistuu
+7. Rekrytointikäytänteet ja rekrytoituminen uudistuvat
+8. Uudenlaisia työn tekemisen tapoja kehitetään
 
-**ARVIOINTIKRITEERIIN 2 LIITTYVÄT KYSYMYKSET:**
-- Miten hankkeesi tuottamat tiedot tai uudet toimintatavat voivat integroitua pääkaupunkiseudulle ja mikä on hankkeesi rooli siinä?
-- Miten olet varmistanut tiedon integroitumista tai uusien toimintatapojen käyttöönottoa jo hankesuunnitelmaa valmistellessa ja miten varmistat sitä hankeaikana?
+ARVIOINTIKRITEERI 2: Integroituminen pääkaupunkiseudulle
+─────────────────────────────────────────────────────────
+KYSYMYKSET joihin hakemus TÄYTYY vastata:
 
-**ARVIOINTIKRITEERIIN 3 LIITTYVÄT KYSYMYKSET:**
-- Millaiset resurssit hankkeella on ja mikä osa hankkeen kuluista on tarkoitus kattaa säätiön rahoituksella?
+✓ MITEN tiedot/toimintatavat integroituvat pk-seudulle?
+✓ Mikä on hankkeen ROOLI integroitumisessa?
+✓ Miten VARMISTETTU integroituminen JO SUUNNITTELUVAIHEESSA?
+  - Onko sovittu kumppanuuksia?
+  - Onko sitoutuneita käyttäjiä?
+  - Onko konkreettinen jalkautussuunnitelma?
+✓ Miten VARMISTETAAN integroituminen HANKEAIKANA?
+  - Välivaiheraportointi?
+  - Käyttäjien osallistaminen?
+  - Levittämissuunnitelma?
 
----
+ARVIOI ANKARASTI:
+- Pelkkä "tieto palvelee toimijoita" → HYLÄTTÄVÄ (ei riitä!)
+- Ei konkreettisia kumppaneita → VAKAVA PUUTE
+- Ei jalkautussuunnitelmaa → VAKAVA PUUTE
+- Hyvin suunniteltu integrointi → VAHVUUS
 
-AMI-SÄÄTIÖN OHJELMALLISET TEEMAT (2025-):
+ARVIOINTIKRITEERI 3: Hankesuunnitelman laatu ja toteutuskelpoisuus
+──────────────────────────────────────────────────────────────────
+KYSYMYKSET joihin hakemus TÄYTYY vastata:
+
+✓ Millaiset RESURSSIT hankkeella on?
+  - Raha: Onko budjetti REALISTINEN?
+  - Ihmiset: Onko tiimillä OSAAMISTA?
+  - Aika: Onko aikataulu USKOTTAVA?
+  - Kumppanit: Ketkä SITOUTUNEET mukaan?
+
+✓ Mikä osa kuluista katetään AMI:n rahoituksella?
+  - Onko muu rahoitus varmistettu?
+  - Onko budjetti läpinäkyvä?
+
+ARVIOI TARKKAAN:
+- Vertaa budjettia AMI:n aiempiin vastaaviin hankkeisiin
+- Laske €/kohderyhmän henkilö jos mahdollista
+- Jos budjetti epäselvä tai epärealistinen → HYLÄTTÄVÄ
+- Jos aikataulu liian tiukka → KEHITYSKOHDE
+- Jos resurssit riittävät ja hyvin perusteltu → VAHVUUS
+
+===================================================================
+AMI-SÄÄTIÖN OHJELMALLISET TEEMAT (2025-)
+===================================================================
 
 **TEEMA 1: OSAAMINEN JA KOHTAANNOSSA ONNISTUMINEN**
 - Miten työntekijöiden osaaminen ja työnantajien tarpeet kohtaavat?
@@ -349,31 +398,44 @@ AMI-SÄÄTIÖN OHJELMALLISET TEEMAT (2025-):
 - Työelämän laatu ja tasapaino
 - Kestävä työura ja työssä jatkaminen
 
----
+===================================================================
+ANALYYSIN RAKENNE
+===================================================================
 
-AMI-SÄÄTIÖN KONKREETTISET MUUTOSKOHTEET:
+Rakenna analyysi ARVIOINTIKRITEERIEN YMPÄRILLE:
 
-Hakemus voi liittyä yhteen tai useampaan näistä muutoskohteista:
+1. ARVOSANA (1-10)
+   - Perustele ARVIOINTIKRITEERIEN valossa
 
-1. **Osaamistarpeiden ennakointi ja tulevaisuusajattelu** on systemaattinen osa koulutus- ja työllisyystoimijoiden sekä organisaatioiden toimintaa
+2. VAHVUUDET
+   - Viittaa KRITEERI-numeroihin (1, 2, tai 3)
+   - Viittaa MUUTOSKOHDE-numeroihin (1-8)
+   - Viittaa TEEMOIHIN (1, 2, tai 3)
+   Esim: "✅ Täyttää KRITEERIN 1: Liittyy TEEMAAN 2 ja MUUTOSKOHTEESEEN 7"
 
-2. **Pääsemme eroon sitkeistä ja piilossakin olevista haasteista**, jotka vaikuttavat osaamisen hyödyntämiseen
+3. KEHITYSKOHTEET/HEIKKOUDET
+   - Viittaa KRITEERI-numeroihin
+   - Ole KONKREETTINEN mitä puuttuu
+   Esim: "❌ EI täytä KRITEERIÄ 2: Ei konkreettista integroitumissuunnitelmaa"
 
-3. **Heikommassa työmarkkina-asemassa olevien oppiminen** vahvistuu
+4. KRIITTISET KYSYMYKSET
+   - Käytä arviointikriteerien APUKYSYMYKSIÄ
+   - Nosta esiin mitä PUUTTUU hakemuksesta
 
-4. **Työllisyyttä tukevat palvelut** ovat toimivia
+5. VERTAILU AMI-HANKKEISIIN
+   - Käytä Supabasesta saatuja OIKEITA hankkeita
+   - Analysoi päällekkäisyys vs. täydentävyys
+   - Vertaa budjetteja ja kohderyhmän kokoja
 
-5. **Osaaminen työmarkkinoiden katveesta keskiöön**
+6. AMI-SÄÄTIÖN OMA ROOLI (jos relevanttia)
+   - Miten säätiö voisi viestiä hankkeesta (LinkedIn, Instagram, Suunnanetsijä-blogi)?
+   - Onko hanke sellainen että säätiö voisi omalla sisäisellä tiedontuotannolla syventää tai jatkaa hankkeen teemaa?
+     * Blogit (esim. Suunnanetsijä)
+     * Raportit ja selvitykset
+     * Tutkimusyhteistyö
+     * Tiedonlevitys verkostossa
 
-6. **Työ- ja opiskeluperäinen maahanmuutto** rakentuu kestävälle pohjalle
-
-7. **Rekrytointikäytänteet ja rekrytoituminen** uudistuvat ja mahdollistavat laajemman osaajapoolin hyödyntämisen
-
-8. **Kun työ itsessään tukee hyvinvointia**, kyvyt tulevat paremmin käyttöön
-
-**HUOM:** Hakemus EI tarvitse liittyä kaikkiin muutoskohteisiin, mutta JOS se liittyy johonkin, mainitse se analyysissä vahvuutena. Arvioi kriittisesti, mihin muutoskohteisiin hakemus KONKREETTISESTI vaikuttaa.
-
----
+===================================================================
 
 **MAANTIETEELLINEN RAJAUS:**
 - Pääkaupunkiseutu: Helsinki, Espoo, Vantaa, Kauniainen
@@ -651,6 +713,23 @@ Jos et löydä mitään relevanttia Ami-säätiön roolin kannalta, älä kirjoi
 - **TOTEUTUSKELPOISUUS**: Onko aikataulu ja budjetti realistinen?
 - **VERTAA AINA** Ami-säätiön myönnettyihin hankkeisiin
 - Jos päällekkäisyyttä aiempiin hankkeisiin → perustele MIKSI tämä on silti tarpeellinen (tai ei ole)
+
+
+===================================================================
+ENNEN VASTAUKSEN LÄHETTÄMISTÄ - TARKISTA:
+===================================================================
+
+☐ Oletko vastannut KAIKKIIN kolmeen arviointikriteeriin (1, 2, 3)?
+☐ Oletko käyttänyt arviointikriteerien APUKYSYMYKSIÄ?
+☐ Oletko viitannut TEEMOIHIN (1-3) ja MUUTOSKOHTEISIIN (1-8)?
+☐ Oletko vertaillut AMI:n OIKEISIIN hankkeisiin Supabasesta?
+☐ Oletko antanut KONKREETTISIA numeroita ja esimerkkejä?
+☐ Ovatko kriittiset kysymykset TARKKOJA (ei yleistä)?
+☐ Oletko arvioinut AMI-säätiön omaa roolia (viestintä, jatkotuotanto)?
+
+Jos et täytä kaikkia → PALAA ja TÄYDENNÄ!
+
+===================================================================
 
 Vastaa VAIN JSON-muodossa, ei muuta tekstiä.`
 
